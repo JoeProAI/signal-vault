@@ -13,7 +13,7 @@ Signal Vault is a local-first music curation console for large folders of AI gen
 - Groups tracks with matching artist and title as alternate cuts
 - Builds eight themed crates plus a 250-track priority audition deck
 - Supports private local playback, search, energy sorting, and keyboard review
-- Includes Signal Theater with eight original browser-native audio-reactive scenes
+- Includes Signal Theater with nine original browser-native audio-reactive scenes, including the AI-forged Astral Cathedral
 - Can launch the installed VZX Player for a native OpenGL visualizer experience
 - Saves `VAULT`, `HOLD`, and `CUT` decisions in the browser
 - Provides an explicit **Forget Library** action that removes the cached catalog and ratings without touching audio files
@@ -52,7 +52,7 @@ Keyboard controls:
 
 ## Signal Theater and VZX
 
-Signal Theater is the portable visual layer built directly into the web app. It includes eight original scenes, intensity control, automatic scene changes, fullscreen mode, and local audio analysis through the Web Audio API.
+Signal Theater is the portable visual layer built directly into the web app. It includes nine original scenes, intensity control, automatic scene changes, fullscreen mode, and local audio analysis through the Web Audio API. Astral Cathedral combines original generated artwork with frequency-sliced parallax, bass-driven depth, spectral bloom, and live waveform geometry.
 
 The **Launch VZX Player** control opens the separately installed VZX Player through Steam. VZX listens to the computer's active audio output, so Signal Vault can keep playing the selected local track while VZX renders it in its native OpenGL engine. VZX is a third-party product by Vovoid Media Technologies and is not bundled with Signal Vault.
 

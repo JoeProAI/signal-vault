@@ -15,7 +15,8 @@ export const VISUAL_SCENES = [
   { id: 'spectral-crown', code: 'V05', name: 'SPECTRAL CROWN', mood: 'Symmetric skyline / frequency monarchy' },
   { id: 'chromatic-wormhole', code: 'V06', name: 'CHROMATIC WORMHOLE', mood: 'Infinite geometry / tempo descent' },
   { id: 'particle-cathedral', code: 'V07', name: 'PARTICLE CATHEDRAL', mood: 'Luminous dust / towering harmonics' },
-  { id: 'signal-ghost', code: 'V08', name: 'SIGNAL GHOST', mood: 'Feedback trails / haunted transmission' }
+  { id: 'signal-ghost', code: 'V08', name: 'SIGNAL GHOST', mood: 'Feedback trails / haunted transmission' },
+  { id: 'astral-cathedral', code: 'V09', name: 'ASTRAL CATHEDRAL', mood: 'AI-forged architecture / living spectral shrine' }
 ];
 
 function polygon(context, x, y, radius, sides, rotation = 0) {
@@ -44,6 +45,11 @@ export class SignalVisualizer {
     this.lastShuffleAt = performance.now();
     this.particles = [];
     this.ghosts = [];
+    this.artTextures = new Map();
+    const astralCathedral = new Image();
+    astralCathedral.decoding = 'async';
+    astralCathedral.src = '/visuals/astral-cathedral.webp';
+    this.artTextures.set('astral-cathedral', astralCathedral);
     this.frequencyData = new Uint8Array(128);
     this.waveData = new Uint8Array(256);
     this.resize = this.resize.bind(this);
@@ -162,7 +168,8 @@ export class SignalVisualizer {
       'spectral-crown': this.drawSpectralCrown,
       'chromatic-wormhole': this.drawChromaticWormhole,
       'particle-cathedral': this.drawParticleCathedral,
-      'signal-ghost': this.drawSignalGhost
+      'signal-ghost': this.drawSignalGhost,
+      'astral-cathedral': this.drawAstralCathedral
     }[this.scene.id];
     drawScene.call(this, time, signal);
     this.frameHandle = requestAnimationFrame(this.draw);
@@ -380,5 +387,93 @@ export class SignalVisualizer {
       ctx.stroke();
     });
     ctx.restore();
+  }
+
+  drawAstralCathedral(time, signal) {
+    const image = this.artTextures.get('astral-cathedral');
+    if (!image?.complete || !image.naturalWidth) {
+      this.drawChromaticWormhole(time, signal);
+      return;
+    }
+
+    const { context: ctx, width, height } = this;
+    const imageRatio = image.naturalWidth / image.naturalHeight;
+    const viewportRatio = width / height;
+    const sourceWidth = viewportRatio > imageRatio ? image.naturalWidth : image.naturalHeight * viewportRatio;
+    const sourceHeight = viewportRatio > imageRatio ? image.naturalWidth / viewportRatio : image.naturalHeight;
+    const sourceX = (image.naturalWidth - sourceWidth) / 2;
+    const sourceY = (image.naturalHeight - sourceHeight) / 2;
+    const bassPulse = signal.bass * this.intensity;
+    const breath = 1.025 + Math.sin(time * 0.24) * 0.012 + bassPulse * 0.045;
+    const drawWidth = width * breath;
+    const drawHeight = height * breath;
+    const drawX = (width - drawWidth) / 2 + Math.sin(time * 0.17) * width * 0.006;
+    const drawY = (height - drawHeight) / 2 + Math.cos(time * 0.13) * height * 0.004;
+
+    ctx.save();
+    ctx.setTransform(this.ratio, 0, 0, this.ratio, 0, 0);
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = '#010203';
+    ctx.fillRect(0, 0, width, height);
+    ctx.filter = `saturate(${1.08 + signal.highMid * 1.1}) contrast(${1.1 + signal.bass * 0.42}) brightness(${0.58 + signal.energy * 0.5}) hue-rotate(${Math.sin(time * 0.11) * 7}deg)`;
+    ctx.drawImage(image, sourceX, sourceY, sourceWidth, sourceHeight, drawX, drawY, drawWidth, drawHeight);
+    ctx.filter = 'none';
+
+    // Each horizontal band is driven by a different FFT bin, turning the artwork
+    // into shifting architecture instead of a static image backdrop.
+    ctx.globalCompositeOperation = 'screen';
+    const slices = 30;
+    for (let slice = 0; slice < slices; slice += 1) {
+      const progress = slice / slices;
+      const bin = Math.floor(progress * (signal.frequency.length - 1));
+      const value = signal.frequency[bin] / 255;
+      const sourceSliceY = sourceY + progress * sourceHeight;
+      const sourceSliceHeight = sourceHeight / slices + 1;
+      const targetY = progress * height;
+      const targetHeight = height / slices + 1;
+      const direction = slice % 2 === 0 ? 1 : -1;
+      const offset = direction * value * width * 0.022 * this.intensity * Math.sin(time * 1.2 + slice * 0.7);
+      ctx.globalAlpha = 0.04 + value * 0.18;
+      ctx.drawImage(image, sourceX, sourceSliceY, sourceWidth, sourceSliceHeight, offset, targetY, width, targetHeight);
+    }
+
+    const centerX = width / 2;
+    const centerY = height * 0.51;
+    const veilRadius = Math.min(width, height) * (0.105 + signal.bass * 0.025);
+    const bars = Math.min(96, signal.frequency.length);
+    ctx.translate(centerX, centerY);
+    ctx.globalCompositeOperation = 'lighter';
+    for (let index = 0; index < bars; index += 1) {
+      const value = signal.frequency[index] / 255;
+      const angle = index / bars * TAU + time * 0.025;
+      const inner = veilRadius * (0.88 + Math.sin(index * 0.8 + time) * 0.025);
+      const outer = inner + 4 + value * Math.min(width, height) * 0.14 * this.intensity;
+      ctx.beginPath();
+      ctx.moveTo(Math.cos(angle) * inner, Math.sin(angle) * inner);
+      ctx.lineTo(Math.cos(angle) * outer, Math.sin(angle) * outer);
+      ctx.strokeStyle = `hsla(${150 + index * 1.9 + signal.treble * 95},100%,${58 + value * 24}%,${0.08 + value * 0.48})`;
+      ctx.lineWidth = 0.6 + value * 2.2;
+      ctx.stroke();
+    }
+
+    const portal = ctx.createRadialGradient(0, 0, 0, 0, 0, veilRadius * 1.4);
+    portal.addColorStop(0, `rgba(0,0,0,${0.82 - signal.bass * 0.18})`);
+    portal.addColorStop(0.62, 'rgba(0,7,8,.45)');
+    portal.addColorStop(0.84, `rgba(94,255,196,${0.08 + signal.energy * 0.18})`);
+    portal.addColorStop(1, 'rgba(0,217,255,0)');
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = portal;
+    ctx.beginPath();
+    ctx.arc(0, 0, veilRadius * 1.4, 0, TAU);
+    ctx.fill();
+    ctx.restore();
+
+    const vignette = ctx.createRadialGradient(width / 2, height / 2, Math.min(width, height) * 0.18, width / 2, height / 2, Math.max(width, height) * 0.68);
+    vignette.addColorStop(0, 'rgba(0,0,0,0)');
+    vignette.addColorStop(0.7, 'rgba(0,0,0,.08)');
+    vignette.addColorStop(1, 'rgba(0,0,0,.72)');
+    ctx.fillStyle = vignette;
+    ctx.fillRect(0, 0, width, height);
   }
 }
