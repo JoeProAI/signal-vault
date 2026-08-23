@@ -24,6 +24,28 @@ component_create maths;arithmetics;binary;add base_bass_offset -0.570000 0.33000
 param_set base_bass_offset param2 1.00000000000000000000
 component_create maths;converters;float_to_float3 base_scale_vector -0.410000 0.330000
 component_create renderers;opengl_modifiers;gl_scale base_scale -0.250000 0.260000
+component_create maths;oscillators;oscillator base_breathe -0.720000 0.580000
+param_set base_breathe amp 0.02500000000000000000
+param_set base_breathe freq 0.12000000000000000000
+param_set base_breathe ofs 0.00000000000000000000
+component_create maths;arithmetics;binary;add base_motion_sum -0.410000 0.580000
+component_create maths;oscillators;oscillator base_sway -0.720000 0.650000
+param_set base_sway amp 0.00800000000000000000
+param_set base_sway freq 0.05500000000000000000
+param_set base_sway ofs 0.00000000000000000000
+component_create renderers;opengl_modifiers;gl_rotate base_rotate -0.100000 0.260000
+param_set base_rotate axis 0.00000000000000000000,0.00000000000000000000,1.00000000000000000000
+component_create maths;oscillators;oscillator base_drift_x -0.720000 0.720000
+param_set base_drift_x amp 0.01000000000000000000
+param_set base_drift_x freq 0.03700000000000000000
+param_set base_drift_x ofs 0.00000000000000000000
+component_create maths;oscillators;oscillator base_drift_y -0.570000 0.720000
+param_set base_drift_y amp 0.00600000000000000000
+param_set base_drift_y freq 0.08300000000000000000
+param_set base_drift_y ofs 0.00000000000000000000
+component_create maths;converters;3float_to_float3 base_drift_vector -0.410000 0.720000
+param_set base_drift_vector floatc 0.00000000000000000000
+component_create renderers;opengl_modifiers;gl_translate base_translate 0.050000 0.260000
 
 component_create renderers;basic;textured_rectangle portal_layer -0.520000 0.100000
 param_set portal_layer facing_camera 0
@@ -34,10 +56,15 @@ component_create maths;arithmetics;binary;add portal_scale_offset -0.570000 0.42
 param_set portal_scale_offset param2 0.94000000000000000000
 component_create maths;converters;float_to_float3 portal_scale_vector -0.410000 0.420000
 component_create renderers;opengl_modifiers;gl_scale portal_scale -0.250000 0.100000
+component_create maths;oscillators;oscillator portal_breathe -0.720000 0.790000
+param_set portal_breathe amp 0.14000000000000000000
+param_set portal_breathe freq 0.24000000000000000000
+param_set portal_breathe ofs 0.00000000000000000000
+component_create maths;arithmetics;binary;add portal_motion_sum -0.410000 0.790000
 component_create maths;arithmetics;binary;mult portal_alpha_gain -0.720000 0.500000
 param_set portal_alpha_gain param2 0.35000000000000000000
 component_create maths;arithmetics;binary;add portal_alpha_offset -0.570000 0.500000
-param_set portal_alpha_offset param2 0.03500000000000000000
+param_set portal_alpha_offset param2 0.12000000000000000000
 component_create maths;converters;4float_to_float4 portal_color -0.410000 0.500000
 param_set portal_color floata 1.00000000000000000000
 param_set portal_color floatb 1.00000000000000000000
@@ -49,13 +76,18 @@ param_set filament_layer size 1.00000000000000000000,0.56250000000000000000,0.00
 component_create maths;arithmetics;binary;mult filament_alpha_gain -0.720000 -0.250000
 param_set filament_alpha_gain param2 0.18000000000000000000
 component_create maths;arithmetics;binary;add filament_alpha_offset -0.570000 -0.250000
-param_set filament_alpha_offset param2 0.02500000000000000000
+param_set filament_alpha_offset param2 0.10000000000000000000
 component_create maths;converters;4float_to_float4 filament_color -0.410000 -0.250000
 param_set filament_color floata 0.75000000000000000000
 param_set filament_color floatb 1.00000000000000000000
 param_set filament_color floatc 0.92000000000000000000
 component_create maths;arithmetics;binary;mult filament_angle_gain -0.720000 -0.330000
 param_set filament_angle_gain param2 0.02000000000000000000
+component_create maths;oscillators;oscillator filament_sway -0.720000 -0.580000
+param_set filament_sway amp 0.02800000000000000000
+param_set filament_sway freq 0.09500000000000000000
+param_set filament_sway ofs 0.00000000000000000000
+component_create maths;arithmetics;binary;add filament_angle_sum -0.410000 -0.580000
 component_create renderers;opengl_modifiers;gl_rotate filament_rotate -0.250000 -0.060000
 param_set filament_rotate axis 0.00000000000000000000,0.00000000000000000000,1.00000000000000000000
 
@@ -65,7 +97,7 @@ param_set atmosphere_layer size 1.00000000000000000000,0.56250000000000000000,0.
 component_create maths;arithmetics;binary;mult atmosphere_alpha_gain -0.720000 -0.420000
 param_set atmosphere_alpha_gain param2 0.22000000000000000000
 component_create maths;arithmetics;binary;add atmosphere_alpha_offset -0.570000 -0.420000
-param_set atmosphere_alpha_offset param2 0.01200000000000000000
+param_set atmosphere_alpha_offset param2 0.05500000000000000000
 component_create maths;converters;4float_to_float4 atmosphere_color -0.410000 -0.420000
 param_set atmosphere_color floata 0.70000000000000000000
 param_set atmosphere_color floatb 0.92000000000000000000
@@ -76,6 +108,11 @@ component_create maths;arithmetics;binary;add atmosphere_scale_offset -0.570000 
 param_set atmosphere_scale_offset param2 0.99000000000000000000
 component_create maths;converters;float_to_float3 atmosphere_scale_vector -0.410000 -0.500000
 component_create renderers;opengl_modifiers;gl_scale atmosphere_scale -0.250000 -0.170000
+component_create maths;oscillators;oscillator atmosphere_rush -0.720000 -0.650000
+param_set atmosphere_rush amp 0.05500000000000000000
+param_set atmosphere_rush freq 0.18000000000000000000
+param_set atmosphere_rush ofs 0.00000000000000000000
+component_create maths;arithmetics;binary;add atmosphere_motion_sum -0.410000 -0.650000
 
 component_create maths;arithmetics;binary;mult scope_width_gain -0.100000 -0.520000
 param_set scope_width_gain param2 2.40000000000000000000
@@ -155,14 +192,24 @@ param_set screen0 gamma_correction 1.00000000000000000000
 param_connect base_layer texture_in base_texture texture
 param_connect base_bass_gain param1 audio octaves_l_0
 param_connect base_bass_offset param1 base_bass_gain product
-param_connect base_scale_vector param1 base_bass_offset sum
+param_connect base_motion_sum param1 base_bass_offset sum
+param_connect base_motion_sum param2 base_breathe float
+param_connect base_scale_vector param1 base_motion_sum sum
 param_connect base_scale scale base_scale_vector result_float3
 param_connect base_scale render_in base_layer render_out
+param_connect base_rotate angle base_sway float
+param_connect base_rotate render_in base_scale render_out
+param_connect base_drift_vector floata base_drift_x float
+param_connect base_drift_vector floatb base_drift_y float
+param_connect base_translate translation base_drift_vector result_float3
+param_connect base_translate render_in base_rotate render_out
 
 param_connect portal_layer texture_in portal_texture texture
 param_connect portal_scale_gain param1 audio octaves_l_0
 param_connect portal_scale_offset param1 portal_scale_gain product
-param_connect portal_scale_vector param1 portal_scale_offset sum
+param_connect portal_motion_sum param1 portal_scale_offset sum
+param_connect portal_motion_sum param2 portal_breathe float
+param_connect portal_scale_vector param1 portal_motion_sum sum
 param_connect portal_scale scale portal_scale_vector result_float3
 param_connect portal_scale render_in portal_layer render_out
 param_connect portal_alpha_gain param1 audio octaves_l_0
@@ -176,7 +223,9 @@ param_connect filament_alpha_offset param1 filament_alpha_gain product
 param_connect filament_color floatd filament_alpha_offset sum
 param_connect filament_layer color_multiplier filament_color result_float4
 param_connect filament_angle_gain param1 audio octaves_l_3
-param_connect filament_rotate angle filament_angle_gain product
+param_connect filament_angle_sum param1 filament_angle_gain product
+param_connect filament_angle_sum param2 filament_sway float
+param_connect filament_rotate angle filament_angle_sum sum
 param_connect filament_rotate render_in filament_layer render_out
 
 param_connect atmosphere_layer texture_in atmosphere_texture texture
@@ -186,7 +235,9 @@ param_connect atmosphere_color floatd atmosphere_alpha_offset sum
 param_connect atmosphere_layer color_multiplier atmosphere_color result_float4
 param_connect atmosphere_scale_gain param1 audio octaves_l_7
 param_connect atmosphere_scale_offset param1 atmosphere_scale_gain product
-param_connect atmosphere_scale_vector param1 atmosphere_scale_offset sum
+param_connect atmosphere_motion_sum param1 atmosphere_scale_offset sum
+param_connect atmosphere_motion_sum param2 atmosphere_rush float
+param_connect atmosphere_scale_vector param1 atmosphere_motion_sum sum
 param_connect atmosphere_scale scale atmosphere_scale_vector result_float3
 param_connect atmosphere_scale render_in atmosphere_layer render_out
 
@@ -223,7 +274,7 @@ param_connect effects_surface render_in feedback_display render_out
 param_connect effects_blur glow_source effects_surface texture_out
 param_connect glow_display texture_in effects_blur texture_out
 
-param_connect final_composite render_in base_scale render_out
+param_connect final_composite render_in base_translate render_out
 param_connect final_composite render_in effects_add render_out
 param_connect final_composite render_in feedback_display render_out
 param_connect final_composite render_in glow_display render_out

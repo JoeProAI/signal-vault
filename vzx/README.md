@@ -13,6 +13,8 @@ This folder contains the native VZX Creative side of Signal Vault. It is deliber
 - 650 native VZX particles respond to the high-frequency band; and
 - a render surface, blur pass, and low-alpha feedback loop create glow and trails.
 
+V02 also has zero-centered idle motion for the base architecture, portal, filaments, and atmosphere. The cathedral therefore keeps moving when Artiste's separate Visualization Audio service is stopped. When audio is active, the octave bands add stronger frequency-specific motion on top of that baseline.
+
 The three V02 effect images are AI-generated, composition-matched passes derived from the original Astral Cathedral artwork. All state files use VZX resource-relative paths. Launching Artiste with this folder as its `data_path` keeps the scene portable and leaves the Steam installation untouched. V01 remains available as the simpler diagnostic scene.
 
 ## Controls
@@ -20,7 +22,7 @@ The three V02 effect images are AI-generated, composition-matched passes derived
 - Double-click `OPEN SIGNAL CATHEDRAL IN VZX.cmd` in the repository root. It starts Artiste with this portable data folder and loads Cathedral Engine V02 automatically.
 - Play audio through the configured VZX visualization input.
 - Press `Ctrl+F` for the native preview window/fullscreen view.
-- Use Artiste's Input/Output audio configuration if the waveform is flat.
+- Artiste can stop its separate audio-server process when it is restarted. If the radial waveform is flat, open **Input/Output > Visualization Audio**, select **WASAPI** and **Speakers (Realtek(R) Audio)**, then press **Start**. The idle architecture will move before that, but bass/mid/treble reaction requires the audio service.
 
 ## Privacy
 
