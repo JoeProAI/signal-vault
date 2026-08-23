@@ -11,4 +11,4 @@ if not exist "%SIGNAL_VZX_EXE%" (
   exit /b 1
 )
 
-start "Signal Cathedral" "%SIGNAL_VZX_EXE%" -data_path "%~dp0vzx" -state signal-cathedral-v01
+start "Cathedral Engine V02" "%SIGNAL_VZX_EXE%" -data_path "%~dp0vzx" -state signal-cathedral-v02

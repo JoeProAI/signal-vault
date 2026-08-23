@@ -1,0 +1,230 @@
+meta_set U2lnbmFsIENhdGhlZHJhbCBWMDJ8Sm9zZXBoIHwgU2lnbmFsIFZhdWx0fHx8Q2F0aGVkcmFsIEVuZ2luZTogbGF5ZXJlZCBpbWFnZSBzeW50aGVzaXMsIGJhc3Mgc2hvY2t3YXZlcywgbWlkIGFyY2hpdGVjdHVyZSBkcmlmdCwgdHJlYmxlIGZpbGFtZW50cywgcmFkaWFsIHdhdmVmb3JtLCBwYXJ0aWNsZXMsIGdsb3cgYW5kIGZlZWRiYWNrLg==
+component_create sound;input_visualization_listener audio -0.920000 0.000000
+
+component_create texture;loaders;png_tex_load base_texture -0.900000 0.260000
+ps64 base_texture filename cmVzb3VyY2VzL3NpZ25hbC12YXVsdC9hc3RyYWwtY2F0aGVkcmFsLnBuZw==
+param_set base_texture flip_vertical 1
+component_create texture;loaders;png_tex_load filament_texture -0.900000 0.180000
+ps64 filament_texture filename cmVzb3VyY2VzL3NpZ25hbC12YXVsdC9jYXRoZWRyYWwtZmlsYW1lbnRzLXYwMi5wbmc=
+param_set filament_texture flip_vertical 1
+component_create texture;loaders;png_tex_load portal_texture -0.900000 0.100000
+ps64 portal_texture filename cmVzb3VyY2VzL3NpZ25hbC12YXVsdC9jYXRoZWRyYWwtcG9ydGFsLXYwMi5wbmc=
+param_set portal_texture flip_vertical 1
+component_create texture;loaders;png_tex_load atmosphere_texture -0.900000 0.020000
+ps64 atmosphere_texture filename cmVzb3VyY2VzL3NpZ25hbC12YXVsdC9jYXRoZWRyYWwtYXRtb3NwaGVyZS12MDIucG5n
+param_set atmosphere_texture flip_vertical 1
+
+component_create renderers;basic;textured_rectangle base_layer -0.520000 0.260000
+param_set base_layer facing_camera 0
+param_set base_layer size 1.00000000000000000000,0.56250000000000000000,0.00000000000000000000
+param_set base_layer color_multiplier 0.70000000000000000000,0.78000000000000000000,0.90000000000000000000,1.00000000000000000000
+component_create maths;arithmetics;binary;mult base_bass_gain -0.720000 0.330000
+param_set base_bass_gain param2 0.02800000000000000000
+component_create maths;arithmetics;binary;add base_bass_offset -0.570000 0.330000
+param_set base_bass_offset param2 1.00000000000000000000
+component_create maths;converters;float_to_float3 base_scale_vector -0.410000 0.330000
+component_create renderers;opengl_modifiers;gl_scale base_scale -0.250000 0.260000
+
+component_create renderers;basic;textured_rectangle portal_layer -0.520000 0.100000
+param_set portal_layer facing_camera 0
+param_set portal_layer size 1.00000000000000000000,0.56250000000000000000,0.00000000000000000000
+component_create maths;arithmetics;binary;mult portal_scale_gain -0.720000 0.420000
+param_set portal_scale_gain param2 0.16000000000000000000
+component_create maths;arithmetics;binary;add portal_scale_offset -0.570000 0.420000
+param_set portal_scale_offset param2 0.94000000000000000000
+component_create maths;converters;float_to_float3 portal_scale_vector -0.410000 0.420000
+component_create renderers;opengl_modifiers;gl_scale portal_scale -0.250000 0.100000
+component_create maths;arithmetics;binary;mult portal_alpha_gain -0.720000 0.500000
+param_set portal_alpha_gain param2 0.35000000000000000000
+component_create maths;arithmetics;binary;add portal_alpha_offset -0.570000 0.500000
+param_set portal_alpha_offset param2 0.03500000000000000000
+component_create maths;converters;4float_to_float4 portal_color -0.410000 0.500000
+param_set portal_color floata 1.00000000000000000000
+param_set portal_color floatb 1.00000000000000000000
+param_set portal_color floatc 1.00000000000000000000
+
+component_create renderers;basic;textured_rectangle filament_layer -0.520000 -0.060000
+param_set filament_layer facing_camera 0
+param_set filament_layer size 1.00000000000000000000,0.56250000000000000000,0.00000000000000000000
+component_create maths;arithmetics;binary;mult filament_alpha_gain -0.720000 -0.250000
+param_set filament_alpha_gain param2 0.18000000000000000000
+component_create maths;arithmetics;binary;add filament_alpha_offset -0.570000 -0.250000
+param_set filament_alpha_offset param2 0.02500000000000000000
+component_create maths;converters;4float_to_float4 filament_color -0.410000 -0.250000
+param_set filament_color floata 0.75000000000000000000
+param_set filament_color floatb 1.00000000000000000000
+param_set filament_color floatc 0.92000000000000000000
+component_create maths;arithmetics;binary;mult filament_angle_gain -0.720000 -0.330000
+param_set filament_angle_gain param2 0.02000000000000000000
+component_create renderers;opengl_modifiers;gl_rotate filament_rotate -0.250000 -0.060000
+param_set filament_rotate axis 0.00000000000000000000,0.00000000000000000000,1.00000000000000000000
+
+component_create renderers;basic;textured_rectangle atmosphere_layer -0.520000 -0.170000
+param_set atmosphere_layer facing_camera 0
+param_set atmosphere_layer size 1.00000000000000000000,0.56250000000000000000,0.00000000000000000000
+component_create maths;arithmetics;binary;mult atmosphere_alpha_gain -0.720000 -0.420000
+param_set atmosphere_alpha_gain param2 0.22000000000000000000
+component_create maths;arithmetics;binary;add atmosphere_alpha_offset -0.570000 -0.420000
+param_set atmosphere_alpha_offset param2 0.01200000000000000000
+component_create maths;converters;4float_to_float4 atmosphere_color -0.410000 -0.420000
+param_set atmosphere_color floata 0.70000000000000000000
+param_set atmosphere_color floatb 0.92000000000000000000
+param_set atmosphere_color floatc 1.00000000000000000000
+component_create maths;arithmetics;binary;mult atmosphere_scale_gain -0.720000 -0.500000
+param_set atmosphere_scale_gain param2 0.04500000000000000000
+component_create maths;arithmetics;binary;add atmosphere_scale_offset -0.570000 -0.500000
+param_set atmosphere_scale_offset param2 0.99000000000000000000
+component_create maths;converters;float_to_float3 atmosphere_scale_vector -0.410000 -0.500000
+component_create renderers;opengl_modifiers;gl_scale atmosphere_scale -0.250000 -0.170000
+
+component_create maths;arithmetics;binary;mult scope_width_gain -0.100000 -0.520000
+param_set scope_width_gain param2 2.40000000000000000000
+component_create maths;arithmetics;binary;add scope_width_offset 0.050000 -0.520000
+param_set scope_width_offset param2 1.10000000000000000000
+component_create renderers;oscilloscopes;simple_oscilloscope radial_wave_0 -0.100000 -0.250000
+param_set radial_wave_0 size 0.47000000000000000000,0.13000000000000000000,0.00000000000000000000
+param_set radial_wave_0 color 0.05000000000000000000,1.00000000000000000000,0.82000000000000000000,0.76000000000000000000
+component_create renderers;oscilloscopes;simple_oscilloscope radial_wave_45 -0.100000 -0.320000
+param_set radial_wave_45 size 0.47000000000000000000,0.13000000000000000000,0.00000000000000000000
+param_set radial_wave_45 angle 0.78539816339744830000
+param_set radial_wave_45 rotation_axis 0.00000000000000000000,0.00000000000000000000,1.00000000000000000000
+param_set radial_wave_45 color 0.85000000000000000000,0.05000000000000000000,1.00000000000000000000,0.62000000000000000000
+component_create renderers;oscilloscopes;simple_oscilloscope radial_wave_90 -0.100000 -0.390000
+param_set radial_wave_90 size 0.47000000000000000000,0.13000000000000000000,0.00000000000000000000
+param_set radial_wave_90 angle 1.57079632679489660000
+param_set radial_wave_90 rotation_axis 0.00000000000000000000,0.00000000000000000000,1.00000000000000000000
+param_set radial_wave_90 color 0.08000000000000000000,0.65000000000000000000,1.00000000000000000000,0.66000000000000000000
+component_create renderers;oscilloscopes;simple_oscilloscope radial_wave_135 -0.100000 -0.460000
+param_set radial_wave_135 size 0.47000000000000000000,0.13000000000000000000,0.00000000000000000000
+param_set radial_wave_135 angle 2.35619449019234490000
+param_set radial_wave_135 rotation_axis 0.00000000000000000000,0.00000000000000000000,1.00000000000000000000
+param_set radial_wave_135 color 1.00000000000000000000,0.12000000000000000000,0.62000000000000000000,0.54000000000000000000
+
+component_create particlesystems;generators;basic_spray_emitter energy_particles 0.000000 0.350000
+param_set energy_particles emitter_position 0.00000000000000000000,0.00000000000000000000,0.00000000000000000000
+param_set energy_particles speed_x 0.70000000000000000000
+param_set energy_particles speed_y 0.45000000000000000000
+param_set energy_particles speed_z 0.35000000000000000000
+param_set energy_particles num_particles 650.00000000000000000000
+param_set energy_particles particle_size_random_weight 0.01200000000000000000
+param_set energy_particles particle_lifetime_base 2.70000000000000000000
+param_set energy_particles color 0.08000000000000000000,0.95000000000000000000,1.00000000000000000000,0.90000000000000000000
+component_create maths;arithmetics;binary;mult particle_size_gain 0.000000 0.430000
+param_set particle_size_gain param2 0.02200000000000000000
+component_create maths;arithmetics;binary;add particle_size_offset 0.150000 0.430000
+param_set particle_size_offset param2 0.00400000000000000000
+component_create particlesystems;modifiers;basic_gravity energy_gravity 0.150000 0.350000
+param_set energy_gravity center 0.00000000000000000000,0.00000000000000000000,-0.25000000000000000000
+param_set energy_gravity amount 0.00000000000000000000,0.00000000000000000000,-0.08000000000000000000
+component_create texture;particles;blob particle_blob 0.150000 0.260000
+param_set particle_blob arms 5.00000000000000000000
+param_set particle_blob attenuation 0.00002000000000000000
+component_create renderers;particlesystems;simple particle_renderer 0.320000 0.350000
+component_create renderers;opengl_modifiers;cameras;orbit_camera particle_camera 0.470000 0.350000
+param_set particle_camera distance 0.90000000000000000000
+param_set particle_camera fov 70.00000000000000000000
+
+component_create renderers;opengl_modifiers;blend_mode effects_add 0.260000 0.050000
+param_set effects_add dest_blend 1
+component_create texture;buffers;render_surface_single effects_surface 0.420000 -0.120000
+param_set effects_surface texture_size 1
+param_set effects_surface support_feedback 1
+param_set effects_surface clear_color 0.00000000000000000000,0.00000000000000000000,0.00000000000000000000,0.00000000000000000000
+component_create texture;effects;blur effects_blur 0.590000 -0.120000
+param_set effects_blur texture_size 1
+param_set effects_blur start_value 8.00000000000000000000
+param_set effects_blur attenuation 0.86000000000000000000
+component_create renderers;examples;simple_with_texture glow_display 0.740000 -0.120000
+param_set glow_display facing_camera 0
+param_set glow_display x_aspect_ratio 1.77777777777777770000
+param_set glow_display size 1.00000000000000000000
+param_set glow_display global_alpha 0.18000000000000000000
+param_set glow_display color_multiplier 0.65000000000000000000,0.90000000000000000000,1.00000000000000000000,1.00000000000000000000
+component_create renderers;examples;simple_with_texture feedback_display 0.590000 -0.220000
+param_set feedback_display facing_camera 0
+param_set feedback_display x_aspect_ratio 1.77777777777777770000
+param_set feedback_display size 0.98800000000000000000
+param_set feedback_display global_alpha 0.01500000000000000000
+param_set feedback_display color_multiplier 0.45000000000000000000,0.70000000000000000000,0.90000000000000000000,1.00000000000000000000
+component_create renderers;opengl_modifiers;blend_mode final_composite 0.820000 0.080000
+param_set final_composite dest_blend 1
+cpp screen0 0.960000 0.080000
+param_set screen0 clear_color 0.00000000000000000000,0.00000000000000000000,0.00600000000000000000,1.00000000000000000000
+param_set screen0 gamma_correction 1.00000000000000000000
+
+param_connect base_layer texture_in base_texture texture
+param_connect base_bass_gain param1 audio octaves_l_0
+param_connect base_bass_offset param1 base_bass_gain product
+param_connect base_scale_vector param1 base_bass_offset sum
+param_connect base_scale scale base_scale_vector result_float3
+param_connect base_scale render_in base_layer render_out
+
+param_connect portal_layer texture_in portal_texture texture
+param_connect portal_scale_gain param1 audio octaves_l_0
+param_connect portal_scale_offset param1 portal_scale_gain product
+param_connect portal_scale_vector param1 portal_scale_offset sum
+param_connect portal_scale scale portal_scale_vector result_float3
+param_connect portal_scale render_in portal_layer render_out
+param_connect portal_alpha_gain param1 audio octaves_l_0
+param_connect portal_alpha_offset param1 portal_alpha_gain product
+param_connect portal_color floatd portal_alpha_offset sum
+param_connect portal_layer color_multiplier portal_color result_float4
+
+param_connect filament_layer texture_in filament_texture texture
+param_connect filament_alpha_gain param1 audio octaves_l_6
+param_connect filament_alpha_offset param1 filament_alpha_gain product
+param_connect filament_color floatd filament_alpha_offset sum
+param_connect filament_layer color_multiplier filament_color result_float4
+param_connect filament_angle_gain param1 audio octaves_l_3
+param_connect filament_rotate angle filament_angle_gain product
+param_connect filament_rotate render_in filament_layer render_out
+
+param_connect atmosphere_layer texture_in atmosphere_texture texture
+param_connect atmosphere_alpha_gain param1 audio octaves_l_7
+param_connect atmosphere_alpha_offset param1 atmosphere_alpha_gain product
+param_connect atmosphere_color floatd atmosphere_alpha_offset sum
+param_connect atmosphere_layer color_multiplier atmosphere_color result_float4
+param_connect atmosphere_scale_gain param1 audio octaves_l_7
+param_connect atmosphere_scale_offset param1 atmosphere_scale_gain product
+param_connect atmosphere_scale_vector param1 atmosphere_scale_offset sum
+param_connect atmosphere_scale scale atmosphere_scale_vector result_float3
+param_connect atmosphere_scale render_in atmosphere_layer render_out
+
+param_connect scope_width_gain param1 audio octaves_l_6
+param_connect scope_width_offset param1 scope_width_gain product
+param_connect radial_wave_0 data_in audio wave
+param_connect radial_wave_45 data_in audio wave
+param_connect radial_wave_90 data_in audio spectrum
+param_connect radial_wave_135 data_in audio spectrum
+param_connect radial_wave_0 line_width scope_width_offset sum
+param_connect radial_wave_45 line_width scope_width_offset sum
+param_connect radial_wave_90 line_width scope_width_offset sum
+param_connect radial_wave_135 line_width scope_width_offset sum
+
+param_connect particle_size_gain param1 audio octaves_l_7
+param_connect particle_size_offset param1 particle_size_gain product
+param_connect energy_particles particle_size_base particle_size_offset sum
+param_connect energy_gravity in_particlesystem energy_particles particlesystem
+param_connect particle_renderer particlesystem energy_gravity particlesystem
+param_connect particle_renderer texture particle_blob texture
+param_connect particle_camera render_in particle_renderer render_out
+
+param_connect effects_add render_in portal_scale render_out
+param_connect effects_add render_in filament_rotate render_out
+param_connect effects_add render_in atmosphere_scale render_out
+param_connect effects_add render_in radial_wave_0 render_out
+param_connect effects_add render_in radial_wave_45 render_out
+param_connect effects_add render_in radial_wave_90 render_out
+param_connect effects_add render_in radial_wave_135 render_out
+param_connect effects_add render_in particle_camera render_out
+param_connect effects_surface render_in effects_add render_out
+param_connect feedback_display texture_in effects_surface texture_out
+param_connect effects_surface render_in feedback_display render_out
+param_connect effects_blur glow_source effects_surface texture_out
+param_connect glow_display texture_in effects_blur texture_out
+
+param_connect final_composite render_in base_scale render_out
+param_connect final_composite render_in effects_add render_out
+param_connect final_composite render_in feedback_display render_out
+param_connect final_composite render_in glow_display render_out
+param_connect screen0 screen final_composite render_out

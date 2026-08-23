@@ -29,7 +29,7 @@ Signal Vault must not copy, bundle, or redistribute VZX visual packs. VZX is a r
 
 VZX Player is a Windows native OpenGL application. A Vercel-hosted browser application cannot embed that executable, inspect local VZX licenses, or safely rewrite files under a user's VZX profile. The browser can launch the registered application, while VZX independently listens to the same system audio.
 
-Custom VZX visual creation belongs to VZX Artiste, which is part of VZX Creative. The consumer VZX Player is installed on the current development machine; VZX Creative and Artiste are not currently installed there.
+Custom VZX visual creation belongs to VZX Artiste, which is part of VZX Creative. VZX Creative and Artiste are installed on the current development machine. Signal Vault keeps its original scene states and visual assets under `vzx/`, then supplies that folder as a portable `data_path` rather than changing the Steam installation.
 
 ## Phase 2: optional local companion
 
@@ -45,7 +45,7 @@ The browser application would communicate with Signal Bridge only over localhost
 
 ## Phase 3: Artiste creation pipeline
 
-With VZX Creative installed, Signal Vault can become a visual A&R system:
+The first native prototype is now implemented as `vzx/states/signal-cathedral-v02`. It combines four synchronized Cathedral layers with frequency-specific motion, a radial waveform/spectrum structure, native particles, blur, and feedback. From here, Signal Vault can become a visual A&R system:
 
 - Maintain a visual family tree alongside each song family
 - Associate Artiste projects, visual handles, palettes, and tweak presets with tracks
