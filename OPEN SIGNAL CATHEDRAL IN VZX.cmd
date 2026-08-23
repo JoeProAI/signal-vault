@@ -14,7 +14,7 @@ exit /b 1
 :launch
 
 pushd "%~dp0"
-"%SIGNAL_VZX_EXE%" -data_path "%~dp0vzx" -state signal-cathedral-v02
+"%SIGNAL_VZX_EXE%" -data_path "%~dp0vzx" -state signal-cathedral-v04
 set "SIGNAL_VZX_EXIT=%ERRORLEVEL%"
 popd
 

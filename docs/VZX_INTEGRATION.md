@@ -45,7 +45,7 @@ The browser application would communicate with Signal Bridge only over localhost
 
 ## Phase 3: Artiste creation pipeline
 
-The first native prototype is now implemented as `vzx/states/signal-cathedral-v02`. It combines four synchronized Cathedral layers with frequency-specific motion, a radial waveform/spectrum structure, native particles, blur, and feedback. From here, Signal Vault can become a visual A&R system:
+The current native prototype is `vzx/states/signal-cathedral-v04`. It coordinates 20 transparent architectural plates across six smoothed frequency bands, with per-piece scale, opacity, idle phase, and response gain. A shadow base keeps the cathedral visually continuous while its crown, ribs, columns, portal, stairs, roots, aisles, and floor reflections move independently. From here, Signal Vault can become a visual A&R system:
 
 - Maintain a visual family tree alongside each song family
 - Associate Artiste projects, visual handles, palettes, and tweak presets with tracks

@@ -2,28 +2,28 @@
 
 This folder contains the native VZX Creative side of Signal Vault. It is deliberately separate from the public Vercel app and does not contain private music, ratings, catalog data, or local playlist paths.
 
-## Cathedral Engine V02
+## Cathedral Engine V04
 
-`states/signal-cathedral-v02` is the current VZX Artiste scene. Unlike V01's flat image plus analyzer traces, the current engine uses an inpainted background plate and three separately composited RGBA architectural layers:
+`states/signal-cathedral-v04` is the current VZX Artiste scene. It uses a dark stable cathedral base and 20 separately composited RGBA architectural plates:
 
-- the background cathedral remains stable instead of zooming with every beat;
-- bass flexes the isolated foreground arch and changes the depth of the inner portal;
-- mids rotate the foreground pillars and pointed arch independently from the nave;
-- treble expands the isolated stairs and reflective floor to create a perspective ripple;
-- waveform and spectrum data form a radial structure inside the portal instead of straight analyzer overlays;
-- 650 native VZX particles respond to the high-frequency band; and
-- a render surface, blur pass, and low-alpha feedback loop create glow and trails.
+- sub energy opens the portal core and pushes the central floor forward;
+- bass drives the main columns, structural roots, and lower architecture;
+- low mids move the outer arches and stairs;
+- mids open the crown and paired inner ribs;
+- high mids lift the crown apex and upper rib vaults;
+- treble activates the side-aisle light and reflective floor wings; and
+- every plate combines smoothed audio response with its own low-amplitude phase motion.
 
-The old full-frame scale pulse and opaque image-state crossfades are disabled. The visible movement now comes from separately transformed architecture, portal depth, floor perspective, radial waveforms, particles, glow, and feedback. Slow zero-centered motion keeps the layers alive when the separate Visualization Audio service is stopped, while live octave bands add much stronger frequency-specific movement.
+The scene intentionally has no particle field, oscilloscope overlay, rotation jitter, blur loop, or whole-frame pulse. The stable shadow base prevents holes when the luminous plates separate, while independent phase offsets make the cathedral open and contract as a coordinated structure rather than one breathing image.
 
-The background plate and transparent architectural layers are AI-generated, composition-matched passes derived from the original Astral Cathedral artwork. All state files use VZX resource-relative paths. Launching Artiste with this folder as its `data_path` keeps the scene portable and leaves the Steam installation untouched. V01 remains available as the simpler diagnostic scene.
+The V04 master is an AI-generated, composition-matched evolution of the original Astral Cathedral artwork. `scripts/build-vzx-cathedral-v04.py` deterministically rebuilds the base, the 20 transparent plates, the layer map, and the VZX state. All state files use VZX resource-relative paths. Launching Artiste with this folder as its `data_path` keeps the scene portable and leaves the Steam installation untouched. Earlier scene versions remain available for comparison.
 
 ## Controls
 
-- Double-click `OPEN SIGNAL CATHEDRAL IN VZX.cmd` in the repository root. It starts Artiste with this portable data folder and loads Cathedral Engine V02 automatically.
+- Double-click `OPEN SIGNAL CATHEDRAL IN VZX.cmd` in the repository root. It starts Artiste with this portable data folder and loads Cathedral Engine V04 automatically.
 - Play audio through the configured VZX visualization input.
 - Press `Ctrl+F` for the native preview window/fullscreen view.
-- Artiste can stop its separate audio-server process when it is restarted. If the radial waveform is flat, open **Input/Output > Visualization Audio**, select **WASAPI** and **Speakers (Realtek(R) Audio)**, then enable **Recording**. VZX's selector backgrounds can render black in this build; use the visible label and verify the status changes from **Stopped**. The idle architecture will move before that, but bass/mid/treble reaction requires the audio service.
+- Artiste can stop its separate audio-server process when it is restarted. If the architecture only follows its slow idle phases, open **Input/Output > Visualization Audio**, select **WASAPI** and **Speakers (Realtek(R) Audio)**, then enable **Recording**. VZX's selector backgrounds can render black in this build; use the visible label and verify the status changes from **Stopped**. The architecture will move before that, but spectral reaction requires the audio service.
 
 ## Privacy
 
