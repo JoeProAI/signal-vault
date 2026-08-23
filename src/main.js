@@ -431,6 +431,7 @@ async function init() {
 const openFolder = () => folderInput.click();
 $('#connect-button').addEventListener('click', openFolder);
 $('#welcome-connect').addEventListener('click', openFolder);
+$('#welcome-theater').addEventListener('click', openTheater);
 $('#theater-launch').addEventListener('click', openTheater);
 $('#theater-launch-deck').addEventListener('click', openTheater);
 $('#visualizer-close').addEventListener('click', closeTheater);
