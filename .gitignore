@@ -12,3 +12,5 @@ public/share/manifest.json
 .env.*
 !.env.example
 OPEN PRIORITY AUDITIONS IN FOOBAR.cmd
+
+.vercel

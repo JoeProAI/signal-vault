@@ -2,6 +2,10 @@
 
 Signal Vault is a local-first music curation console for large folders of AI generations, demos, alternate takes, and unfinished tracks. It turns an overwhelming directory into focused audition decks without uploading the audio.
 
+## Try it
+
+[Open Signal Vault](https://signal-vault-coral.vercel.app/), choose a music folder, and start reviewing. Analysis, playback, and ratings stay in your browser.
+
 ## What it does
 
 - Opens a music folder through the browser's directory picker
