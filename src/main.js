@@ -1,6 +1,7 @@
 import './styles.css';
 import { audioFilesFrom, buildCatalogFromFiles, createEmptyCatalog } from './catalog.js';
 import { forgetCurrentLibrary, loadCurrentLibrary, saveLibrary } from './storage.js';
+import { SignalVisualizer, VISUAL_SCENES } from './visualizer.js';
 
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
@@ -14,6 +15,7 @@ const state = {
 
 const audio = $('#audio');
 const folderInput = $('#folder-input');
+let visualizer = null;
 audio.volume = 0.85;
 
 const ratingsKey = () => `signal-vault-ratings-v2:${state.catalog.id}`;
@@ -166,6 +168,7 @@ function selectTrack(id, autoplay = false) {
   $('#now-bpm').textContent = track.bpm || '––';
   $('#now-duration').textContent = formatTime(track.duration);
   $('#transport-title').textContent = track.title;
+  updateVisualizerTrack();
   updateRatingControls();
   renderTracks();
   if (autoplay) playTrack(track);
@@ -189,10 +192,65 @@ async function ensureAnalyser() {
   if (!AudioContext) return;
   state.audioContext = new AudioContext();
   state.analyser = state.audioContext.createAnalyser();
-  state.analyser.fftSize = 128;
+  state.analyser.fftSize = 256;
+  state.analyser.smoothingTimeConstant = 0.78;
   state.sourceNode = state.audioContext.createMediaElementSource(audio);
   state.sourceNode.connect(state.analyser);
   state.analyser.connect(state.audioContext.destination);
+}
+
+function updateVisualizerTrack() {
+  const track = state.tracksById.get(state.selectedId);
+  $('#visualizer-track-title').textContent = track?.title || 'NO SIGNAL LOADED';
+  $('#visualizer-track-artist').textContent = track ? `${track.artist} / ${track.source}` : 'Choose a track or let the idle signal breathe.';
+}
+
+function updateVisualizerScene(scene, engine = visualizer) {
+  if (!scene) return;
+  $('#visualizer-code').textContent = scene.code;
+  $('#visualizer-name').textContent = scene.name;
+  $('#visualizer-mood').textContent = scene.mood;
+  $('#visualizer-shuffle').textContent = engine?.shuffle ? 'AUTO / ON' : 'AUTO / OFF';
+  $('#visualizer-shuffle').setAttribute('aria-pressed', String(Boolean(engine?.shuffle)));
+  $$('#visualizer-index button').forEach((button) => button.classList.toggle('active', button.dataset.scene === scene.id));
+}
+
+function initializeVisualizer() {
+  visualizer = new SignalVisualizer({
+    canvas: $('#visualizer-canvas'),
+    analyserProvider: () => state.analyser,
+    trackProvider: () => state.tracksById.get(state.selectedId),
+    onSceneChange: updateVisualizerScene
+  });
+  $('#visualizer-intensity').value = String(visualizer.intensity);
+  $('#visualizer-index').innerHTML = VISUAL_SCENES.map((scene, index) => `<button type="button" data-scene="${scene.id}" data-index="${index}" aria-label="Open ${scene.name}"><span>${scene.code}</span><strong>${scene.name}</strong></button>`).join('');
+  $$('#visualizer-index button').forEach((button) => button.addEventListener('click', () => visualizer.setScene(Number(button.dataset.index))));
+  updateVisualizerScene(visualizer.scene, visualizer);
+  updateVisualizerTrack();
+}
+
+async function openTheater() {
+  if (!visualizer) initializeVisualizer();
+  await ensureAnalyser();
+  $('#visualizer-screen').hidden = false;
+  document.body.classList.add('theater-open');
+  visualizer.start();
+  updateVisualizerTrack();
+}
+
+function closeTheater() {
+  if ($('#visualizer-screen').hidden) return;
+  $('#visualizer-screen').hidden = true;
+  document.body.classList.remove('theater-open');
+  visualizer?.stop();
+  if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+}
+
+async function toggleTheaterFullscreen() {
+  try {
+    if (document.fullscreenElement) await document.exitFullscreen();
+    else await $('#visualizer-screen').requestFullscreen();
+  } catch { toast('FULLSCREEN IS NOT AVAILABLE IN THIS BROWSER'); }
 }
 
 function togglePlayback() {
@@ -278,6 +336,7 @@ function applyCatalog(catalog, files = []) {
   $('#connect-button').classList.toggle('connected', connected);
   $('#transport-status').textContent = connected ? 'READY FOR PRIVATE PLAYBACK' : 'RECONNECT FOLDER TO LISTEN';
   $('#welcome-screen').hidden = true;
+  updateVisualizerTrack();
 }
 
 async function forgetLibrary() {
@@ -304,6 +363,7 @@ async function forgetLibrary() {
   $('#transport-title').textContent = 'NO SIGNAL LOADED';
   $('#transport-status').textContent = 'OPEN A FOLDER TO BEGIN';
   $('#welcome-screen').hidden = false;
+  updateVisualizerTrack();
 }
 
 async function connectFolder(fileList) {
@@ -362,6 +422,7 @@ function animateSignalField() {
 }
 
 async function init() {
+  initializeVisualizer();
   renderStats(); renderCrates(); renderDeckHeading(); renderTracks(); animateSignalField();
   const cached = await loadCurrentLibrary();
   if (cached?.version === 2 && cached.tracks?.length) applyCatalog(cached);
@@ -370,6 +431,17 @@ async function init() {
 const openFolder = () => folderInput.click();
 $('#connect-button').addEventListener('click', openFolder);
 $('#welcome-connect').addEventListener('click', openFolder);
+$('#theater-launch').addEventListener('click', openTheater);
+$('#theater-launch-deck').addEventListener('click', openTheater);
+$('#visualizer-close').addEventListener('click', closeTheater);
+$('#visualizer-play').addEventListener('click', togglePlayback);
+$('#visualizer-previous').addEventListener('click', () => visualizer?.previous());
+$('#visualizer-next').addEventListener('click', () => visualizer?.next());
+$('#visualizer-random').addEventListener('click', () => visualizer?.random());
+$('#visualizer-intensity').addEventListener('input', (event) => visualizer?.setIntensity(event.target.value));
+$('#visualizer-shuffle').addEventListener('click', () => visualizer?.setShuffle(!visualizer.shuffle));
+$('#visualizer-fullscreen').addEventListener('click', toggleTheaterFullscreen);
+$('#vzx-launch').addEventListener('click', () => toast('OPENING VZX PLAYER / IT WILL LISTEN TO YOUR SYSTEM AUDIO'));
 folderInput.addEventListener('change', async () => { const files = [...folderInput.files]; folderInput.value = ''; await connectFolder(files); });
 $('#cancel-import').addEventListener('click', () => state.importController?.abort());
 $('#dismiss-privacy').addEventListener('click', () => $('#privacy-strip').remove());
@@ -390,6 +462,12 @@ audio.addEventListener('timeupdate', updateTransport);
 audio.addEventListener('ended', () => adjacentTrack(1));
 document.addEventListener('keydown', (event) => {
   if (event.target.matches('input, select, textarea')) return;
+  const theaterOpen = !$('#visualizer-screen').hidden;
+  if (event.key === 'Escape' && theaterOpen) { closeTheater(); return; }
+  if (event.key === 'ArrowRight' && theaterOpen) { event.preventDefault(); visualizer?.next(); return; }
+  if (event.key === 'ArrowLeft' && theaterOpen) { event.preventDefault(); visualizer?.previous(); return; }
+  if (event.key.toLowerCase() === 'r' && theaterOpen) { visualizer?.random(); return; }
+  if (event.key.toLowerCase() === 'f') { if (theaterOpen) closeTheater(); else openTheater(); return; }
   if (event.code === 'Space') { event.preventDefault(); togglePlayback(); }
   if (event.key.toLowerCase() === 'v') setRating(state.selectedId, 'vault');
   if (event.key.toLowerCase() === 'h') setRating(state.selectedId, 'hold');

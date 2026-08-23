@@ -19,6 +19,7 @@
         <div class="masthead-center">
           <span class="live-dot"></span>
           <span id="connection-label">NO LIBRARY CONNECTED</span>
+          <button class="theater-launch" id="theater-launch" type="button"><span>◉</span> SIGNAL THEATER</button>
         </div>
         <button class="connect-button" id="connect-button" type="button">
           <span>OPEN MUSIC FOLDER</span>
@@ -80,6 +81,7 @@
                 <p id="active-subtitle">Open a music folder to build your private audition deck.</p>
               </div>
               <div class="deck-actions">
+                <button class="text-button theater-deck-button" id="theater-launch-deck" type="button">◉ SIGNAL THEATER</button>
                 <button class="text-button" id="export-m3u" type="button">EXPORT VAULT M3U</button>
                 <button class="text-button" id="export-ratings" type="button">EXPORT RATINGS</button>
                 <button class="text-button" id="forget-library" type="button">FORGET LIBRARY</button>
@@ -140,6 +142,36 @@
     </div>
 
     <audio id="audio" preload="metadata"></audio>
+    <section class="visualizer-screen" id="visualizer-screen" hidden aria-label="Signal Theater audio visualizer">
+      <canvas id="visualizer-canvas" aria-hidden="true"></canvas>
+      <div class="visualizer-vignette" aria-hidden="true"></div>
+      <header class="visualizer-header">
+        <div class="visualizer-brand"><span class="visualizer-brand-mark">SV</span><span>SIGNAL THEATER<small>LOCAL AUDIO / LIVE REACTION</small></span></div>
+        <div class="visualizer-scene-copy">
+          <span id="visualizer-code">V01</span>
+          <strong id="visualizer-name">NEON RIFT</strong>
+          <small id="visualizer-mood">Mirrored frequency blades / cyan voltage</small>
+        </div>
+        <button class="visualizer-close" id="visualizer-close" type="button" aria-label="Close Signal Theater">CLOSE ×</button>
+      </header>
+      <div class="visualizer-track">
+        <span>NOW REACTING TO</span>
+        <strong id="visualizer-track-title">NO SIGNAL LOADED</strong>
+        <small id="visualizer-track-artist">Choose a track or let the idle signal breathe.</small>
+      </div>
+      <div class="visualizer-controls" aria-label="Visualizer controls">
+        <button class="visualizer-play" id="visualizer-play" type="button">PLAY / PAUSE</button>
+        <button id="visualizer-previous" type="button" aria-label="Previous visualizer">←</button>
+        <button id="visualizer-random" type="button">RANDOMIZE</button>
+        <button id="visualizer-next" type="button" aria-label="Next visualizer">→</button>
+        <label class="visualizer-intensity"><span>INTENSITY</span><input id="visualizer-intensity" type="range" min="0.5" max="2" step="0.05" value="1.15" /></label>
+        <button id="visualizer-shuffle" type="button" aria-pressed="false">AUTO / OFF</button>
+        <button id="visualizer-fullscreen" type="button">FULLSCREEN</button>
+        <a class="vzx-launch" id="vzx-launch" href="steam://rungameid/981590"><span>LAUNCH VZX PLAYER</span><small>STEAM APP REQUIRED ↗</small></a>
+      </div>
+      <div class="visualizer-index" id="visualizer-index" aria-label="Visualizer scene list"></div>
+      <p class="visualizer-hint">F THEATER · ← → SCENES · R RANDOM · ESC CLOSE</p>
+    </section>
     <div class="transport" id="transport" aria-label="Audio player">
       <button id="transport-play" type="button" aria-label="Play or pause">▶</button>
       <div class="transport-copy">
