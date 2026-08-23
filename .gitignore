@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.cache/
+.local/
+playlists/*.m3u8
+public/data/catalog.json
+public/share/tracks/*
+!public/share/tracks/README.md
+public/share/manifest.json
+*.log
+.env
+.env.*
+!.env.example
+OPEN PRIORITY AUDITIONS IN FOOBAR.cmd

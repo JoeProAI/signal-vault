@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0b0c0d" />
+    <meta name="description" content="Turn an overwhelming music folder into the tracks worth keeping. Private, local-first curation in your browser." />
+    <title>Signal Vault / Local Music Curator</title>
+  </head>
+  <body>
+    <canvas id="signal-field" aria-hidden="true"></canvas>
+    <div class="noise" aria-hidden="true"></div>
+    <div id="app">
+      <header class="masthead">
+        <a class="identity" href="#top" aria-label="Signal Vault home">
+          <span class="identity-mark">SV</span>
+          <span>LOCAL MUSIC<br />CURATION SYSTEM</span>
+        </a>
+        <div class="masthead-center">
+          <span class="live-dot"></span>
+          <span id="connection-label">NO LIBRARY CONNECTED</span>
+        </div>
+        <button class="connect-button" id="connect-button" type="button">
+          <span>OPEN MUSIC FOLDER</span>
+          <span aria-hidden="true">↗</span>
+        </button>
+        <input id="folder-input" type="file" accept="audio/*,.mp3,.m4a,.aac,.flac,.wav,.ogg,.opus,.aif,.aiff,.ape" webkitdirectory multiple hidden />
+      </header>
+
+      <main id="top">
+        <section class="hero" aria-labelledby="page-title">
+          <div class="hero-copy">
+            <p class="kicker" id="collection-kicker">NO COLLECTION / PRIVATE MASTER DECK</p>
+            <h1 id="page-title"><span>SIGNAL</span><span>VAULT</span></h1>
+            <p class="hero-note" id="hero-note">Open any music folder. Signal Vault analyzes it locally, groups alternate cuts, and helps you find the records that deserve to survive.</p>
+          </div>
+          <div class="hero-instrument" aria-hidden="true">
+            <div class="orbit orbit-a"></div>
+            <div class="orbit orbit-b"></div>
+            <div class="reel">
+              <div class="reel-cutout r1"></div>
+              <div class="reel-cutout r2"></div>
+              <div class="reel-cutout r3"></div>
+              <div class="reel-cutout r4"></div>
+              <div class="reel-core">LOCAL</div>
+            </div>
+            <span class="instrument-label">ARCHIVE SIGNAL</span>
+          </div>
+          <div class="collection-stats" id="collection-stats" aria-label="Collection statistics"></div>
+        </section>
+
+        <section class="privacy-strip" id="privacy-strip">
+          <span class="privacy-icon">LOCAL</span>
+          <p><strong>Your archive stays on this machine.</strong> Tags, ratings, and playback are processed locally in your browser. Nothing is uploaded.</p>
+          <button id="dismiss-privacy" type="button" aria-label="Dismiss privacy notice">×</button>
+        </section>
+
+        <section class="console" aria-label="Listening console">
+          <aside class="crate-rail">
+            <div class="rail-heading">
+              <span>THE CRATES</span>
+              <span id="crate-count">00</span>
+            </div>
+            <nav id="crate-list" aria-label="Playlist crates"></nav>
+            <div class="rail-footer">
+              <span>KEYBOARD</span>
+              <dl>
+                <div><dt>SPACE</dt><dd>PLAY</dd></div>
+                <div><dt>V / H / X</dt><dd>RATE</dd></div>
+                <div><dt>J / K</dt><dd>NEXT / BACK</dd></div>
+              </dl>
+            </div>
+          </aside>
+
+          <div class="deck">
+            <div class="deck-heading">
+              <div>
+                <p class="section-index" id="active-code">00 / CONTROL ROOM</p>
+                <h2 id="active-title">PRIORITY AUDITIONS</h2>
+                <p id="active-subtitle">Open a music folder to build your private audition deck.</p>
+              </div>
+              <div class="deck-actions">
+                <button class="text-button" id="export-m3u" type="button">EXPORT VAULT M3U</button>
+                <button class="text-button" id="export-ratings" type="button">EXPORT RATINGS</button>
+                <button class="text-button" id="forget-library" type="button">FORGET LIBRARY</button>
+              </div>
+            </div>
+
+            <div class="now-deck" id="now-deck">
+              <div class="now-index" id="now-index">0000</div>
+              <button class="main-play" id="main-play" type="button" aria-label="Play selected track"><span>▶</span></button>
+              <div class="now-copy">
+                <span class="now-label">ON THE REVIEW DECK</span>
+                <h3 id="now-title">Open your music folder</h3>
+                <p id="now-prompt">Signal Vault supports MP3, M4A, FLAC, WAV, OGG, Opus, AAC, AIFF, and APE libraries.</p>
+              </div>
+              <div class="now-meters">
+                <div><span>ENERGY</span><strong id="now-energy">––</strong></div>
+                <div><span>BPM</span><strong id="now-bpm">––</strong></div>
+                <div><span>TIME</span><strong id="now-duration">––</strong></div>
+              </div>
+              <div class="rating-bank" aria-label="Rate selected track">
+                <button type="button" data-rate="cut"><span>X</span>CUT</button>
+                <button type="button" data-rate="hold"><span>H</span>HOLD</button>
+                <button type="button" data-rate="vault"><span>V</span>VAULT</button>
+              </div>
+            </div>
+
+            <div class="toolbar">
+              <label class="search-control">
+                <span>FIND</span>
+                <input id="search" type="search" placeholder="TITLE, MOOD, INSTRUMENT…" autocomplete="off" />
+              </label>
+              <label class="sort-control">
+                <span>ORDER</span>
+                <select id="sort">
+                  <option value="signal">SIGNAL STRENGTH</option>
+                  <option value="energy-desc">ENERGY: HIGH → LOW</option>
+                  <option value="energy-asc">ENERGY: LOW → HIGH</option>
+                  <option value="title">TITLE: A → Z</option>
+                  <option value="duration">LONGEST FIRST</option>
+                </select>
+              </label>
+              <div class="result-count" id="result-count">0 SIGNALS</div>
+            </div>
+
+            <div class="track-head" aria-hidden="true">
+              <span>NO.</span><span>SIGNAL / STYLE DNA</span><span>READOUT</span><span>DECISION</span>
+            </div>
+            <div class="track-list" id="track-list" aria-live="polite"></div>
+            <button class="load-more" id="load-more" type="button">LOAD MORE SIGNALS</button>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <span>SIGNAL VAULT / LOCAL-FIRST CURATION SYSTEM</span>
+        <span>NO AUDIO LEAVES YOUR BROWSER UNTIL YOU CHOOSE TO PUBLISH IT</span>
+      </footer>
+    </div>
+
+    <audio id="audio" preload="metadata"></audio>
+    <div class="transport" id="transport" aria-label="Audio player">
+      <button id="transport-play" type="button" aria-label="Play or pause">▶</button>
+      <div class="transport-copy">
+        <strong id="transport-title">NO SIGNAL LOADED</strong>
+        <span id="transport-status">OPEN A FOLDER TO BEGIN</span>
+      </div>
+      <span id="current-time">0:00</span>
+      <input id="seek" type="range" min="0" max="1000" value="0" aria-label="Seek" />
+      <span id="total-time">0:00</span>
+      <label class="volume"><span>VOL</span><input id="volume" type="range" min="0" max="1" step="0.01" value="0.85" aria-label="Volume" /></label>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <section class="welcome-screen" id="welcome-screen" aria-labelledby="welcome-title">
+      <div class="welcome-grid" aria-hidden="true"></div>
+      <div class="welcome-panel">
+        <p class="welcome-index">LOCAL-FIRST / ZERO UPLOADS / YOUR MUSIC</p>
+        <h2 id="welcome-title">FIND THE<br /><span>ONES WORTH</span><br />KEEPING.</h2>
+        <p class="welcome-lede">Turn a chaotic folder of AI generations, demos, and alternate cuts into a focused listening deck. Your audio never leaves this device.</p>
+        <button class="welcome-connect" id="welcome-connect" type="button">
+          <span>CHOOSE A MUSIC FOLDER</span><span>↗</span>
+        </button>
+        <div class="welcome-steps">
+          <div><b>01</b><strong>OPEN</strong><span>Select a folder from this device</span></div>
+          <div><b>02</b><strong>LISTEN</strong><span>Compare variants and themed crates</span></div>
+          <div><b>03</b><strong>KEEP</strong><span>Export the winners to your player</span></div>
+        </div>
+        <p class="format-line">MP3 · M4A · FLAC · WAV · OGG · OPUS · AAC · AIFF · APE</p>
+      </div>
+      <div class="welcome-seal" aria-hidden="true"><span>SV</span><small>LOCAL AUDIO<br />ONLY</small></div>
+    </section>
+
+    <section class="import-screen" id="import-screen" hidden aria-live="polite" aria-labelledby="import-title">
+      <div class="import-panel">
+        <p class="welcome-index">BUILDING YOUR SIGNAL MAP</p>
+        <h2 id="import-title">READING THE<br />RECORDS.</h2>
+        <div class="import-progress"><span id="import-progress-bar"></span></div>
+        <div class="import-readout"><strong id="import-count">0 / 0</strong><span id="import-percent">0%</span></div>
+        <p id="import-file">Starting local analysis…</p>
+        <p class="import-privacy">Audio is read directly from your device. No file is sent across the network.</p>
+        <button class="text-button" id="cancel-import" type="button">CANCEL IMPORT</button>
+      </div>
+    </section>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

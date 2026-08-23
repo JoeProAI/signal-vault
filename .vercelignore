@@ -1,0 +1,12 @@
+.env
+.env.*
+!.env.example
+.cache
+.local
+playlists
+scripts
+public/data
+public/share
+README.md
+node_modules
+npm-debug.log*
