@@ -30,6 +30,31 @@ function polygon(context, x, y, radius, sides, rotation = 0) {
   }
 }
 
+function clipPolygonToHalfPlane(points, normalX, normalY, limit) {
+  const clipped = [];
+  for (let index = 0; index < points.length; index += 1) {
+    const current = points[index];
+    const next = points[(index + 1) % points.length];
+    const currentDistance = current.x * normalX + current.y * normalY - limit;
+    const nextDistance = next.x * normalX + next.y * normalY - limit;
+    const currentInside = currentDistance <= 1e-9;
+    const nextInside = nextDistance <= 1e-9;
+
+    if (currentInside) clipped.push(current);
+    if (currentInside !== nextInside) {
+      const denominator = (next.x - current.x) * normalX + (next.y - current.y) * normalY;
+      if (Math.abs(denominator) > 1e-9) {
+        const amount = (limit - current.x * normalX - current.y * normalY) / denominator;
+        clipped.push({
+          x: current.x + (next.x - current.x) * amount,
+          y: current.y + (next.y - current.y) * amount
+        });
+      }
+    }
+  }
+  return clipped;
+}
+
 export class SignalVisualizer {
   constructor({ canvas, analyserProvider, trackProvider, onSceneChange }) {
     this.canvas = canvas;
@@ -124,41 +149,59 @@ export class SignalVisualizer {
   }
 
   buildRigPieces() {
-    const pieces = [];
     const columns = 5;
     const rows = 4;
+    const seeds = [];
     for (let row = 0; row < rows; row += 1) {
       for (let column = 0; column < columns; column += 1) {
         const index = row * columns + column;
-        const centerX = (column + 0.5) / columns;
-        const centerY = (row + 0.5) / rows;
-        const radialX = centerX - 0.5;
-        const radialY = centerY - 0.5;
-        const length = Math.hypot(radialX, radialY) || 1;
-        const band = row === rows - 1
-          ? (column > 0 && column < columns - 1 ? 'bass' : 'treble')
-          : row === 2
-            ? (column > 0 && column < columns - 1 ? 'lowMid' : 'highMid')
-            : row === 1
-              ? (column === 2 ? 'bass' : 'lowMid')
-              : (column === 2 ? 'highMid' : 'treble');
-        pieces.push({
-          index,
-          row,
-          column,
-          x: column / columns,
-          y: row / rows,
-          width: 1 / columns,
-          height: 1 / rows,
-          directionX: radialX / length,
-          directionY: radialY / length,
-          band,
-          phase: index * 0.73 + row * 0.41,
-          level: 0
-        });
+        const centerX = clamp((column + 0.5) / columns + Math.sin(index * 12.9898 + 1.4) * 0.032, 0.04, 0.96);
+        const centerY = clamp((row + 0.5) / rows + Math.sin(index * 7.233 + 4.1) * 0.038, 0.04, 0.96);
+        seeds.push({ index, row, column, centerX, centerY });
       }
     }
-    return pieces;
+
+    return seeds.map((seed) => {
+      let region = [
+        { x: 0, y: 0 },
+        { x: 1, y: 0 },
+        { x: 1, y: 1 },
+        { x: 0, y: 1 }
+      ];
+      for (const neighbor of seeds) {
+        if (neighbor.index === seed.index) continue;
+        const normalX = 2 * (neighbor.centerX - seed.centerX);
+        const normalY = 2 * (neighbor.centerY - seed.centerY);
+        const limit = neighbor.centerX ** 2 + neighbor.centerY ** 2
+          - seed.centerX ** 2 - seed.centerY ** 2;
+        region = clipPolygonToHalfPlane(region, normalX, normalY, limit);
+      }
+
+      const { index, row, column, centerX, centerY } = seed;
+      const radialX = centerX - 0.5;
+      const radialY = centerY - 0.5;
+      const length = Math.hypot(radialX, radialY) || 1;
+      const band = row === rows - 1
+        ? (column > 0 && column < columns - 1 ? 'bass' : 'treble')
+        : row === 2
+          ? (column > 0 && column < columns - 1 ? 'lowMid' : 'highMid')
+          : row === 1
+            ? (column === 2 ? 'bass' : 'lowMid')
+            : (column === 2 ? 'highMid' : 'treble');
+      return {
+        index,
+        row,
+        column,
+        centerX,
+        centerY,
+        polygon: region,
+        directionX: radialX / length,
+        directionY: radialY / length,
+        band,
+        phase: index * 0.73 + row * 0.41,
+        level: 0
+      };
+    });
   }
 
   async setRigImage(file) {
@@ -508,12 +551,16 @@ export class SignalVisualizer {
     }
 
     const { context: ctx, width, height } = this;
-    const imageRatio = image.naturalWidth / image.naturalHeight;
-    const viewportRatio = width / height;
-    const sourceWidth = viewportRatio > imageRatio ? image.naturalWidth : image.naturalHeight * viewportRatio;
-    const sourceHeight = viewportRatio > imageRatio ? image.naturalWidth / viewportRatio : image.naturalHeight;
-    const sourceX = (image.naturalWidth - sourceWidth) / 2;
-    const sourceY = (image.naturalHeight - sourceHeight) / 2;
+    const fitScale = Math.min(width / image.naturalWidth, height / image.naturalHeight);
+    const drawWidth = image.naturalWidth * fitScale;
+    const drawHeight = image.naturalHeight * fitScale;
+    const drawX = (width - drawWidth) / 2;
+    const drawY = (height - drawHeight) / 2;
+    const coverScale = Math.max(width / image.naturalWidth, height / image.naturalHeight);
+    const backgroundWidth = image.naturalWidth * coverScale;
+    const backgroundHeight = image.naturalHeight * coverScale;
+    const backgroundX = (width - backgroundWidth) / 2;
+    const backgroundY = (height - backgroundHeight) / 2;
     const directives = this.rigDirectives;
     const signalChange = Math.abs(signal.energy - this.rigPreviousSignal.energy) * 1.25
       + Math.abs(signal.bass - this.rigPreviousSignal.bass)
@@ -530,8 +577,8 @@ export class SignalVisualizer {
         : directives.palette === 'acid' ? 78
           : directives.palette === 'cycle' ? this.rigHue + time * 4 : 0;
     const paletteFilter = directives.palette === 'mono'
-      ? 'grayscale(1) contrast(1.2) brightness(.88)'
-      : `hue-rotate(${paletteHue}deg) brightness(.84) saturate(1.12) contrast(1.08)`;
+      ? 'grayscale(1) contrast(1.16) brightness(.94)'
+      : `hue-rotate(${paletteHue}deg) brightness(.94) saturate(1.08) contrast(1.04)`;
 
     ctx.save();
     ctx.setTransform(this.ratio, 0, 0, this.ratio, 0, 0);
@@ -539,8 +586,13 @@ export class SignalVisualizer {
     ctx.globalAlpha = 1;
     ctx.fillStyle = '#020304';
     ctx.fillRect(0, 0, width, height);
+    ctx.filter = 'blur(28px) brightness(.24) saturate(.8)';
+    ctx.drawImage(image, backgroundX - 30, backgroundY - 30, backgroundWidth + 60, backgroundHeight + 60);
+    ctx.filter = 'none';
+    ctx.fillStyle = 'rgba(2,3,4,.28)';
+    ctx.fillRect(0, 0, width, height);
     ctx.filter = paletteFilter;
-    ctx.drawImage(image, sourceX, sourceY, sourceWidth, sourceHeight, 0, 0, width, height);
+    ctx.drawImage(image, drawX, drawY, drawWidth, drawHeight);
     ctx.filter = 'none';
 
     for (const piece of this.rigPieces) {
@@ -550,40 +602,39 @@ export class SignalVisualizer {
       piece.level += (target - piece.level) * easing;
       const idle = Math.sin(time * (0.22 + piece.row * 0.025) + piece.phase);
       const response = piece.level * this.intensity * directives.motion;
-      const centerX = (piece.x + piece.width / 2) * width;
-      const centerY = (piece.y + piece.height / 2) * height;
+      const centerX = drawX + piece.centerX * drawWidth;
+      const centerY = drawY + piece.centerY * drawHeight;
       const floorPush = piece.row === 3 ? 1.45 : 1;
-      const travel = Math.min(width, height) * (0.016 + response * 0.055) * floorPush;
+      const travel = Math.min(drawWidth, drawHeight) * (0.005 + response * 0.026) * floorPush;
       const cutDirection = piece.index % 2 ? -1 : 1;
-      const translateX = piece.directionX * travel + Math.cos(piece.phase) * idle * 4.5 + cutDirection * this.rigCutPulse * width * 0.009;
-      const translateY = piece.directionY * travel + (piece.row === 0 ? -1 : piece.row === 3 ? 1 : 0) * response * height * 0.026 + Math.sin(piece.phase) * idle * 4.5;
-      const scale = 1.008 + response * (piece.column === 2 ? 0.14 : 0.095) + idle * 0.008 + this.rigCutPulse * 0.024;
-      const targetX = piece.x * width - 2;
-      const targetY = piece.y * height - 2;
-      const targetWidth = piece.width * width + 4;
-      const targetHeight = piece.height * height + 4;
-      const cropX = sourceX + piece.x * sourceWidth;
-      const cropY = sourceY + piece.y * sourceHeight;
-      const cropWidth = piece.width * sourceWidth;
-      const cropHeight = piece.height * sourceHeight;
+      const translateX = piece.directionX * travel + Math.cos(piece.phase) * idle * 2.2 + cutDirection * this.rigCutPulse * drawWidth * 0.004;
+      const translateY = piece.directionY * travel + (piece.row === 0 ? -1 : piece.row === 3 ? 1 : 0) * response * drawHeight * 0.012 + Math.sin(piece.phase) * idle * 2.2;
+      const scale = 1.002 + response * (piece.column === 2 ? 0.065 : 0.04) + idle * 0.003 + this.rigCutPulse * 0.01;
 
       ctx.save();
       ctx.translate(centerX + translateX, centerY + translateY);
       ctx.scale(scale, scale);
       ctx.translate(-centerX, -centerY);
       ctx.beginPath();
-      ctx.rect(targetX, targetY, targetWidth, targetHeight);
+      piece.polygon.forEach((point, pointIndex) => {
+        const pointX = drawX + point.x * drawWidth;
+        const pointY = drawY + point.y * drawHeight;
+        if (pointIndex === 0) ctx.moveTo(pointX, pointY); else ctx.lineTo(pointX, pointY);
+      });
+      ctx.closePath();
       ctx.clip();
-      ctx.globalAlpha = clamp(0.54 + response * 0.54, 0, 1);
+      ctx.globalAlpha = clamp(0.42 + response * 0.5, 0, 0.92);
       const pieceColor = directives.palette === 'mono' ? 'grayscale(1)' : `hue-rotate(${paletteHue + piece.index * 1.7}deg)`;
-      ctx.filter = `${pieceColor} brightness(${1.08 + response * 0.34}) saturate(${1.18 + response * 0.74}) contrast(${1.04 + response * 0.18})`;
-      ctx.drawImage(image, cropX, cropY, cropWidth, cropHeight, targetX, targetY, targetWidth, targetHeight);
+      ctx.filter = `${pieceColor} brightness(${1.02 + response * 0.22}) saturate(${1.08 + response * 0.5}) contrast(${1.02 + response * 0.12})`;
+      ctx.drawImage(image, drawX, drawY, drawWidth, drawHeight);
       ctx.restore();
     }
 
     ctx.globalCompositeOperation = 'screen';
     ctx.globalAlpha = 0.11 + signal.energy * 0.2;
-    const glow = ctx.createRadialGradient(width / 2, height * 0.52, 0, width / 2, height * 0.52, Math.max(width, height) * 0.58);
+    const glowX = drawX + drawWidth / 2;
+    const glowY = drawY + drawHeight * 0.52;
+    const glow = ctx.createRadialGradient(glowX, glowY, 0, glowX, glowY, Math.max(drawWidth, drawHeight) * 0.58);
     glow.addColorStop(0, 'rgba(167,255,63,.26)');
     glow.addColorStop(.48, 'rgba(0,217,255,.08)');
     glow.addColorStop(1, 'rgba(255,79,216,0)');
