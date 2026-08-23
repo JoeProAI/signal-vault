@@ -1,4 +1,4 @@
-meta_set U2lnbmFsIENhdGhlZHJhbCBWMDJ8Sm9zZXBoIHwgU2lnbmFsIFZhdWx0fHx8Q2F0aGVkcmFsIEVuZ2luZTogbGF5ZXJlZCBpbWFnZSBzeW50aGVzaXMsIGJhc3Mgc2hvY2t3YXZlcywgbWlkIGFyY2hpdGVjdHVyZSBkcmlmdCwgdHJlYmxlIGZpbGFtZW50cywgcmFkaWFsIHdhdmVmb3JtLCBwYXJ0aWNsZXMsIGdsb3cgYW5kIGZlZWRiYWNrLg==
+meta_set U2lnbmFsIENhdGhlZHJhbCBWMDJ8Sm9zZXBoIHwgU2lnbmFsIFZhdWx0fHx8Q2F0aGVkcmFsIEVuZ2luZTogbGF5ZXJlZCBpbWFnZSBzeW50aGVzaXMgd2l0aCBzbW9vdGhlZCBiYXNzLCBtaWQgYW5kIHRyZWJsZSBzY2FsZSBwbHVzIG9wYWNpdHkgYmxvb20u
 component_create sound;input_visualization_listener audio -0.920000 0.000000
 
 component_create texture;loaders;png_tex_load morph_sub_texture -1.080000 0.880000
@@ -20,10 +20,10 @@ param_set morph_bass_layer facing_camera 0
 param_set morph_bass_layer size 1.00000000000000000000,0.56250000000000000000,0.00000000000000000000
 component_create maths;oscillators;oscillator morph_bass_cycle -0.820000 0.940000
 param_set morph_bass_cycle amp 0.00000000000000000000
-param_set morph_bass_cycle ofs 0.82000000000000000000
+param_set morph_bass_cycle ofs 0.54000000000000000000
 param_set morph_bass_cycle freq 0.07100000000000000000
 component_create maths;arithmetics;binary;mult morph_bass_audio -0.650000 0.940000
-param_set morph_bass_audio param2 0.10000000000000000000
+param_set morph_bass_audio param2 0.36000000000000000000
 component_create maths;arithmetics;binary;add morph_bass_alpha -0.480000 0.940000
 component_create maths;converters;4float_to_float4 morph_bass_color -0.300000 0.940000
 param_set morph_bass_color floata 1.00000000000000000000
@@ -35,11 +35,11 @@ param_set morph_mid_layer facing_camera 0
 param_set morph_mid_layer size 1.00000000000000000000,0.56250000000000000000,0.00000000000000000000
 component_create maths;oscillators;oscillator morph_mid_cycle -0.820000 0.860000
 param_set morph_mid_cycle amp 0.00000000000000000000
-param_set morph_mid_cycle ofs 0.72000000000000000000
+param_set morph_mid_cycle ofs 0.42000000000000000000
 param_set morph_mid_cycle freq 0.09700000000000000000
 param_set morph_mid_cycle phase 0.41000000000000000000
 component_create maths;arithmetics;binary;mult morph_mid_audio -0.650000 0.860000
-param_set morph_mid_audio param2 0.16000000000000000000
+param_set morph_mid_audio param2 0.46000000000000000000
 component_create maths;arithmetics;binary;add morph_mid_alpha -0.480000 0.860000
 component_create maths;converters;4float_to_float4 morph_mid_color -0.300000 0.860000
 param_set morph_mid_color floata 1.00000000000000000000
@@ -51,11 +51,11 @@ param_set morph_treble_layer facing_camera 0
 param_set morph_treble_layer size 1.00000000000000000000,0.56250000000000000000,0.00000000000000000000
 component_create maths;oscillators;oscillator morph_treble_cycle -0.820000 0.780000
 param_set morph_treble_cycle amp 0.00000000000000000000
-param_set morph_treble_cycle ofs 0.72000000000000000000
+param_set morph_treble_cycle ofs 0.44000000000000000000
 param_set morph_treble_cycle freq 0.13700000000000000000
 param_set morph_treble_cycle phase 0.83000000000000000000
 component_create maths;arithmetics;binary;mult morph_treble_audio -0.650000 0.780000
-param_set morph_treble_audio param2 0.18000000000000000000
+param_set morph_treble_audio param2 0.40000000000000000000
 component_create maths;arithmetics;binary;add morph_treble_alpha -0.480000 0.780000
 component_create maths;converters;4float_to_float4 morph_treble_color -0.300000 0.780000
 param_set morph_treble_color floata 1.00000000000000000000
@@ -63,15 +63,15 @@ param_set morph_treble_color floatb 1.00000000000000000000
 param_set morph_treble_color floatc 1.00000000000000000000
 
 component_create maths;arithmetics;binary;mult arch_bass_scale -0.080000 0.900000
-param_set arch_bass_scale param2 0.22000000000000000000
+param_set arch_bass_scale param2 0.00000000000000000000
 component_create maths;arithmetics;binary;add arch_scale_offset 0.070000 0.900000
 param_set arch_scale_offset param2 0.98500000000000000000
 component_create maths;converters;float_to_float3 arch_scale_vector 0.220000 0.900000
 component_create renderers;opengl_modifiers;gl_scale arch_scale 0.370000 0.880000
 component_create maths;arithmetics;binary;mult arch_mid_angle -0.080000 0.830000
-param_set arch_mid_angle param2 0.08000000000000000000
+param_set arch_mid_angle param2 0.00000000000000000000
 component_create maths;oscillators;oscillator arch_sway 0.070000 0.830000
-param_set arch_sway amp 0.02200000000000000000
+param_set arch_sway amp 0.00000000000000000000
 param_set arch_sway ofs 0.00000000000000000000
 param_set arch_sway freq 0.06300000000000000000
 component_create maths;arithmetics;binary;add arch_angle_sum 0.220000 0.830000
@@ -79,9 +79,9 @@ component_create renderers;opengl_modifiers;gl_rotate arch_rotate 0.520000 0.880
 param_set arch_rotate axis 0.00000000000000000000,0.00000000000000000000,1.00000000000000000000
 
 component_create maths;arithmetics;binary;mult inner_bass_scale -0.080000 0.740000
-param_set inner_bass_scale param2 0.35000000000000000000
+param_set inner_bass_scale param2 0.00000000000000000000
 component_create maths;oscillators;oscillator inner_depth_cycle 0.070000 0.740000
-param_set inner_depth_cycle amp 0.05500000000000000000
+param_set inner_depth_cycle amp 0.01200000000000000000
 param_set inner_depth_cycle ofs 0.00000000000000000000
 param_set inner_depth_cycle freq 0.11800000000000000000
 component_create maths;arithmetics;binary;add inner_motion_sum 0.220000 0.740000
@@ -91,9 +91,9 @@ component_create maths;converters;float_to_float3 inner_scale_vector 0.520000 0.
 component_create renderers;opengl_modifiers;gl_scale inner_scale 0.670000 0.720000
 
 component_create maths;arithmetics;binary;mult floor_treble_scale -0.080000 0.580000
-param_set floor_treble_scale param2 0.18000000000000000000
+param_set floor_treble_scale param2 0.00000000000000000000
 component_create maths;oscillators;oscillator floor_ripple_cycle 0.070000 0.580000
-param_set floor_ripple_cycle amp 0.03000000000000000000
+param_set floor_ripple_cycle amp 0.00800000000000000000
 param_set floor_ripple_cycle ofs 0.00000000000000000000
 param_set floor_ripple_cycle freq 0.16500000000000000000
 component_create maths;arithmetics;binary;add floor_motion_sum 0.220000 0.580000
@@ -135,142 +135,6 @@ component_create maths;converters;3float_to_float3 base_drift_vector -0.410000 0
 param_set base_drift_vector floatc 0.00000000000000000000
 component_create renderers;opengl_modifiers;gl_translate base_translate 0.050000 0.260000
 
-component_create renderers;basic;textured_rectangle portal_layer -0.520000 0.100000
-param_set portal_layer facing_camera 0
-param_set portal_layer size 1.00000000000000000000,0.56250000000000000000,0.00000000000000000000
-component_create maths;arithmetics;binary;mult portal_scale_gain -0.720000 0.420000
-param_set portal_scale_gain param2 0.16000000000000000000
-component_create maths;arithmetics;binary;add portal_scale_offset -0.570000 0.420000
-param_set portal_scale_offset param2 0.94000000000000000000
-component_create maths;converters;float_to_float3 portal_scale_vector -0.410000 0.420000
-component_create renderers;opengl_modifiers;gl_scale portal_scale -0.250000 0.100000
-component_create maths;oscillators;oscillator portal_breathe -0.720000 0.790000
-param_set portal_breathe amp 0.14000000000000000000
-param_set portal_breathe freq 0.24000000000000000000
-param_set portal_breathe ofs 0.00000000000000000000
-component_create maths;arithmetics;binary;add portal_motion_sum -0.410000 0.790000
-component_create maths;arithmetics;binary;mult portal_alpha_gain -0.720000 0.500000
-param_set portal_alpha_gain param2 0.35000000000000000000
-component_create maths;arithmetics;binary;add portal_alpha_offset -0.570000 0.500000
-param_set portal_alpha_offset param2 0.12000000000000000000
-component_create maths;converters;4float_to_float4 portal_color -0.410000 0.500000
-param_set portal_color floata 1.00000000000000000000
-param_set portal_color floatb 1.00000000000000000000
-param_set portal_color floatc 1.00000000000000000000
-
-component_create renderers;basic;textured_rectangle filament_layer -0.520000 -0.060000
-param_set filament_layer facing_camera 0
-param_set filament_layer size 1.00000000000000000000,0.56250000000000000000,0.00000000000000000000
-component_create maths;arithmetics;binary;mult filament_alpha_gain -0.720000 -0.250000
-param_set filament_alpha_gain param2 0.18000000000000000000
-component_create maths;arithmetics;binary;add filament_alpha_offset -0.570000 -0.250000
-param_set filament_alpha_offset param2 0.10000000000000000000
-component_create maths;converters;4float_to_float4 filament_color -0.410000 -0.250000
-param_set filament_color floata 0.75000000000000000000
-param_set filament_color floatb 1.00000000000000000000
-param_set filament_color floatc 0.92000000000000000000
-component_create maths;arithmetics;binary;mult filament_angle_gain -0.720000 -0.330000
-param_set filament_angle_gain param2 0.02000000000000000000
-component_create maths;oscillators;oscillator filament_sway -0.720000 -0.580000
-param_set filament_sway amp 0.02800000000000000000
-param_set filament_sway freq 0.09500000000000000000
-param_set filament_sway ofs 0.00000000000000000000
-component_create maths;arithmetics;binary;add filament_angle_sum -0.410000 -0.580000
-component_create renderers;opengl_modifiers;gl_rotate filament_rotate -0.250000 -0.060000
-param_set filament_rotate axis 0.00000000000000000000,0.00000000000000000000,1.00000000000000000000
-
-component_create renderers;basic;textured_rectangle atmosphere_layer -0.520000 -0.170000
-param_set atmosphere_layer facing_camera 0
-param_set atmosphere_layer size 1.00000000000000000000,0.56250000000000000000,0.00000000000000000000
-component_create maths;arithmetics;binary;mult atmosphere_alpha_gain -0.720000 -0.420000
-param_set atmosphere_alpha_gain param2 0.22000000000000000000
-component_create maths;arithmetics;binary;add atmosphere_alpha_offset -0.570000 -0.420000
-param_set atmosphere_alpha_offset param2 0.05500000000000000000
-component_create maths;converters;4float_to_float4 atmosphere_color -0.410000 -0.420000
-param_set atmosphere_color floata 0.70000000000000000000
-param_set atmosphere_color floatb 0.92000000000000000000
-param_set atmosphere_color floatc 1.00000000000000000000
-component_create maths;arithmetics;binary;mult atmosphere_scale_gain -0.720000 -0.500000
-param_set atmosphere_scale_gain param2 0.04500000000000000000
-component_create maths;arithmetics;binary;add atmosphere_scale_offset -0.570000 -0.500000
-param_set atmosphere_scale_offset param2 0.99000000000000000000
-component_create maths;converters;float_to_float3 atmosphere_scale_vector -0.410000 -0.500000
-component_create renderers;opengl_modifiers;gl_scale atmosphere_scale -0.250000 -0.170000
-component_create maths;oscillators;oscillator atmosphere_rush -0.720000 -0.650000
-param_set atmosphere_rush amp 0.05500000000000000000
-param_set atmosphere_rush freq 0.18000000000000000000
-param_set atmosphere_rush ofs 0.00000000000000000000
-component_create maths;arithmetics;binary;add atmosphere_motion_sum -0.410000 -0.650000
-
-component_create maths;arithmetics;binary;mult scope_width_gain -0.100000 -0.520000
-param_set scope_width_gain param2 2.40000000000000000000
-component_create maths;arithmetics;binary;add scope_width_offset 0.050000 -0.520000
-param_set scope_width_offset param2 1.10000000000000000000
-component_create renderers;oscilloscopes;simple_oscilloscope radial_wave_0 -0.100000 -0.250000
-param_set radial_wave_0 size 0.47000000000000000000,0.13000000000000000000,0.00000000000000000000
-param_set radial_wave_0 color 0.05000000000000000000,1.00000000000000000000,0.82000000000000000000,0.76000000000000000000
-component_create renderers;oscilloscopes;simple_oscilloscope radial_wave_45 -0.100000 -0.320000
-param_set radial_wave_45 size 0.47000000000000000000,0.13000000000000000000,0.00000000000000000000
-param_set radial_wave_45 angle 0.78539816339744830000
-param_set radial_wave_45 rotation_axis 0.00000000000000000000,0.00000000000000000000,1.00000000000000000000
-param_set radial_wave_45 color 0.85000000000000000000,0.05000000000000000000,1.00000000000000000000,0.62000000000000000000
-component_create renderers;oscilloscopes;simple_oscilloscope radial_wave_90 -0.100000 -0.390000
-param_set radial_wave_90 size 0.47000000000000000000,0.13000000000000000000,0.00000000000000000000
-param_set radial_wave_90 angle 1.57079632679489660000
-param_set radial_wave_90 rotation_axis 0.00000000000000000000,0.00000000000000000000,1.00000000000000000000
-param_set radial_wave_90 color 0.08000000000000000000,0.65000000000000000000,1.00000000000000000000,0.66000000000000000000
-component_create renderers;oscilloscopes;simple_oscilloscope radial_wave_135 -0.100000 -0.460000
-param_set radial_wave_135 size 0.47000000000000000000,0.13000000000000000000,0.00000000000000000000
-param_set radial_wave_135 angle 2.35619449019234490000
-param_set radial_wave_135 rotation_axis 0.00000000000000000000,0.00000000000000000000,1.00000000000000000000
-param_set radial_wave_135 color 1.00000000000000000000,0.12000000000000000000,0.62000000000000000000,0.54000000000000000000
-
-component_create particlesystems;generators;basic_spray_emitter energy_particles 0.000000 0.350000
-param_set energy_particles emitter_position 0.00000000000000000000,0.00000000000000000000,0.00000000000000000000
-param_set energy_particles speed_x 0.70000000000000000000
-param_set energy_particles speed_y 0.45000000000000000000
-param_set energy_particles speed_z 0.35000000000000000000
-param_set energy_particles num_particles 650.00000000000000000000
-param_set energy_particles particle_size_random_weight 0.01200000000000000000
-param_set energy_particles particle_lifetime_base 2.70000000000000000000
-param_set energy_particles color 0.08000000000000000000,0.95000000000000000000,1.00000000000000000000,0.90000000000000000000
-component_create maths;arithmetics;binary;mult particle_size_gain 0.000000 0.430000
-param_set particle_size_gain param2 0.02200000000000000000
-component_create maths;arithmetics;binary;add particle_size_offset 0.150000 0.430000
-param_set particle_size_offset param2 0.00400000000000000000
-component_create particlesystems;modifiers;basic_gravity energy_gravity 0.150000 0.350000
-param_set energy_gravity center 0.00000000000000000000,0.00000000000000000000,-0.25000000000000000000
-param_set energy_gravity amount 0.00000000000000000000,0.00000000000000000000,-0.08000000000000000000
-component_create texture;particles;blob particle_blob 0.150000 0.260000
-param_set particle_blob arms 5.00000000000000000000
-param_set particle_blob attenuation 0.00002000000000000000
-component_create renderers;particlesystems;simple particle_renderer 0.320000 0.350000
-component_create renderers;opengl_modifiers;cameras;orbit_camera particle_camera 0.470000 0.350000
-param_set particle_camera distance 0.90000000000000000000
-param_set particle_camera fov 70.00000000000000000000
-
-component_create renderers;opengl_modifiers;blend_mode effects_add 0.260000 0.050000
-param_set effects_add dest_blend 1
-component_create texture;buffers;render_surface_single effects_surface 0.420000 -0.120000
-param_set effects_surface texture_size 1
-param_set effects_surface support_feedback 1
-param_set effects_surface clear_color 0.00000000000000000000,0.00000000000000000000,0.00000000000000000000,0.00000000000000000000
-component_create texture;effects;blur effects_blur 0.590000 -0.120000
-param_set effects_blur texture_size 1
-param_set effects_blur start_value 8.00000000000000000000
-param_set effects_blur attenuation 0.86000000000000000000
-component_create renderers;examples;simple_with_texture glow_display 0.740000 -0.120000
-param_set glow_display facing_camera 0
-param_set glow_display x_aspect_ratio 1.77777777777777770000
-param_set glow_display size 1.00000000000000000000
-param_set glow_display global_alpha 0.18000000000000000000
-param_set glow_display color_multiplier 0.65000000000000000000,0.90000000000000000000,1.00000000000000000000,1.00000000000000000000
-component_create renderers;examples;simple_with_texture feedback_display 0.590000 -0.220000
-param_set feedback_display facing_camera 0
-param_set feedback_display x_aspect_ratio 1.77777777777777770000
-param_set feedback_display size 0.98800000000000000000
-param_set feedback_display global_alpha 0.01500000000000000000
-param_set feedback_display color_multiplier 0.45000000000000000000,0.70000000000000000000,0.90000000000000000000,1.00000000000000000000
 component_create renderers;opengl_modifiers;blend_mode final_composite 0.820000 0.080000
 param_set final_composite dest_blend 1
 cpp screen0 0.960000 0.080000
@@ -342,72 +206,5 @@ param_connect base_drift_vector floatb base_drift_y float
 param_connect base_translate translation base_drift_vector result_float3
 param_connect base_translate render_in base_rotate render_out
 
-param_connect portal_scale_gain param1 audio octaves_l_0
-param_connect portal_scale_offset param1 portal_scale_gain product
-param_connect portal_motion_sum param1 portal_scale_offset sum
-param_connect portal_motion_sum param2 portal_breathe float
-param_connect portal_scale_vector param1 portal_motion_sum sum
-param_connect portal_scale scale portal_scale_vector result_float3
-param_connect portal_scale render_in portal_layer render_out
-param_connect portal_alpha_gain param1 audio octaves_l_0
-param_connect portal_alpha_offset param1 portal_alpha_gain product
-param_connect portal_color floatd portal_alpha_offset sum
-param_connect portal_layer color_multiplier portal_color result_float4
-
-param_connect filament_alpha_gain param1 audio octaves_l_6
-param_connect filament_alpha_offset param1 filament_alpha_gain product
-param_connect filament_color floatd filament_alpha_offset sum
-param_connect filament_layer color_multiplier filament_color result_float4
-param_connect filament_angle_gain param1 audio octaves_l_3
-param_connect filament_angle_sum param1 filament_angle_gain product
-param_connect filament_angle_sum param2 filament_sway float
-param_connect filament_rotate angle filament_angle_sum sum
-param_connect filament_rotate render_in filament_layer render_out
-
-param_connect atmosphere_alpha_gain param1 audio octaves_l_7
-param_connect atmosphere_alpha_offset param1 atmosphere_alpha_gain product
-param_connect atmosphere_color floatd atmosphere_alpha_offset sum
-param_connect atmosphere_layer color_multiplier atmosphere_color result_float4
-param_connect atmosphere_scale_gain param1 audio octaves_l_7
-param_connect atmosphere_scale_offset param1 atmosphere_scale_gain product
-param_connect atmosphere_motion_sum param1 atmosphere_scale_offset sum
-param_connect atmosphere_motion_sum param2 atmosphere_rush float
-param_connect atmosphere_scale_vector param1 atmosphere_motion_sum sum
-param_connect atmosphere_scale scale atmosphere_scale_vector result_float3
-param_connect atmosphere_scale render_in atmosphere_layer render_out
-
-param_connect scope_width_gain param1 audio octaves_l_6
-param_connect scope_width_offset param1 scope_width_gain product
-param_connect radial_wave_0 data_in audio wave
-param_connect radial_wave_45 data_in audio wave
-param_connect radial_wave_90 data_in audio spectrum
-param_connect radial_wave_135 data_in audio spectrum
-param_connect radial_wave_0 line_width scope_width_offset sum
-param_connect radial_wave_45 line_width scope_width_offset sum
-param_connect radial_wave_90 line_width scope_width_offset sum
-param_connect radial_wave_135 line_width scope_width_offset sum
-
-param_connect particle_size_gain param1 audio octaves_l_7
-param_connect particle_size_offset param1 particle_size_gain product
-param_connect energy_particles particle_size_base particle_size_offset sum
-param_connect energy_gravity in_particlesystem energy_particles particlesystem
-param_connect particle_renderer particlesystem energy_gravity particlesystem
-param_connect particle_renderer texture particle_blob texture
-param_connect particle_camera render_in particle_renderer render_out
-
-param_connect effects_add render_in radial_wave_0 render_out
-param_connect effects_add render_in radial_wave_45 render_out
-param_connect effects_add render_in radial_wave_90 render_out
-param_connect effects_add render_in radial_wave_135 render_out
-param_connect effects_add render_in particle_camera render_out
-param_connect effects_surface render_in effects_add render_out
-param_connect feedback_display texture_in effects_surface texture_out
-param_connect effects_surface render_in feedback_display render_out
-param_connect effects_blur glow_source effects_surface texture_out
-param_connect glow_display texture_in effects_blur texture_out
-
 param_connect final_composite render_in base_translate render_out
-param_connect final_composite render_in effects_add render_out
-param_connect final_composite render_in feedback_display render_out
-param_connect final_composite render_in glow_display render_out
 param_connect screen0 screen final_composite render_out
