@@ -56,7 +56,7 @@ export class SignalVisualizer {
     this.rigImage.src = '/visuals/astral-cathedral.webp';
     this.rigImageName = 'Astral Cathedral / built-in demo';
     this.rigPieces = this.buildRigPieces();
-    this.rigDirectives = { motion: 1, bass: 1, palette: 'cycle', beatColor: true, cutSensitivity: 0.055 };
+    this.rigDirectives = { motion: 1.25, bass: 1.15, palette: 'cycle', beatColor: true, cutSensitivity: 0.052 };
     this.rigPreviousSignal = { energy: 0, bass: 0, highMid: 0 };
     this.rigCutPulse = 0;
     this.rigHue = 0;
@@ -518,7 +518,7 @@ export class SignalVisualizer {
     const signalChange = Math.abs(signal.energy - this.rigPreviousSignal.energy) * 1.25
       + Math.abs(signal.bass - this.rigPreviousSignal.bass)
       + Math.abs(signal.highMid - this.rigPreviousSignal.highMid) * 0.8;
-    if (signal.live && signalChange > directives.cutSensitivity && time - this.rigLastCutAt > 0.22) {
+    if (signalChange > directives.cutSensitivity && time - this.rigLastCutAt > 0.22) {
       this.rigCutPulse = 1;
       this.rigLastCutAt = time;
       if (directives.beatColor) this.rigHue = (this.rigHue + 47 + Math.round(signal.treble * 90)) % 360;
@@ -553,11 +553,11 @@ export class SignalVisualizer {
       const centerX = (piece.x + piece.width / 2) * width;
       const centerY = (piece.y + piece.height / 2) * height;
       const floorPush = piece.row === 3 ? 1.45 : 1;
-      const travel = Math.min(width, height) * (0.012 + response * 0.034) * floorPush;
+      const travel = Math.min(width, height) * (0.016 + response * 0.055) * floorPush;
       const cutDirection = piece.index % 2 ? -1 : 1;
-      const translateX = piece.directionX * travel + Math.cos(piece.phase) * idle * 2.5 + cutDirection * this.rigCutPulse * width * 0.006;
-      const translateY = piece.directionY * travel + (piece.row === 0 ? -1 : piece.row === 3 ? 1 : 0) * response * height * 0.018 + Math.sin(piece.phase) * idle * 2.5;
-      const scale = 1.006 + response * (piece.column === 2 ? 0.105 : 0.072) + idle * 0.006 + this.rigCutPulse * 0.018;
+      const translateX = piece.directionX * travel + Math.cos(piece.phase) * idle * 4.5 + cutDirection * this.rigCutPulse * width * 0.009;
+      const translateY = piece.directionY * travel + (piece.row === 0 ? -1 : piece.row === 3 ? 1 : 0) * response * height * 0.026 + Math.sin(piece.phase) * idle * 4.5;
+      const scale = 1.008 + response * (piece.column === 2 ? 0.14 : 0.095) + idle * 0.008 + this.rigCutPulse * 0.024;
       const targetX = piece.x * width - 2;
       const targetY = piece.y * height - 2;
       const targetWidth = piece.width * width + 4;
