@@ -17,7 +17,8 @@ ps64 base_texture filename cmVzb3VyY2VzL3NpZ25hbC12YXVsdC9sYXllcnMtdjA0LzAwLWNhd
 param_set base_texture flip_vertical 1
 component_create renderers;basic;textured_rectangle base_layer -0.980000 0.820000
 param_set base_layer facing_camera 0
-param_set base_layer size 1.00000000000000000000,0.56189903846153840000,0.00000000000000000000
+param_set base_layer size 1.00000000000000000000
+param_set base_layer x_aspect_ratio 1.00000000000000000000
 component_create renderers;opengl_modifiers;blend_mode cathedral_composite 0.860000 0.100000
 cpp screen0 1.040000 0.100000
 param_set screen0 clear_color 0.00000000000000000000,0.00000000000000000000,0.00400000000000000000,1.00000000000000000000
@@ -27,11 +28,11 @@ ps64 plate_01_texture filename cmVzb3VyY2VzL3NpZ25hbC12YXVsdC9sYXllcnMtdjA0LzAxL
 param_set plate_01_texture flip_vertical 1
 component_create renderers;basic;textured_rectangle plate_01_layer -0.740000 0.720000
 param_set plate_01_layer facing_camera 0
-param_set plate_01_layer size 1.00000000000000000000,0.56189903846153840000,0.00000000000000000000
+param_set plate_01_layer x_aspect_ratio 1.30810096153846133760
 component_create maths;arithmetics;binary;mult plate_01_alpha_audio -0.820000 0.640000
 param_set plate_01_alpha_audio param2 0.68000000000000004885
 component_create maths;oscillators;oscillator plate_01_alpha_cycle -0.740000 0.640000
-param_set plate_01_alpha_cycle amp 0.01439999999999999961
+param_set plate_01_alpha_cycle amp 0.00385026737967914413
 param_set plate_01_alpha_cycle ofs 0.34000000000000002442
 param_set plate_01_alpha_cycle freq 0.17810000000000000830
 param_set plate_01_alpha_cycle phase 0.05000000000000000278
@@ -41,25 +42,35 @@ param_set plate_01_color floata 1.00000000000000000000
 param_set plate_01_color floatb 1.00000000000000000000
 param_set plate_01_color floatc 1.00000000000000000000
 component_create maths;arithmetics;binary;mult plate_01_scale_audio -0.820000 0.560000
-param_set plate_01_scale_audio param2 0.17000000000000001221
+param_set plate_01_scale_audio param2 0.04545454545454546275
 component_create maths;oscillators;oscillator plate_01_scale_cycle -0.740000 0.560000
-param_set plate_01_scale_cycle amp 0.01799999999999999864
-param_set plate_01_scale_cycle ofs 0.98499999999999998668
+param_set plate_01_scale_cycle amp 0.00481283422459892994
+param_set plate_01_scale_cycle ofs 0.26336898395721924926
 param_set plate_01_scale_cycle freq 0.13000000000000000444
 param_set plate_01_scale_cycle phase 0.05000000000000000278
 component_create maths;arithmetics;binary;add plate_01_scale_sum -0.660000 0.560000
-component_create maths;converters;float_to_float3 plate_01_scale_vector -0.580000 0.560000
-component_create renderers;opengl_modifiers;gl_scale plate_01_scale -0.500000 0.720000
+component_create maths;arithmetics;binary;mult plate_01_move_audio -0.820000 0.480000
+param_set plate_01_move_audio param2 0.05999999999999999778
+component_create maths;oscillators;oscillator plate_01_move_cycle -0.740000 0.480000
+param_set plate_01_move_cycle amp 0.00600000000000000012
+param_set plate_01_move_cycle ofs 0.73262032085561501482
+param_set plate_01_move_cycle freq 0.09489999999999999825
+param_set plate_01_move_cycle phase 0.05000000000000000278
+component_create maths;arithmetics;binary;add plate_01_move_sum -0.660000 0.480000
+component_create maths;converters;3float_to_float3 plate_01_position -0.580000 0.480000
+param_set plate_01_position floata 0.00000000000000000000
+param_set plate_01_position floatb 0.00000000000000000000
+param_set plate_01_position floatc 0.00000000000000000000
 component_create texture;loaders;png_tex_load plate_02_texture -0.480000 0.720000
 ps64 plate_02_texture filename cmVzb3VyY2VzL3NpZ25hbC12YXVsdC9sYXllcnMtdjA0LzAyLWNyb3duLWxlZnQtYWxwaGEucG5n
 param_set plate_02_texture flip_vertical 1
 component_create renderers;basic;textured_rectangle plate_02_layer -0.400000 0.720000
 param_set plate_02_layer facing_camera 0
-param_set plate_02_layer size 1.00000000000000000000,0.56189903846153840000,0.00000000000000000000
+param_set plate_02_layer x_aspect_ratio 0.65014958326961302948
 component_create maths;arithmetics;binary;mult plate_02_alpha_audio -0.480000 0.640000
 param_set plate_02_alpha_audio param2 0.66000000000000003109
 component_create maths;oscillators;oscillator plate_02_alpha_cycle -0.400000 0.640000
-param_set plate_02_alpha_cycle amp 0.02000000000000000389
+param_set plate_02_alpha_cycle amp 0.01075935828877005486
 param_set plate_02_alpha_cycle ofs 0.29999999999999998890
 param_set plate_02_alpha_cycle freq 0.15070000000000000062
 param_set plate_02_alpha_cycle phase 0.11999999999999999556
@@ -69,25 +80,35 @@ param_set plate_02_color floata 1.00000000000000000000
 param_set plate_02_color floatb 1.00000000000000000000
 param_set plate_02_color floatc 1.00000000000000000000
 component_create maths;arithmetics;binary;mult plate_02_scale_audio -0.480000 0.560000
-param_set plate_02_scale_audio param2 0.22000000000000000111
+param_set plate_02_scale_audio param2 0.11835294117647059131
 component_create maths;oscillators;oscillator plate_02_scale_cycle -0.400000 0.560000
-param_set plate_02_scale_cycle amp 0.02500000000000000139
-param_set plate_02_scale_cycle ofs 0.97499999999999997780
+param_set plate_02_scale_cycle amp 0.01344919786096256814
+param_set plate_02_scale_cycle ofs 0.52451871657754012279
 param_set plate_02_scale_cycle freq 0.11000000000000000056
 param_set plate_02_scale_cycle phase 0.11999999999999999556
 component_create maths;arithmetics;binary;add plate_02_scale_sum -0.320000 0.560000
-component_create maths;converters;float_to_float3 plate_02_scale_vector -0.240000 0.560000
-component_create renderers;opengl_modifiers;gl_scale plate_02_scale -0.160000 0.720000
+component_create maths;arithmetics;binary;mult plate_02_move_audio -0.480000 0.480000
+param_set plate_02_move_audio param2 -0.04000000000000000083
+component_create maths;oscillators;oscillator plate_02_move_cycle -0.400000 0.480000
+param_set plate_02_move_cycle amp 0.00400000000000000008
+param_set plate_02_move_cycle ofs -0.29927884615384614531
+param_set plate_02_move_cycle freq 0.08029999999999999638
+param_set plate_02_move_cycle phase 0.11999999999999999556
+component_create maths;arithmetics;binary;add plate_02_move_sum -0.320000 0.480000
+component_create maths;converters;3float_to_float3 plate_02_position -0.240000 0.480000
+param_set plate_02_position floata 0.00000000000000000000
+param_set plate_02_position floatb 0.34866310160427804732
+param_set plate_02_position floatc 0.00000000000000000000
 component_create texture;loaders;png_tex_load plate_03_texture -0.140000 0.720000
 ps64 plate_03_texture filename cmVzb3VyY2VzL3NpZ25hbC12YXVsdC9sYXllcnMtdjA0LzAzLWNyb3duLXJpZ2h0LWFscGhhLnBuZw==
 param_set plate_03_texture flip_vertical 1
 component_create renderers;basic;textured_rectangle plate_03_layer -0.060000 0.720000
 param_set plate_03_layer facing_camera 0
-param_set plate_03_layer size 1.00000000000000000000,0.56189903846153840000,0.00000000000000000000
+param_set plate_03_layer x_aspect_ratio 0.65014958326961302948
 component_create maths;arithmetics;binary;mult plate_03_alpha_audio -0.140000 0.640000
 param_set plate_03_alpha_audio param2 0.66000000000000003109
 component_create maths;oscillators;oscillator plate_03_alpha_cycle -0.060000 0.640000
-param_set plate_03_alpha_cycle amp 0.02000000000000000389
+param_set plate_03_alpha_cycle amp 0.01075935828877005486
 param_set plate_03_alpha_cycle ofs 0.29999999999999998890
 param_set plate_03_alpha_cycle freq 0.15070000000000000062
 param_set plate_03_alpha_cycle phase 0.61999999999999999556
@@ -97,25 +118,35 @@ param_set plate_03_color floata 1.00000000000000000000
 param_set plate_03_color floatb 1.00000000000000000000
 param_set plate_03_color floatc 1.00000000000000000000
 component_create maths;arithmetics;binary;mult plate_03_scale_audio -0.140000 0.560000
-param_set plate_03_scale_audio param2 0.22000000000000000111
+param_set plate_03_scale_audio param2 0.11835294117647059131
 component_create maths;oscillators;oscillator plate_03_scale_cycle -0.060000 0.560000
-param_set plate_03_scale_cycle amp 0.02500000000000000139
-param_set plate_03_scale_cycle ofs 0.97499999999999997780
+param_set plate_03_scale_cycle amp 0.01344919786096256814
+param_set plate_03_scale_cycle ofs 0.52451871657754012279
 param_set plate_03_scale_cycle freq 0.11000000000000000056
 param_set plate_03_scale_cycle phase 0.61999999999999999556
 component_create maths;arithmetics;binary;add plate_03_scale_sum 0.020000 0.560000
-component_create maths;converters;float_to_float3 plate_03_scale_vector 0.100000 0.560000
-component_create renderers;opengl_modifiers;gl_scale plate_03_scale 0.180000 0.720000
+component_create maths;arithmetics;binary;mult plate_03_move_audio -0.140000 0.480000
+param_set plate_03_move_audio param2 0.04000000000000000083
+component_create maths;oscillators;oscillator plate_03_move_cycle -0.060000 0.480000
+param_set plate_03_move_cycle amp 0.00400000000000000008
+param_set plate_03_move_cycle ofs 0.30048076923076916245
+param_set plate_03_move_cycle freq 0.08029999999999999638
+param_set plate_03_move_cycle phase 0.61999999999999999556
+component_create maths;arithmetics;binary;add plate_03_move_sum 0.020000 0.480000
+component_create maths;converters;3float_to_float3 plate_03_position 0.100000 0.480000
+param_set plate_03_position floata 0.00000000000000000000
+param_set plate_03_position floatb 0.34866310160427804732
+param_set plate_03_position floatc 0.00000000000000000000
 component_create texture;loaders;png_tex_load plate_04_texture 0.200000 0.720000
 ps64 plate_04_texture filename cmVzb3VyY2VzL3NpZ25hbC12YXVsdC9sYXllcnMtdjA0LzA0LW1haW4tY29sdW1uLWxlZnQtYWxwaGEucG5n
 param_set plate_04_texture flip_vertical 1
 component_create renderers;basic;textured_rectangle plate_04_layer 0.280000 0.720000
 param_set plate_04_layer facing_camera 0
-param_set plate_04_layer size 1.00000000000000000000,0.56189903846153840000,0.00000000000000000000
+param_set plate_04_layer x_aspect_ratio 0.32510431154381080887
 component_create maths;arithmetics;binary;mult plate_04_alpha_audio 0.200000 0.640000
 param_set plate_04_alpha_audio param2 0.69999999999999995559
 component_create maths;oscillators;oscillator plate_04_alpha_cycle 0.280000 0.640000
-param_set plate_04_alpha_cycle amp 0.02560000000000000123
+param_set plate_04_alpha_cycle amp 0.01968598930481283912
 param_set plate_04_alpha_cycle ofs 0.35999999999999998668
 param_set plate_04_alpha_cycle freq 0.13015000000000001568
 param_set plate_04_alpha_cycle phase 0.17999999999999999334
@@ -125,25 +156,35 @@ param_set plate_04_color floata 1.00000000000000000000
 param_set plate_04_color floatb 1.00000000000000000000
 param_set plate_04_color floatc 1.00000000000000000000
 component_create maths;arithmetics;binary;mult plate_04_scale_audio 0.200000 0.560000
-param_set plate_04_scale_audio param2 0.28000000000000002665
+param_set plate_04_scale_audio param2 0.21531550802139040601
 component_create maths;oscillators;oscillator plate_04_scale_cycle 0.280000 0.560000
-param_set plate_04_scale_cycle amp 0.03200000000000000067
-param_set plate_04_scale_cycle ofs 0.96499999999999996891
+param_set plate_04_scale_cycle amp 0.02460748663101604630
+param_set plate_04_scale_cycle ofs 0.74206951871657755859
 param_set plate_04_scale_cycle freq 0.09500000000000000111
 param_set plate_04_scale_cycle phase 0.17999999999999999334
 component_create maths;arithmetics;binary;add plate_04_scale_sum 0.360000 0.560000
-component_create maths;converters;float_to_float3 plate_04_scale_vector 0.440000 0.560000
-component_create renderers;opengl_modifiers;gl_scale plate_04_scale 0.520000 0.720000
+component_create maths;arithmetics;binary;mult plate_04_move_audio 0.200000 0.480000
+param_set plate_04_move_audio param2 -0.06500000000000000222
+component_create maths;oscillators;oscillator plate_04_move_cycle 0.280000 0.480000
+param_set plate_04_move_cycle amp 0.00650000000000000057
+param_set plate_04_move_cycle ofs -0.39903846153846156408
+param_set plate_04_move_cycle freq 0.06934999999999999498
+param_set plate_04_move_cycle phase 0.17999999999999999334
+component_create maths;arithmetics;binary;add plate_04_move_sum 0.360000 0.480000
+component_create maths;converters;3float_to_float3 plate_04_position 0.440000 0.480000
+param_set plate_04_position floata 0.00000000000000000000
+param_set plate_04_position floatb -0.04064171122994642005
+param_set plate_04_position floatc 0.00000000000000000000
 component_create texture;loaders;png_tex_load plate_05_texture 0.540000 0.720000
 ps64 plate_05_texture filename cmVzb3VyY2VzL3NpZ25hbC12YXVsdC9sYXllcnMtdjA0LzA1LW1haW4tY29sdW1uLXJpZ2h0LWFscGhhLnBuZw==
 param_set plate_05_texture flip_vertical 1
 component_create renderers;basic;textured_rectangle plate_05_layer 0.620000 0.720000
 param_set plate_05_layer facing_camera 0
-param_set plate_05_layer size 1.00000000000000000000,0.56189903846153840000,0.00000000000000000000
+param_set plate_05_layer x_aspect_ratio 0.32510431154381080887
 component_create maths;arithmetics;binary;mult plate_05_alpha_audio 0.540000 0.640000
 param_set plate_05_alpha_audio param2 0.69999999999999995559
 component_create maths;oscillators;oscillator plate_05_alpha_cycle 0.620000 0.640000
-param_set plate_05_alpha_cycle amp 0.02560000000000000123
+param_set plate_05_alpha_cycle amp 0.01968598930481283912
 param_set plate_05_alpha_cycle ofs 0.35999999999999998668
 param_set plate_05_alpha_cycle freq 0.13015000000000001568
 param_set plate_05_alpha_cycle phase 0.68000000000000004885
@@ -153,25 +194,35 @@ param_set plate_05_color floata 1.00000000000000000000
 param_set plate_05_color floatb 1.00000000000000000000
 param_set plate_05_color floatc 1.00000000000000000000
 component_create maths;arithmetics;binary;mult plate_05_scale_audio 0.540000 0.560000
-param_set plate_05_scale_audio param2 0.28000000000000002665
+param_set plate_05_scale_audio param2 0.21531550802139040601
 component_create maths;oscillators;oscillator plate_05_scale_cycle 0.620000 0.560000
-param_set plate_05_scale_cycle amp 0.03200000000000000067
-param_set plate_05_scale_cycle ofs 0.96499999999999996891
+param_set plate_05_scale_cycle amp 0.02460748663101604630
+param_set plate_05_scale_cycle ofs 0.74206951871657755859
 param_set plate_05_scale_cycle freq 0.09500000000000000111
 param_set plate_05_scale_cycle phase 0.68000000000000004885
 component_create maths;arithmetics;binary;add plate_05_scale_sum 0.700000 0.560000
-component_create maths;converters;float_to_float3 plate_05_scale_vector 0.780000 0.560000
-component_create renderers;opengl_modifiers;gl_scale plate_05_scale 0.860000 0.720000
+component_create maths;arithmetics;binary;mult plate_05_move_audio 0.540000 0.480000
+param_set plate_05_move_audio param2 0.06500000000000000222
+component_create maths;oscillators;oscillator plate_05_move_cycle 0.620000 0.480000
+param_set plate_05_move_cycle amp 0.00650000000000000057
+param_set plate_05_move_cycle ofs 0.40024038461538458122
+param_set plate_05_move_cycle freq 0.06934999999999999498
+param_set plate_05_move_cycle phase 0.68000000000000004885
+component_create maths;arithmetics;binary;add plate_05_move_sum 0.700000 0.480000
+component_create maths;converters;3float_to_float3 plate_05_position 0.780000 0.480000
+param_set plate_05_position floata 0.00000000000000000000
+param_set plate_05_position floatb -0.04064171122994642005
+param_set plate_05_position floatc 0.00000000000000000000
 component_create texture;loaders;png_tex_load plate_06_texture -0.820000 0.340000
 ps64 plate_06_texture filename cmVzb3VyY2VzL3NpZ25hbC12YXVsdC9sYXllcnMtdjA0LzA2LW91dGVyLWFyY2gtbGVmdC1hbHBoYS5wbmc=
 param_set plate_06_texture flip_vertical 1
 component_create renderers;basic;textured_rectangle plate_06_layer -0.740000 0.340000
 param_set plate_06_layer facing_camera 0
-param_set plate_06_layer size 1.00000000000000000000,0.56189903846153840000,0.00000000000000000000
+param_set plate_06_layer x_aspect_ratio 0.40520864511623266857
 component_create maths;arithmetics;binary;mult plate_06_alpha_audio -0.820000 0.260000
 param_set plate_06_alpha_audio param2 0.71999999999999997335
 component_create maths;oscillators;oscillator plate_06_alpha_cycle -0.740000 0.260000
-param_set plate_06_alpha_cycle amp 0.01760000000000000106
+param_set plate_06_alpha_cycle amp 0.01451294117647058783
 param_set plate_06_alpha_cycle ofs 0.26000000000000000888
 param_set plate_06_alpha_cycle freq 0.10275000000000000799
 param_set plate_06_alpha_cycle phase 0.08000000000000000167
@@ -181,25 +232,35 @@ param_set plate_06_color floata 1.00000000000000000000
 param_set plate_06_color floatb 1.00000000000000000000
 param_set plate_06_color floatc 1.00000000000000000000
 component_create maths;arithmetics;binary;mult plate_06_scale_audio -0.820000 0.180000
-param_set plate_06_scale_audio param2 0.20000000000000001110
+param_set plate_06_scale_audio param2 0.16491978609625668195
 component_create maths;oscillators;oscillator plate_06_scale_cycle -0.740000 0.180000
-param_set plate_06_scale_cycle amp 0.02199999999999999872
-param_set plate_06_scale_cycle ofs 0.97999999999999998224
+param_set plate_06_scale_cycle amp 0.01814117647058823349
+param_set plate_06_scale_cycle ofs 0.80810695187165770825
 param_set plate_06_scale_cycle freq 0.07499999999999999722
 param_set plate_06_scale_cycle phase 0.08000000000000000167
 component_create maths;arithmetics;binary;add plate_06_scale_sum -0.660000 0.180000
-component_create maths;converters;float_to_float3 plate_06_scale_vector -0.580000 0.180000
-component_create renderers;opengl_modifiers;gl_scale plate_06_scale -0.500000 0.340000
+component_create maths;arithmetics;binary;mult plate_06_move_audio -0.820000 0.100000
+param_set plate_06_move_audio param2 -0.08000000000000000167
+component_create maths;oscillators;oscillator plate_06_move_cycle -0.740000 0.100000
+param_set plate_06_move_cycle amp 0.00800000000000000017
+param_set plate_06_move_cycle ofs -0.66586538461538458122
+param_set plate_06_move_cycle freq 0.05475000000000000006
+param_set plate_06_move_cycle phase 0.08000000000000000167
+component_create maths;arithmetics;binary;add plate_06_move_sum -0.660000 0.100000
+component_create maths;converters;3float_to_float3 plate_06_position -0.580000 0.100000
+param_set plate_06_position floata 0.00000000000000000000
+param_set plate_06_position floatb 0.17540106951871659025
+param_set plate_06_position floatc 0.00000000000000000000
 component_create texture;loaders;png_tex_load plate_07_texture -0.480000 0.340000
 ps64 plate_07_texture filename cmVzb3VyY2VzL3NpZ25hbC12YXVsdC9sYXllcnMtdjA0LzA3LW91dGVyLWFyY2gtcmlnaHQtYWxwaGEucG5n
 param_set plate_07_texture flip_vertical 1
 component_create renderers;basic;textured_rectangle plate_07_layer -0.400000 0.340000
 param_set plate_07_layer facing_camera 0
-param_set plate_07_layer size 1.00000000000000000000,0.56189903846153840000,0.00000000000000000000
+param_set plate_07_layer x_aspect_ratio 0.40520864511623266857
 component_create maths;arithmetics;binary;mult plate_07_alpha_audio -0.480000 0.260000
 param_set plate_07_alpha_audio param2 0.71999999999999997335
 component_create maths;oscillators;oscillator plate_07_alpha_cycle -0.400000 0.260000
-param_set plate_07_alpha_cycle amp 0.01760000000000000106
+param_set plate_07_alpha_cycle amp 0.01451294117647058783
 param_set plate_07_alpha_cycle ofs 0.26000000000000000888
 param_set plate_07_alpha_cycle freq 0.10275000000000000799
 param_set plate_07_alpha_cycle phase 0.57999999999999996003
@@ -209,25 +270,35 @@ param_set plate_07_color floata 1.00000000000000000000
 param_set plate_07_color floatb 1.00000000000000000000
 param_set plate_07_color floatc 1.00000000000000000000
 component_create maths;arithmetics;binary;mult plate_07_scale_audio -0.480000 0.180000
-param_set plate_07_scale_audio param2 0.20000000000000001110
+param_set plate_07_scale_audio param2 0.16491978609625668195
 component_create maths;oscillators;oscillator plate_07_scale_cycle -0.400000 0.180000
-param_set plate_07_scale_cycle amp 0.02199999999999999872
-param_set plate_07_scale_cycle ofs 0.97999999999999998224
+param_set plate_07_scale_cycle amp 0.01814117647058823349
+param_set plate_07_scale_cycle ofs 0.80810695187165770825
 param_set plate_07_scale_cycle freq 0.07499999999999999722
 param_set plate_07_scale_cycle phase 0.57999999999999996003
 component_create maths;arithmetics;binary;add plate_07_scale_sum -0.320000 0.180000
-component_create maths;converters;float_to_float3 plate_07_scale_vector -0.240000 0.180000
-component_create renderers;opengl_modifiers;gl_scale plate_07_scale -0.160000 0.340000
+component_create maths;arithmetics;binary;mult plate_07_move_audio -0.480000 0.100000
+param_set plate_07_move_audio param2 0.08000000000000000167
+component_create maths;oscillators;oscillator plate_07_move_cycle -0.400000 0.100000
+param_set plate_07_move_cycle amp 0.00800000000000000017
+param_set plate_07_move_cycle ofs 0.66586538461538458122
+param_set plate_07_move_cycle freq 0.05475000000000000006
+param_set plate_07_move_cycle phase 0.57999999999999996003
+component_create maths;arithmetics;binary;add plate_07_move_sum -0.320000 0.100000
+component_create maths;converters;3float_to_float3 plate_07_position -0.240000 0.100000
+param_set plate_07_position floata 0.00000000000000000000
+param_set plate_07_position floatb 0.17540106951871659025
+param_set plate_07_position floatc 0.00000000000000000000
 component_create texture;loaders;png_tex_load plate_08_texture -0.140000 0.340000
 ps64 plate_08_texture filename cmVzb3VyY2VzL3NpZ25hbC12YXVsdC9sYXllcnMtdjA0LzA4LWlubmVyLXJpYi1sZWZ0LWFscGhhLnBuZw==
 param_set plate_08_texture flip_vertical 1
 component_create renderers;basic;textured_rectangle plate_08_layer -0.060000 0.340000
 param_set plate_08_layer facing_camera 0
-param_set plate_08_layer size 1.00000000000000000000,0.56189903846153840000,0.00000000000000000000
+param_set plate_08_layer x_aspect_ratio 0.40958940898844747869
 component_create maths;arithmetics;binary;mult plate_08_alpha_audio -0.140000 0.260000
 param_set plate_08_alpha_audio param2 0.78000000000000002665
 component_create maths;oscillators;oscillator plate_08_alpha_cycle -0.060000 0.260000
-param_set plate_08_alpha_cycle amp 0.02800000000000000405
+param_set plate_08_alpha_cycle amp 0.01635080213903743543
 param_set plate_08_alpha_cycle ofs 0.28000000000000002665
 param_set plate_08_alpha_cycle freq 0.19180000000000002602
 param_set plate_08_alpha_cycle phase 0.22000000000000000111
@@ -237,25 +308,35 @@ param_set plate_08_color floata 1.00000000000000000000
 param_set plate_08_color floatb 1.00000000000000000000
 param_set plate_08_color floatc 1.00000000000000000000
 component_create maths;arithmetics;binary;mult plate_08_scale_audio -0.140000 0.180000
-param_set plate_08_scale_audio param2 0.29999999999999998890
+param_set plate_08_scale_audio param2 0.17518716577540108248
 component_create maths;oscillators;oscillator plate_08_scale_cycle -0.060000 0.180000
-param_set plate_08_scale_cycle amp 0.03500000000000000333
-param_set plate_08_scale_cycle ofs 0.95499999999999996003
+param_set plate_08_scale_cycle amp 0.02043850267379679342
+param_set plate_08_scale_cycle ofs 0.55767914438502674823
 param_set plate_08_scale_cycle freq 0.14000000000000001332
 param_set plate_08_scale_cycle phase 0.22000000000000000111
 component_create maths;arithmetics;binary;add plate_08_scale_sum 0.020000 0.180000
-component_create maths;converters;float_to_float3 plate_08_scale_vector 0.100000 0.180000
-component_create renderers;opengl_modifiers;gl_scale plate_08_scale 0.180000 0.340000
+component_create maths;arithmetics;binary;mult plate_08_move_audio -0.140000 0.100000
+param_set plate_08_move_audio param2 -0.05000000000000000278
+component_create maths;oscillators;oscillator plate_08_move_cycle -0.060000 0.100000
+param_set plate_08_move_cycle amp 0.00500000000000000097
+param_set plate_08_move_cycle ofs -0.18870192307692312816
+param_set plate_08_move_cycle freq 0.10220000000000001306
+param_set plate_08_move_cycle phase 0.22000000000000000111
+component_create maths;arithmetics;binary;add plate_08_move_sum 0.020000 0.100000
+component_create maths;converters;3float_to_float3 plate_08_position 0.100000 0.100000
+param_set plate_08_position floata 0.00000000000000000000
+param_set plate_08_position floatb 0.05454545454545456362
+param_set plate_08_position floatc 0.00000000000000000000
 component_create texture;loaders;png_tex_load plate_09_texture 0.200000 0.340000
 ps64 plate_09_texture filename cmVzb3VyY2VzL3NpZ25hbC12YXVsdC9sYXllcnMtdjA0LzA5LWlubmVyLXJpYi1yaWdodC1hbHBoYS5wbmc=
 param_set plate_09_texture flip_vertical 1
 component_create renderers;basic;textured_rectangle plate_09_layer 0.280000 0.340000
 param_set plate_09_layer facing_camera 0
-param_set plate_09_layer size 1.00000000000000000000,0.56189903846153840000,0.00000000000000000000
+param_set plate_09_layer x_aspect_ratio 0.40809455713082543049
 component_create maths;arithmetics;binary;mult plate_09_alpha_audio 0.200000 0.260000
 param_set plate_09_alpha_audio param2 0.78000000000000002665
 component_create maths;oscillators;oscillator plate_09_alpha_cycle 0.280000 0.260000
-param_set plate_09_alpha_cycle amp 0.02800000000000000405
+param_set plate_09_alpha_cycle amp 0.01641069518716577538
 param_set plate_09_alpha_cycle ofs 0.28000000000000002665
 param_set plate_09_alpha_cycle freq 0.19180000000000002602
 param_set plate_09_alpha_cycle phase 0.71999999999999997335
@@ -265,25 +346,35 @@ param_set plate_09_color floata 1.00000000000000000000
 param_set plate_09_color floatb 1.00000000000000000000
 param_set plate_09_color floatc 1.00000000000000000000
 component_create maths;arithmetics;binary;mult plate_09_scale_audio 0.200000 0.180000
-param_set plate_09_scale_audio param2 0.29999999999999998890
+param_set plate_09_scale_audio param2 0.17582887700534757802
 component_create maths;oscillators;oscillator plate_09_scale_cycle 0.280000 0.180000
-param_set plate_09_scale_cycle amp 0.03500000000000000333
-param_set plate_09_scale_cycle ofs 0.95499999999999996003
+param_set plate_09_scale_cycle amp 0.02051336898395721836
+param_set plate_09_scale_cycle ofs 0.55972192513368979050
 param_set plate_09_scale_cycle freq 0.14000000000000001332
 param_set plate_09_scale_cycle phase 0.71999999999999997335
 component_create maths;arithmetics;binary;add plate_09_scale_sum 0.360000 0.180000
-component_create maths;converters;float_to_float3 plate_09_scale_vector 0.440000 0.180000
-component_create renderers;opengl_modifiers;gl_scale plate_09_scale 0.520000 0.340000
+component_create maths;arithmetics;binary;mult plate_09_move_audio 0.200000 0.100000
+param_set plate_09_move_audio param2 0.05000000000000000278
+component_create maths;oscillators;oscillator plate_09_move_cycle 0.280000 0.100000
+param_set plate_09_move_cycle amp 0.00500000000000000097
+param_set plate_09_move_cycle ofs 0.18990384615384625633
+param_set plate_09_move_cycle freq 0.10220000000000001306
+param_set plate_09_move_cycle phase 0.71999999999999997335
+component_create maths;arithmetics;binary;add plate_09_move_sum 0.360000 0.100000
+component_create maths;converters;3float_to_float3 plate_09_position 0.440000 0.100000
+param_set plate_09_position floata 0.00000000000000000000
+param_set plate_09_position floatb 0.05668449197860958577
+param_set plate_09_position floatc 0.00000000000000000000
 component_create texture;loaders;png_tex_load plate_10_texture 0.540000 0.340000
 ps64 plate_10_texture filename cmVzb3VyY2VzL3NpZ25hbC12YXVsdC9sYXllcnMtdjA0LzEwLXBvcnRhbC1jb3JlLWFscGhhLnBuZw==
 param_set plate_10_texture flip_vertical 1
 component_create renderers;basic;textured_rectangle plate_10_layer 0.620000 0.340000
 param_set plate_10_layer facing_camera 0
-param_set plate_10_layer size 1.00000000000000000000,0.56189903846153840000,0.00000000000000000000
+param_set plate_10_layer x_aspect_ratio 0.63882569253663001874
 component_create maths;arithmetics;binary;mult plate_10_alpha_audio 0.540000 0.260000
 param_set plate_10_alpha_audio param2 0.85999999999999998668
 component_create maths;oscillators;oscillator plate_10_alpha_cycle 0.620000 0.260000
-param_set plate_10_alpha_cycle amp 0.03599999999999999728
+param_set plate_10_alpha_cycle amp 0.01940534759358289105
 param_set plate_10_alpha_cycle ofs 0.22000000000000000111
 param_set plate_10_alpha_cycle freq 0.09590000000000001301
 param_set plate_10_alpha_cycle phase 0.00000000000000000000
@@ -293,25 +384,35 @@ param_set plate_10_color floata 1.00000000000000000000
 param_set plate_10_color floatb 1.00000000000000000000
 param_set plate_10_color floatc 1.00000000000000000000
 component_create maths;arithmetics;binary;mult plate_10_scale_audio 0.540000 0.180000
-param_set plate_10_scale_audio param2 0.47999999999999998224
+param_set plate_10_scale_audio param2 0.25873796791443848253
 component_create maths;oscillators;oscillator plate_10_scale_cycle 0.620000 0.180000
-param_set plate_10_scale_cycle amp 0.04499999999999999833
-param_set plate_10_scale_cycle ofs 0.92500000000000004441
+param_set plate_10_scale_cycle amp 0.02425668449197861121
+param_set plate_10_scale_cycle ofs 0.49860962566844924115
 param_set plate_10_scale_cycle freq 0.07000000000000000666
 param_set plate_10_scale_cycle phase 0.00000000000000000000
 component_create maths;arithmetics;binary;add plate_10_scale_sum 0.700000 0.180000
-component_create maths;converters;float_to_float3 plate_10_scale_vector 0.780000 0.180000
-component_create renderers;opengl_modifiers;gl_scale plate_10_scale 0.860000 0.340000
+component_create maths;arithmetics;binary;mult plate_10_move_audio 0.540000 0.100000
+param_set plate_10_move_audio param2 0.02500000000000000139
+component_create maths;oscillators;oscillator plate_10_move_cycle 0.620000 0.100000
+param_set plate_10_move_cycle amp 0.00250000000000000049
+param_set plate_10_move_cycle ofs 0.00962566844919787723
+param_set plate_10_move_cycle freq 0.05110000000000000653
+param_set plate_10_move_cycle phase 0.00000000000000000000
+component_create maths;arithmetics;binary;add plate_10_move_sum 0.700000 0.100000
+component_create maths;converters;3float_to_float3 plate_10_position 0.780000 0.100000
+param_set plate_10_position floata 0.00300480769230770939
+param_set plate_10_position floatb 0.00000000000000000000
+param_set plate_10_position floatc 0.00000000000000000000
 component_create texture;loaders;png_tex_load plate_11_texture -0.820000 -0.040000
 ps64 plate_11_texture filename cmVzb3VyY2VzL3NpZ25hbC12YXVsdC9sYXllcnMtdjA0LzExLXVwcGVyLXJpYnMtbGVmdC1hbHBoYS5wbmc=
 param_set plate_11_texture flip_vertical 1
 component_create renderers;basic;textured_rectangle plate_11_layer -0.740000 -0.040000
 param_set plate_11_layer facing_camera 0
-param_set plate_11_layer size 1.00000000000000000000,0.56189903846153840000,0.00000000000000000000
+param_set plate_11_layer x_aspect_ratio 0.76974434605572994439
 component_create maths;arithmetics;binary;mult plate_11_alpha_audio -0.820000 -0.120000
 param_set plate_11_alpha_audio param2 0.73999999999999999112
 component_create maths;oscillators;oscillator plate_11_alpha_cycle -0.740000 -0.120000
-param_set plate_11_alpha_cycle amp 0.01600000000000000033
+param_set plate_11_alpha_cycle amp 0.00670802139037433159
 param_set plate_11_alpha_cycle ofs 0.23999999999999999112
 param_set plate_11_alpha_cycle freq 0.23290000000000002367
 param_set plate_11_alpha_cycle phase 0.29999999999999998890
@@ -321,25 +422,35 @@ param_set plate_11_color floata 1.00000000000000000000
 param_set plate_11_color floatb 1.00000000000000000000
 param_set plate_11_color floatc 1.00000000000000000000
 component_create maths;arithmetics;binary;mult plate_11_scale_audio -0.820000 -0.200000
-param_set plate_11_scale_audio param2 0.17999999999999999334
+param_set plate_11_scale_audio param2 0.07546524064171122870
 component_create maths;oscillators;oscillator plate_11_scale_cycle -0.740000 -0.200000
-param_set plate_11_scale_cycle amp 0.02000000000000000042
-param_set plate_11_scale_cycle ofs 0.97999999999999998224
+param_set plate_11_scale_cycle amp 0.00838502673796791449
+param_set plate_11_scale_cycle ofs 0.41086631016042779452
 param_set plate_11_scale_cycle freq 0.17000000000000001221
 param_set plate_11_scale_cycle phase 0.29999999999999998890
 component_create maths;arithmetics;binary;add plate_11_scale_sum -0.660000 -0.200000
-component_create maths;converters;float_to_float3 plate_11_scale_vector -0.580000 -0.200000
-component_create renderers;opengl_modifiers;gl_scale plate_11_scale -0.500000 -0.040000
+component_create maths;arithmetics;binary;mult plate_11_move_audio -0.820000 -0.280000
+param_set plate_11_move_audio param2 0.05500000000000000028
+component_create maths;oscillators;oscillator plate_11_move_cycle -0.740000 -0.280000
+param_set plate_11_move_cycle amp 0.00550000000000000055
+param_set plate_11_move_cycle ofs 0.58074866310160433436
+param_set plate_11_move_cycle freq 0.12410000000000000198
+param_set plate_11_move_cycle phase 0.29999999999999998890
+component_create maths;arithmetics;binary;add plate_11_move_sum -0.660000 -0.280000
+component_create maths;converters;3float_to_float3 plate_11_position -0.580000 -0.280000
+param_set plate_11_position floata -0.36117788461538458122
+param_set plate_11_position floatb 0.00000000000000000000
+param_set plate_11_position floatc 0.00000000000000000000
 component_create texture;loaders;png_tex_load plate_12_texture -0.480000 -0.040000
 ps64 plate_12_texture filename cmVzb3VyY2VzL3NpZ25hbC12YXVsdC9sYXllcnMtdjA0LzEyLXVwcGVyLXJpYnMtcmlnaHQtYWxwaGEucG5n
 param_set plate_12_texture flip_vertical 1
 component_create renderers;basic;textured_rectangle plate_12_layer -0.400000 -0.040000
 param_set plate_12_layer facing_camera 0
-param_set plate_12_layer size 1.00000000000000000000,0.56189903846153840000,0.00000000000000000000
+param_set plate_12_layer x_aspect_ratio 0.76349640340575453124
 component_create maths;arithmetics;binary;mult plate_12_alpha_audio -0.480000 -0.120000
 param_set plate_12_alpha_audio param2 0.73999999999999999112
 component_create maths;oscillators;oscillator plate_12_alpha_cycle -0.400000 -0.120000
-param_set plate_12_alpha_cycle amp 0.01600000000000000033
+param_set plate_12_alpha_cycle amp 0.00672513368983957294
 param_set plate_12_alpha_cycle ofs 0.23999999999999999112
 param_set plate_12_alpha_cycle freq 0.23290000000000002367
 param_set plate_12_alpha_cycle phase 0.80000000000000004441
@@ -349,25 +460,35 @@ param_set plate_12_color floata 1.00000000000000000000
 param_set plate_12_color floatb 1.00000000000000000000
 param_set plate_12_color floatc 1.00000000000000000000
 component_create maths;arithmetics;binary;mult plate_12_scale_audio -0.480000 -0.200000
-param_set plate_12_scale_audio param2 0.17999999999999999334
+param_set plate_12_scale_audio param2 0.07565775401069518846
 component_create maths;oscillators;oscillator plate_12_scale_cycle -0.400000 -0.200000
-param_set plate_12_scale_cycle amp 0.02000000000000000042
-param_set plate_12_scale_cycle ofs 0.97999999999999998224
+param_set plate_12_scale_cycle amp 0.00840641711229946596
+param_set plate_12_scale_cycle ofs 0.41191443850267384086
 param_set plate_12_scale_cycle freq 0.17000000000000001221
 param_set plate_12_scale_cycle phase 0.80000000000000004441
 component_create maths;arithmetics;binary;add plate_12_scale_sum -0.320000 -0.200000
-component_create maths;converters;float_to_float3 plate_12_scale_vector -0.240000 -0.200000
-component_create renderers;opengl_modifiers;gl_scale plate_12_scale -0.160000 -0.040000
+component_create maths;arithmetics;binary;mult plate_12_move_audio -0.480000 -0.280000
+param_set plate_12_move_audio param2 0.05500000000000000028
+component_create maths;oscillators;oscillator plate_12_move_cycle -0.400000 -0.280000
+param_set plate_12_move_cycle amp 0.00550000000000000055
+param_set plate_12_move_cycle ofs 0.57967914438502665675
+param_set plate_12_move_cycle freq 0.12410000000000000198
+param_set plate_12_move_cycle phase 0.80000000000000004441
+component_create maths;arithmetics;binary;add plate_12_move_sum -0.320000 -0.280000
+component_create maths;converters;3float_to_float3 plate_12_position -0.240000 -0.280000
+param_set plate_12_position floata 0.36538461538461541878
+param_set plate_12_position floatb 0.00000000000000000000
+param_set plate_12_position floatc 0.00000000000000000000
 component_create texture;loaders;png_tex_load plate_13_texture -0.140000 -0.040000
 ps64 plate_13_texture filename cmVzb3VyY2VzL3NpZ25hbC12YXVsdC9sYXllcnMtdjA0LzEzLWFpc2xlLWdsb3ctbGVmdC1hbHBoYS5wbmc=
 param_set plate_13_texture flip_vertical 1
 component_create renderers;basic;textured_rectangle plate_13_layer -0.060000 -0.040000
 param_set plate_13_layer facing_camera 0
-param_set plate_13_layer size 1.00000000000000000000,0.56189903846153840000,0.00000000000000000000
+param_set plate_13_layer x_aspect_ratio 0.53514194139194137811
 component_create maths;arithmetics;binary;mult plate_13_alpha_audio -0.140000 -0.120000
 param_set plate_13_alpha_audio param2 0.90000000000000002220
 component_create maths;oscillators;oscillator plate_13_alpha_cycle -0.060000 -0.120000
-param_set plate_13_alpha_cycle amp 0.01280000000000000061
+param_set plate_13_alpha_cycle amp 0.00776213903743315503
 param_set plate_13_alpha_cycle ofs 0.17999999999999999334
 param_set plate_13_alpha_cycle freq 0.31510000000000004672
 param_set plate_13_alpha_cycle phase 0.10000000000000000555
@@ -377,25 +498,35 @@ param_set plate_13_color floata 1.00000000000000000000
 param_set plate_13_color floatb 1.00000000000000000000
 param_set plate_13_color floatc 1.00000000000000000000
 component_create maths;arithmetics;binary;mult plate_13_scale_audio -0.140000 -0.200000
-param_set plate_13_scale_audio param2 0.14000000000000001332
+param_set plate_13_scale_audio param2 0.08489839572192514616
 component_create maths;oscillators;oscillator plate_13_scale_cycle -0.060000 -0.200000
-param_set plate_13_scale_cycle amp 0.01600000000000000033
-param_set plate_13_scale_cycle ofs 0.98999999999999999112
+param_set plate_13_scale_cycle amp 0.00970267379679144379
+param_set plate_13_scale_cycle ofs 0.60035294117647064471
 param_set plate_13_scale_cycle freq 0.23000000000000000999
 param_set plate_13_scale_cycle phase 0.10000000000000000555
 component_create maths;arithmetics;binary;add plate_13_scale_sum 0.020000 -0.200000
-component_create maths;converters;float_to_float3 plate_13_scale_vector 0.100000 -0.200000
-component_create renderers;opengl_modifiers;gl_scale plate_13_scale 0.180000 -0.040000
+component_create maths;arithmetics;binary;mult plate_13_move_audio -0.140000 -0.280000
+param_set plate_13_move_audio param2 -0.08500000000000000611
+component_create maths;oscillators;oscillator plate_13_move_cycle -0.060000 -0.280000
+param_set plate_13_move_cycle amp 0.00850000000000000061
+param_set plate_13_move_cycle ofs -0.67548076923076916245
+param_set plate_13_move_cycle freq 0.16789999999999999369
+param_set plate_13_move_cycle phase 0.10000000000000000555
+component_create maths;arithmetics;binary;add plate_13_move_sum 0.020000 -0.280000
+component_create maths;converters;3float_to_float3 plate_13_position 0.100000 -0.280000
+param_set plate_13_position floata 0.00000000000000000000
+param_set plate_13_position floatb -0.11764705882352943789
+param_set plate_13_position floatc 0.00000000000000000000
 component_create texture;loaders;png_tex_load plate_14_texture 0.200000 -0.040000
 ps64 plate_14_texture filename cmVzb3VyY2VzL3NpZ25hbC12YXVsdC9sYXllcnMtdjA0LzE0LWFpc2xlLWdsb3ctcmlnaHQtYWxwaGEucG5n
 param_set plate_14_texture flip_vertical 1
 component_create renderers;basic;textured_rectangle plate_14_layer 0.280000 -0.040000
 param_set plate_14_layer facing_camera 0
-param_set plate_14_layer size 1.00000000000000000000,0.56189903846153840000,0.00000000000000000000
+param_set plate_14_layer x_aspect_ratio 0.53415093779677114139
 component_create maths;arithmetics;binary;mult plate_14_alpha_audio 0.200000 -0.120000
 param_set plate_14_alpha_audio param2 0.90000000000000002220
 component_create maths;oscillators;oscillator plate_14_alpha_cycle 0.280000 -0.120000
-param_set plate_14_alpha_cycle amp 0.01280000000000000061
+param_set plate_14_alpha_cycle amp 0.00776213903743315503
 param_set plate_14_alpha_cycle ofs 0.17999999999999999334
 param_set plate_14_alpha_cycle freq 0.31510000000000004672
 param_set plate_14_alpha_cycle phase 0.59999999999999997780
@@ -405,25 +536,35 @@ param_set plate_14_color floata 1.00000000000000000000
 param_set plate_14_color floatb 1.00000000000000000000
 param_set plate_14_color floatc 1.00000000000000000000
 component_create maths;arithmetics;binary;mult plate_14_scale_audio 0.200000 -0.200000
-param_set plate_14_scale_audio param2 0.14000000000000001332
+param_set plate_14_scale_audio param2 0.08489839572192514616
 component_create maths;oscillators;oscillator plate_14_scale_cycle 0.280000 -0.200000
-param_set plate_14_scale_cycle amp 0.01600000000000000033
-param_set plate_14_scale_cycle ofs 0.98999999999999999112
+param_set plate_14_scale_cycle amp 0.00970267379679144379
+param_set plate_14_scale_cycle ofs 0.60035294117647064471
 param_set plate_14_scale_cycle freq 0.23000000000000000999
 param_set plate_14_scale_cycle phase 0.59999999999999997780
 component_create maths;arithmetics;binary;add plate_14_scale_sum 0.360000 -0.200000
-component_create maths;converters;float_to_float3 plate_14_scale_vector 0.440000 -0.200000
-component_create renderers;opengl_modifiers;gl_scale plate_14_scale 0.520000 -0.040000
+component_create maths;arithmetics;binary;mult plate_14_move_audio 0.200000 -0.280000
+param_set plate_14_move_audio param2 0.08500000000000000611
+component_create maths;oscillators;oscillator plate_14_move_cycle 0.280000 -0.280000
+param_set plate_14_move_cycle amp 0.00850000000000000061
+param_set plate_14_move_cycle ofs 0.67608173076923083755
+param_set plate_14_move_cycle freq 0.16789999999999999369
+param_set plate_14_move_cycle phase 0.59999999999999997780
+component_create maths;arithmetics;binary;add plate_14_move_sum 0.360000 -0.280000
+component_create maths;converters;3float_to_float3 plate_14_position 0.440000 -0.280000
+param_set plate_14_position floata 0.00000000000000000000
+param_set plate_14_position floatb -0.11764705882352943789
+param_set plate_14_position floatc 0.00000000000000000000
 component_create texture;loaders;png_tex_load plate_15_texture 0.540000 -0.040000
 ps64 plate_15_texture filename cmVzb3VyY2VzL3NpZ25hbC12YXVsdC9sYXllcnMtdjA0LzE1LXJvb3QtbGVmdC1hbHBoYS5wbmc=
 param_set plate_15_texture flip_vertical 1
 component_create renderers;basic;textured_rectangle plate_15_layer 0.620000 -0.040000
 param_set plate_15_layer facing_camera 0
-param_set plate_15_layer size 1.00000000000000000000,0.56189903846153840000,0.00000000000000000000
+param_set plate_15_layer x_aspect_ratio 0.87786996590666954710
 component_create maths;arithmetics;binary;mult plate_15_alpha_audio 0.540000 -0.120000
 param_set plate_15_alpha_audio param2 0.76000000000000000888
 component_create maths;oscillators;oscillator plate_15_alpha_cycle 0.620000 -0.120000
-param_set plate_15_alpha_cycle amp 0.02240000000000000324
+param_set plate_15_alpha_cycle amp 0.00864855614973262209
 param_set plate_15_alpha_cycle ofs 0.28000000000000002665
 param_set plate_15_alpha_cycle freq 0.14385000000000000564
 param_set plate_15_alpha_cycle phase 0.35999999999999998668
@@ -433,25 +574,35 @@ param_set plate_15_color floata 1.00000000000000000000
 param_set plate_15_color floatb 1.00000000000000000000
 param_set plate_15_color floatc 1.00000000000000000000
 component_create maths;arithmetics;binary;mult plate_15_scale_audio 0.540000 -0.200000
-param_set plate_15_scale_audio param2 0.29999999999999998890
+param_set plate_15_scale_audio param2 0.11582887700534759412
 component_create maths;oscillators;oscillator plate_15_scale_cycle 0.620000 -0.200000
-param_set plate_15_scale_cycle amp 0.02800000000000000058
-param_set plate_15_scale_cycle ofs 0.96999999999999997335
+param_set plate_15_scale_cycle amp 0.01081069518716577631
+param_set plate_15_scale_cycle ofs 0.37451336898395720665
 param_set plate_15_scale_cycle freq 0.10499999999999999611
 param_set plate_15_scale_cycle phase 0.35999999999999998668
 component_create maths;arithmetics;binary;add plate_15_scale_sum 0.700000 -0.200000
-component_create maths;converters;float_to_float3 plate_15_scale_vector 0.780000 -0.200000
-component_create renderers;opengl_modifiers;gl_scale plate_15_scale 0.860000 -0.040000
+component_create maths;arithmetics;binary;mult plate_15_move_audio 0.540000 -0.280000
+param_set plate_15_move_audio param2 -0.05999999999999999778
+component_create maths;oscillators;oscillator plate_15_move_cycle 0.620000 -0.280000
+param_set plate_15_move_cycle amp 0.00600000000000000012
+param_set plate_15_move_cycle ofs -0.42788461538461541878
+param_set plate_15_move_cycle freq 0.07664999999999999591
+param_set plate_15_move_cycle phase 0.35999999999999998668
+component_create maths;arithmetics;binary;add plate_15_move_sum 0.700000 -0.280000
+component_create maths;converters;3float_to_float3 plate_15_position 0.780000 -0.280000
+param_set plate_15_position floata 0.00000000000000000000
+param_set plate_15_position floatb -0.42352941176470593199
+param_set plate_15_position floatc 0.00000000000000000000
 component_create texture;loaders;png_tex_load plate_16_texture -0.820000 -0.420000
 ps64 plate_16_texture filename cmVzb3VyY2VzL3NpZ25hbC12YXVsdC9sYXllcnMtdjA0LzE2LXJvb3QtcmlnaHQtYWxwaGEucG5n
 param_set plate_16_texture flip_vertical 1
 component_create renderers;basic;textured_rectangle plate_16_layer -0.740000 -0.420000
 param_set plate_16_layer facing_camera 0
-param_set plate_16_layer size 1.00000000000000000000,0.56189903846153840000,0.00000000000000000000
+param_set plate_16_layer x_aspect_ratio 0.87631345887492007041
 component_create maths;arithmetics;binary;mult plate_16_alpha_audio -0.820000 -0.500000
 param_set plate_16_alpha_audio param2 0.76000000000000000888
 component_create maths;oscillators;oscillator plate_16_alpha_cycle -0.740000 -0.500000
-param_set plate_16_alpha_cycle amp 0.02240000000000000324
+param_set plate_16_alpha_cycle amp 0.00864855614973262209
 param_set plate_16_alpha_cycle ofs 0.28000000000000002665
 param_set plate_16_alpha_cycle freq 0.14385000000000000564
 param_set plate_16_alpha_cycle phase 0.85999999999999998668
@@ -461,25 +612,35 @@ param_set plate_16_color floata 1.00000000000000000000
 param_set plate_16_color floatb 1.00000000000000000000
 param_set plate_16_color floatc 1.00000000000000000000
 component_create maths;arithmetics;binary;mult plate_16_scale_audio -0.820000 -0.580000
-param_set plate_16_scale_audio param2 0.29999999999999998890
+param_set plate_16_scale_audio param2 0.11582887700534759412
 component_create maths;oscillators;oscillator plate_16_scale_cycle -0.740000 -0.580000
-param_set plate_16_scale_cycle amp 0.02800000000000000058
-param_set plate_16_scale_cycle ofs 0.96999999999999997335
+param_set plate_16_scale_cycle amp 0.01081069518716577631
+param_set plate_16_scale_cycle ofs 0.37451336898395720665
 param_set plate_16_scale_cycle freq 0.10499999999999999611
 param_set plate_16_scale_cycle phase 0.85999999999999998668
 component_create maths;arithmetics;binary;add plate_16_scale_sum -0.660000 -0.580000
-component_create maths;converters;float_to_float3 plate_16_scale_vector -0.580000 -0.580000
-component_create renderers;opengl_modifiers;gl_scale plate_16_scale -0.500000 -0.420000
+component_create maths;arithmetics;binary;mult plate_16_move_audio -0.820000 -0.660000
+param_set plate_16_move_audio param2 0.05999999999999999778
+component_create maths;oscillators;oscillator plate_16_move_cycle -0.740000 -0.660000
+param_set plate_16_move_cycle amp 0.00600000000000000012
+param_set plate_16_move_cycle ofs 0.42848557692307687184
+param_set plate_16_move_cycle freq 0.07664999999999999591
+param_set plate_16_move_cycle phase 0.85999999999999998668
+component_create maths;arithmetics;binary;add plate_16_move_sum -0.660000 -0.660000
+component_create maths;converters;3float_to_float3 plate_16_position -0.580000 -0.660000
+param_set plate_16_position floata 0.00000000000000000000
+param_set plate_16_position floatb -0.42352941176470593199
+param_set plate_16_position floatc 0.00000000000000000000
 component_create texture;loaders;png_tex_load plate_17_texture -0.480000 -0.420000
 ps64 plate_17_texture filename cmVzb3VyY2VzL3NpZ25hbC12YXVsdC9sYXllcnMtdjA0LzE3LXN0YWlycy1hbHBoYS5wbmc=
 param_set plate_17_texture flip_vertical 1
 component_create renderers;basic;textured_rectangle plate_17_layer -0.400000 -0.420000
 param_set plate_17_layer facing_camera 0
-param_set plate_17_layer size 1.00000000000000000000,0.56189903846153840000,0.00000000000000000000
+param_set plate_17_layer x_aspect_ratio 1.33907108516483508431
 component_create maths;arithmetics;binary;mult plate_17_alpha_audio -0.480000 -0.500000
 param_set plate_17_alpha_audio param2 0.69999999999999995559
 component_create maths;oscillators;oscillator plate_17_alpha_cycle -0.400000 -0.500000
-param_set plate_17_alpha_cycle amp 0.02079999999999999905
+param_set plate_17_alpha_cycle amp 0.00685176470588235321
 param_set plate_17_alpha_cycle ofs 0.32000000000000000666
 param_set plate_17_alpha_cycle freq 0.16440000000000001834
 param_set plate_17_alpha_cycle phase 0.45000000000000001110
@@ -489,25 +650,35 @@ param_set plate_17_color floata 1.00000000000000000000
 param_set plate_17_color floatb 1.00000000000000000000
 param_set plate_17_color floatc 1.00000000000000000000
 component_create maths;arithmetics;binary;mult plate_17_scale_audio -0.480000 -0.580000
-param_set plate_17_scale_audio param2 0.23999999999999999112
+param_set plate_17_scale_audio param2 0.07905882352941176472
 component_create maths;oscillators;oscillator plate_17_scale_cycle -0.400000 -0.580000
-param_set plate_17_scale_cycle amp 0.02599999999999999881
-param_set plate_17_scale_cycle ofs 0.96499999999999996891
+param_set plate_17_scale_cycle amp 0.00856470588235294129
+param_set plate_17_scale_cycle ofs 0.31788235294117644925
 param_set plate_17_scale_cycle freq 0.11999999999999999556
 param_set plate_17_scale_cycle phase 0.45000000000000001110
 component_create maths;arithmetics;binary;add plate_17_scale_sum -0.320000 -0.580000
-component_create maths;converters;float_to_float3 plate_17_scale_vector -0.240000 -0.580000
-component_create renderers;opengl_modifiers;gl_scale plate_17_scale -0.160000 -0.420000
+component_create maths;arithmetics;binary;mult plate_17_move_audio -0.480000 -0.660000
+param_set plate_17_move_audio param2 -0.05000000000000000278
+component_create maths;oscillators;oscillator plate_17_move_cycle -0.400000 -0.660000
+param_set plate_17_move_cycle amp 0.00500000000000000097
+param_set plate_17_move_cycle ofs -0.56149732620320857990
+param_set plate_17_move_cycle freq 0.08759999999999999731
+param_set plate_17_move_cycle phase 0.45000000000000001110
+component_create maths;arithmetics;binary;add plate_17_move_sum -0.320000 -0.660000
+component_create maths;converters;3float_to_float3 plate_17_position -0.240000 -0.660000
+param_set plate_17_position floata 0.00000000000000000000
+param_set plate_17_position floatb 0.00000000000000000000
+param_set plate_17_position floatc 0.00000000000000000000
 component_create texture;loaders;png_tex_load plate_18_texture -0.140000 -0.420000
 ps64 plate_18_texture filename cmVzb3VyY2VzL3NpZ25hbC12YXVsdC9sYXllcnMtdjA0LzE4LWZsb29yLWNlbnRlci1hbHBoYS5wbmc=
 param_set plate_18_texture flip_vertical 1
 component_create renderers;basic;textured_rectangle plate_18_layer -0.060000 -0.420000
 param_set plate_18_layer facing_camera 0
-param_set plate_18_layer size 1.00000000000000000000,0.56189903846153840000,0.00000000000000000000
+param_set plate_18_layer x_aspect_ratio 2.59792996729990655069
 component_create maths;arithmetics;binary;mult plate_18_alpha_audio -0.140000 -0.500000
 param_set plate_18_alpha_audio param2 0.81999999999999995115
 component_create maths;oscillators;oscillator plate_18_alpha_cycle -0.060000 -0.500000
-param_set plate_18_alpha_cycle amp 0.03039999999999999994
+param_set plate_18_alpha_cycle amp 0.00803080213903743269
 param_set plate_18_alpha_cycle ofs 0.23999999999999999112
 param_set plate_18_alpha_cycle freq 0.10960000000000001685
 param_set plate_18_alpha_cycle phase 0.50000000000000000000
@@ -517,25 +688,35 @@ param_set plate_18_color floata 1.00000000000000000000
 param_set plate_18_color floatb 1.00000000000000000000
 param_set plate_18_color floatc 1.00000000000000000000
 component_create maths;arithmetics;binary;mult plate_18_scale_audio -0.140000 -0.580000
-param_set plate_18_scale_audio param2 0.38000000000000000444
+param_set plate_18_scale_audio param2 0.10038502673796791120
 component_create maths;oscillators;oscillator plate_18_scale_cycle -0.060000 -0.580000
-param_set plate_18_scale_cycle amp 0.03799999999999999906
-param_set plate_18_scale_cycle ofs 0.94999999999999995559
+param_set plate_18_scale_cycle amp 0.01003850267379679043
+param_set plate_18_scale_cycle ofs 0.25096256684491974331
 param_set plate_18_scale_cycle freq 0.08000000000000000167
 param_set plate_18_scale_cycle phase 0.50000000000000000000
 component_create maths;arithmetics;binary;add plate_18_scale_sum 0.020000 -0.580000
-component_create maths;converters;float_to_float3 plate_18_scale_vector 0.100000 -0.580000
-component_create renderers;opengl_modifiers;gl_scale plate_18_scale 0.180000 -0.420000
+component_create maths;arithmetics;binary;mult plate_18_move_audio -0.140000 -0.660000
+param_set plate_18_move_audio param2 -0.07000000000000000666
+component_create maths;oscillators;oscillator plate_18_move_cycle -0.060000 -0.660000
+param_set plate_18_move_cycle amp 0.00700000000000000101
+param_set plate_18_move_cycle ofs -0.73582887700534760356
+param_set plate_18_move_cycle freq 0.05840000000000000052
+param_set plate_18_move_cycle phase 0.50000000000000000000
+component_create maths;arithmetics;binary;add plate_18_move_sum 0.020000 -0.660000
+component_create maths;converters;3float_to_float3 plate_18_position 0.100000 -0.660000
+param_set plate_18_position floata 0.00240384615384625633
+param_set plate_18_position floatb 0.00000000000000000000
+param_set plate_18_position floatc 0.00000000000000000000
 component_create texture;loaders;png_tex_load plate_19_texture 0.200000 -0.420000
 ps64 plate_19_texture filename cmVzb3VyY2VzL3NpZ25hbC12YXVsdC9sYXllcnMtdjA0LzE5LWZsb29yLWxlZnQtYWxwaGEucG5n
 param_set plate_19_texture flip_vertical 1
 component_create renderers;basic;textured_rectangle plate_19_layer 0.280000 -0.420000
 param_set plate_19_layer facing_camera 0
-param_set plate_19_layer size 1.00000000000000000000,0.56189903846153840000,0.00000000000000000000
+param_set plate_19_layer x_aspect_ratio 1.46212461064463683513
 component_create maths;arithmetics;binary;mult plate_19_alpha_audio 0.200000 -0.500000
 param_set plate_19_alpha_audio param2 0.88000000000000000444
 component_create maths;oscillators;oscillator plate_19_alpha_cycle 0.280000 -0.500000
-param_set plate_19_alpha_cycle amp 0.01760000000000000106
+param_set plate_19_alpha_cycle amp 0.00534588235294117687
 param_set plate_19_alpha_cycle ofs 0.20000000000000001110
 param_set plate_19_alpha_cycle freq 0.26030000000000003135
 param_set plate_19_alpha_cycle phase 0.25000000000000000000
@@ -545,25 +726,35 @@ param_set plate_19_color floata 1.00000000000000000000
 param_set plate_19_color floatb 1.00000000000000000000
 param_set plate_19_color floatc 1.00000000000000000000
 component_create maths;arithmetics;binary;mult plate_19_scale_audio 0.200000 -0.580000
-param_set plate_19_scale_audio param2 0.17999999999999999334
+param_set plate_19_scale_audio param2 0.05467379679144385163
 component_create maths;oscillators;oscillator plate_19_scale_cycle 0.280000 -0.580000
-param_set plate_19_scale_cycle amp 0.02199999999999999872
-param_set plate_19_scale_cycle ofs 0.98499999999999998668
+param_set plate_19_scale_cycle amp 0.00668235294117647087
+param_set plate_19_scale_cycle ofs 0.29918716577540110935
 param_set plate_19_scale_cycle freq 0.19000000000000000222
 param_set plate_19_scale_cycle phase 0.25000000000000000000
 component_create maths;arithmetics;binary;add plate_19_scale_sum 0.360000 -0.580000
-component_create maths;converters;float_to_float3 plate_19_scale_vector 0.440000 -0.580000
-component_create renderers;opengl_modifiers;gl_scale plate_19_scale 0.520000 -0.420000
+component_create maths;arithmetics;binary;mult plate_19_move_audio 0.200000 -0.660000
+param_set plate_19_move_audio param2 -0.07499999999999999722
+component_create maths;oscillators;oscillator plate_19_move_cycle 0.280000 -0.660000
+param_set plate_19_move_cycle amp 0.00749999999999999972
+param_set plate_19_move_cycle ofs -0.55588942307692312816
+param_set plate_19_move_cycle freq 0.13869999999999998996
+param_set plate_19_move_cycle phase 0.25000000000000000000
+component_create maths;arithmetics;binary;add plate_19_move_sum 0.360000 -0.660000
+component_create maths;converters;3float_to_float3 plate_19_position 0.440000 -0.660000
+param_set plate_19_position floata 0.00000000000000000000
+param_set plate_19_position floatb -0.69625668449197863907
+param_set plate_19_position floatc 0.00000000000000000000
 component_create texture;loaders;png_tex_load plate_20_texture 0.540000 -0.420000
 ps64 plate_20_texture filename cmVzb3VyY2VzL3NpZ25hbC12YXVsdC9sYXllcnMtdjA0LzIwLWZsb29yLXJpZ2h0LWFscGhhLnBuZw==
 param_set plate_20_texture flip_vertical 1
 component_create renderers;basic;textured_rectangle plate_20_layer 0.620000 -0.420000
 param_set plate_20_layer facing_camera 0
-param_set plate_20_layer size 1.00000000000000000000,0.56189903846153840000,0.00000000000000000000
+param_set plate_20_layer x_aspect_ratio 1.45421053968038993531
 component_create maths;arithmetics;binary;mult plate_20_alpha_audio 0.540000 -0.500000
 param_set plate_20_alpha_audio param2 0.88000000000000000444
 component_create maths;oscillators;oscillator plate_20_alpha_cycle 0.620000 -0.500000
-param_set plate_20_alpha_cycle amp 0.01760000000000000106
+param_set plate_20_alpha_cycle amp 0.00534588235294117687
 param_set plate_20_alpha_cycle ofs 0.20000000000000001110
 param_set plate_20_alpha_cycle freq 0.26030000000000003135
 param_set plate_20_alpha_cycle phase 0.75000000000000000000
@@ -573,15 +764,25 @@ param_set plate_20_color floata 1.00000000000000000000
 param_set plate_20_color floatb 1.00000000000000000000
 param_set plate_20_color floatc 1.00000000000000000000
 component_create maths;arithmetics;binary;mult plate_20_scale_audio 0.540000 -0.580000
-param_set plate_20_scale_audio param2 0.17999999999999999334
+param_set plate_20_scale_audio param2 0.05467379679144385163
 component_create maths;oscillators;oscillator plate_20_scale_cycle 0.620000 -0.580000
-param_set plate_20_scale_cycle amp 0.02199999999999999872
-param_set plate_20_scale_cycle ofs 0.98499999999999998668
+param_set plate_20_scale_cycle amp 0.00668235294117647087
+param_set plate_20_scale_cycle ofs 0.29918716577540110935
 param_set plate_20_scale_cycle freq 0.19000000000000000222
 param_set plate_20_scale_cycle phase 0.75000000000000000000
 component_create maths;arithmetics;binary;add plate_20_scale_sum 0.700000 -0.580000
-component_create maths;converters;float_to_float3 plate_20_scale_vector 0.780000 -0.580000
-component_create renderers;opengl_modifiers;gl_scale plate_20_scale 0.860000 -0.420000
+component_create maths;arithmetics;binary;mult plate_20_move_audio 0.540000 -0.660000
+param_set plate_20_move_audio param2 0.07499999999999999722
+component_create maths;oscillators;oscillator plate_20_move_cycle 0.620000 -0.660000
+param_set plate_20_move_cycle amp 0.00749999999999999972
+param_set plate_20_move_cycle ofs 0.55829326923076916245
+param_set plate_20_move_cycle freq 0.13869999999999998996
+param_set plate_20_move_cycle phase 0.75000000000000000000
+component_create maths;arithmetics;binary;add plate_20_move_sum 0.700000 -0.660000
+component_create maths;converters;3float_to_float3 plate_20_position 0.780000 -0.660000
+param_set plate_20_position floata 0.00000000000000000000
+param_set plate_20_position floatb -0.69625668449197863907
+param_set plate_20_position floatc 0.00000000000000000000
 
 param_connect band_sub value_in audio octaves_l_0
 param_connect band_bass value_in audio octaves_l_1
@@ -600,10 +801,13 @@ param_connect plate_01_layer color_multiplier plate_01_color result_float4
 param_connect plate_01_scale_audio param1 band_highmid result_float
 param_connect plate_01_scale_sum param1 plate_01_scale_cycle float
 param_connect plate_01_scale_sum param2 plate_01_scale_audio product
-param_connect plate_01_scale_vector param1 plate_01_scale_sum sum
-param_connect plate_01_scale scale plate_01_scale_vector result_float3
-param_connect plate_01_scale render_in plate_01_layer render_out
-param_connect cathedral_composite render_in plate_01_scale render_out
+param_connect plate_01_layer size plate_01_scale_sum sum
+param_connect plate_01_move_audio param1 band_highmid result_float
+param_connect plate_01_move_sum param1 plate_01_move_cycle float
+param_connect plate_01_move_sum param2 plate_01_move_audio product
+param_connect plate_01_position floata plate_01_move_sum sum
+param_connect plate_01_layer position plate_01_position result_float3
+param_connect cathedral_composite render_in plate_01_layer render_out
 param_connect plate_02_layer texture_in plate_02_texture texture
 param_connect plate_02_alpha_audio param1 band_mid result_float
 param_connect plate_02_alpha_sum param1 plate_02_alpha_cycle float
@@ -613,10 +817,13 @@ param_connect plate_02_layer color_multiplier plate_02_color result_float4
 param_connect plate_02_scale_audio param1 band_mid result_float
 param_connect plate_02_scale_sum param1 plate_02_scale_cycle float
 param_connect plate_02_scale_sum param2 plate_02_scale_audio product
-param_connect plate_02_scale_vector param1 plate_02_scale_sum sum
-param_connect plate_02_scale scale plate_02_scale_vector result_float3
-param_connect plate_02_scale render_in plate_02_layer render_out
-param_connect cathedral_composite render_in plate_02_scale render_out
+param_connect plate_02_layer size plate_02_scale_sum sum
+param_connect plate_02_move_audio param1 band_mid result_float
+param_connect plate_02_move_sum param1 plate_02_move_cycle float
+param_connect plate_02_move_sum param2 plate_02_move_audio product
+param_connect plate_02_position floata plate_02_move_sum sum
+param_connect plate_02_layer position plate_02_position result_float3
+param_connect cathedral_composite render_in plate_02_layer render_out
 param_connect plate_03_layer texture_in plate_03_texture texture
 param_connect plate_03_alpha_audio param1 band_mid result_float
 param_connect plate_03_alpha_sum param1 plate_03_alpha_cycle float
@@ -626,10 +833,13 @@ param_connect plate_03_layer color_multiplier plate_03_color result_float4
 param_connect plate_03_scale_audio param1 band_mid result_float
 param_connect plate_03_scale_sum param1 plate_03_scale_cycle float
 param_connect plate_03_scale_sum param2 plate_03_scale_audio product
-param_connect plate_03_scale_vector param1 plate_03_scale_sum sum
-param_connect plate_03_scale scale plate_03_scale_vector result_float3
-param_connect plate_03_scale render_in plate_03_layer render_out
-param_connect cathedral_composite render_in plate_03_scale render_out
+param_connect plate_03_layer size plate_03_scale_sum sum
+param_connect plate_03_move_audio param1 band_mid result_float
+param_connect plate_03_move_sum param1 plate_03_move_cycle float
+param_connect plate_03_move_sum param2 plate_03_move_audio product
+param_connect plate_03_position floata plate_03_move_sum sum
+param_connect plate_03_layer position plate_03_position result_float3
+param_connect cathedral_composite render_in plate_03_layer render_out
 param_connect plate_04_layer texture_in plate_04_texture texture
 param_connect plate_04_alpha_audio param1 band_bass result_float
 param_connect plate_04_alpha_sum param1 plate_04_alpha_cycle float
@@ -639,10 +849,13 @@ param_connect plate_04_layer color_multiplier plate_04_color result_float4
 param_connect plate_04_scale_audio param1 band_bass result_float
 param_connect plate_04_scale_sum param1 plate_04_scale_cycle float
 param_connect plate_04_scale_sum param2 plate_04_scale_audio product
-param_connect plate_04_scale_vector param1 plate_04_scale_sum sum
-param_connect plate_04_scale scale plate_04_scale_vector result_float3
-param_connect plate_04_scale render_in plate_04_layer render_out
-param_connect cathedral_composite render_in plate_04_scale render_out
+param_connect plate_04_layer size plate_04_scale_sum sum
+param_connect plate_04_move_audio param1 band_bass result_float
+param_connect plate_04_move_sum param1 plate_04_move_cycle float
+param_connect plate_04_move_sum param2 plate_04_move_audio product
+param_connect plate_04_position floata plate_04_move_sum sum
+param_connect plate_04_layer position plate_04_position result_float3
+param_connect cathedral_composite render_in plate_04_layer render_out
 param_connect plate_05_layer texture_in plate_05_texture texture
 param_connect plate_05_alpha_audio param1 band_bass result_float
 param_connect plate_05_alpha_sum param1 plate_05_alpha_cycle float
@@ -652,10 +865,13 @@ param_connect plate_05_layer color_multiplier plate_05_color result_float4
 param_connect plate_05_scale_audio param1 band_bass result_float
 param_connect plate_05_scale_sum param1 plate_05_scale_cycle float
 param_connect plate_05_scale_sum param2 plate_05_scale_audio product
-param_connect plate_05_scale_vector param1 plate_05_scale_sum sum
-param_connect plate_05_scale scale plate_05_scale_vector result_float3
-param_connect plate_05_scale render_in plate_05_layer render_out
-param_connect cathedral_composite render_in plate_05_scale render_out
+param_connect plate_05_layer size plate_05_scale_sum sum
+param_connect plate_05_move_audio param1 band_bass result_float
+param_connect plate_05_move_sum param1 plate_05_move_cycle float
+param_connect plate_05_move_sum param2 plate_05_move_audio product
+param_connect plate_05_position floata plate_05_move_sum sum
+param_connect plate_05_layer position plate_05_position result_float3
+param_connect cathedral_composite render_in plate_05_layer render_out
 param_connect plate_06_layer texture_in plate_06_texture texture
 param_connect plate_06_alpha_audio param1 band_lowmid result_float
 param_connect plate_06_alpha_sum param1 plate_06_alpha_cycle float
@@ -665,10 +881,13 @@ param_connect plate_06_layer color_multiplier plate_06_color result_float4
 param_connect plate_06_scale_audio param1 band_lowmid result_float
 param_connect plate_06_scale_sum param1 plate_06_scale_cycle float
 param_connect plate_06_scale_sum param2 plate_06_scale_audio product
-param_connect plate_06_scale_vector param1 plate_06_scale_sum sum
-param_connect plate_06_scale scale plate_06_scale_vector result_float3
-param_connect plate_06_scale render_in plate_06_layer render_out
-param_connect cathedral_composite render_in plate_06_scale render_out
+param_connect plate_06_layer size plate_06_scale_sum sum
+param_connect plate_06_move_audio param1 band_lowmid result_float
+param_connect plate_06_move_sum param1 plate_06_move_cycle float
+param_connect plate_06_move_sum param2 plate_06_move_audio product
+param_connect plate_06_position floata plate_06_move_sum sum
+param_connect plate_06_layer position plate_06_position result_float3
+param_connect cathedral_composite render_in plate_06_layer render_out
 param_connect plate_07_layer texture_in plate_07_texture texture
 param_connect plate_07_alpha_audio param1 band_lowmid result_float
 param_connect plate_07_alpha_sum param1 plate_07_alpha_cycle float
@@ -678,10 +897,13 @@ param_connect plate_07_layer color_multiplier plate_07_color result_float4
 param_connect plate_07_scale_audio param1 band_lowmid result_float
 param_connect plate_07_scale_sum param1 plate_07_scale_cycle float
 param_connect plate_07_scale_sum param2 plate_07_scale_audio product
-param_connect plate_07_scale_vector param1 plate_07_scale_sum sum
-param_connect plate_07_scale scale plate_07_scale_vector result_float3
-param_connect plate_07_scale render_in plate_07_layer render_out
-param_connect cathedral_composite render_in plate_07_scale render_out
+param_connect plate_07_layer size plate_07_scale_sum sum
+param_connect plate_07_move_audio param1 band_lowmid result_float
+param_connect plate_07_move_sum param1 plate_07_move_cycle float
+param_connect plate_07_move_sum param2 plate_07_move_audio product
+param_connect plate_07_position floata plate_07_move_sum sum
+param_connect plate_07_layer position plate_07_position result_float3
+param_connect cathedral_composite render_in plate_07_layer render_out
 param_connect plate_08_layer texture_in plate_08_texture texture
 param_connect plate_08_alpha_audio param1 band_mid result_float
 param_connect plate_08_alpha_sum param1 plate_08_alpha_cycle float
@@ -691,10 +913,13 @@ param_connect plate_08_layer color_multiplier plate_08_color result_float4
 param_connect plate_08_scale_audio param1 band_mid result_float
 param_connect plate_08_scale_sum param1 plate_08_scale_cycle float
 param_connect plate_08_scale_sum param2 plate_08_scale_audio product
-param_connect plate_08_scale_vector param1 plate_08_scale_sum sum
-param_connect plate_08_scale scale plate_08_scale_vector result_float3
-param_connect plate_08_scale render_in plate_08_layer render_out
-param_connect cathedral_composite render_in plate_08_scale render_out
+param_connect plate_08_layer size plate_08_scale_sum sum
+param_connect plate_08_move_audio param1 band_mid result_float
+param_connect plate_08_move_sum param1 plate_08_move_cycle float
+param_connect plate_08_move_sum param2 plate_08_move_audio product
+param_connect plate_08_position floata plate_08_move_sum sum
+param_connect plate_08_layer position plate_08_position result_float3
+param_connect cathedral_composite render_in plate_08_layer render_out
 param_connect plate_09_layer texture_in plate_09_texture texture
 param_connect plate_09_alpha_audio param1 band_mid result_float
 param_connect plate_09_alpha_sum param1 plate_09_alpha_cycle float
@@ -704,10 +929,13 @@ param_connect plate_09_layer color_multiplier plate_09_color result_float4
 param_connect plate_09_scale_audio param1 band_mid result_float
 param_connect plate_09_scale_sum param1 plate_09_scale_cycle float
 param_connect plate_09_scale_sum param2 plate_09_scale_audio product
-param_connect plate_09_scale_vector param1 plate_09_scale_sum sum
-param_connect plate_09_scale scale plate_09_scale_vector result_float3
-param_connect plate_09_scale render_in plate_09_layer render_out
-param_connect cathedral_composite render_in plate_09_scale render_out
+param_connect plate_09_layer size plate_09_scale_sum sum
+param_connect plate_09_move_audio param1 band_mid result_float
+param_connect plate_09_move_sum param1 plate_09_move_cycle float
+param_connect plate_09_move_sum param2 plate_09_move_audio product
+param_connect plate_09_position floata plate_09_move_sum sum
+param_connect plate_09_layer position plate_09_position result_float3
+param_connect cathedral_composite render_in plate_09_layer render_out
 param_connect plate_10_layer texture_in plate_10_texture texture
 param_connect plate_10_alpha_audio param1 band_sub result_float
 param_connect plate_10_alpha_sum param1 plate_10_alpha_cycle float
@@ -717,10 +945,13 @@ param_connect plate_10_layer color_multiplier plate_10_color result_float4
 param_connect plate_10_scale_audio param1 band_sub result_float
 param_connect plate_10_scale_sum param1 plate_10_scale_cycle float
 param_connect plate_10_scale_sum param2 plate_10_scale_audio product
-param_connect plate_10_scale_vector param1 plate_10_scale_sum sum
-param_connect plate_10_scale scale plate_10_scale_vector result_float3
-param_connect plate_10_scale render_in plate_10_layer render_out
-param_connect cathedral_composite render_in plate_10_scale render_out
+param_connect plate_10_layer size plate_10_scale_sum sum
+param_connect plate_10_move_audio param1 band_sub result_float
+param_connect plate_10_move_sum param1 plate_10_move_cycle float
+param_connect plate_10_move_sum param2 plate_10_move_audio product
+param_connect plate_10_position floata plate_10_move_sum sum
+param_connect plate_10_layer position plate_10_position result_float3
+param_connect cathedral_composite render_in plate_10_layer render_out
 param_connect plate_11_layer texture_in plate_11_texture texture
 param_connect plate_11_alpha_audio param1 band_highmid result_float
 param_connect plate_11_alpha_sum param1 plate_11_alpha_cycle float
@@ -730,10 +961,13 @@ param_connect plate_11_layer color_multiplier plate_11_color result_float4
 param_connect plate_11_scale_audio param1 band_highmid result_float
 param_connect plate_11_scale_sum param1 plate_11_scale_cycle float
 param_connect plate_11_scale_sum param2 plate_11_scale_audio product
-param_connect plate_11_scale_vector param1 plate_11_scale_sum sum
-param_connect plate_11_scale scale plate_11_scale_vector result_float3
-param_connect plate_11_scale render_in plate_11_layer render_out
-param_connect cathedral_composite render_in plate_11_scale render_out
+param_connect plate_11_layer size plate_11_scale_sum sum
+param_connect plate_11_move_audio param1 band_highmid result_float
+param_connect plate_11_move_sum param1 plate_11_move_cycle float
+param_connect plate_11_move_sum param2 plate_11_move_audio product
+param_connect plate_11_position floata plate_11_move_sum sum
+param_connect plate_11_layer position plate_11_position result_float3
+param_connect cathedral_composite render_in plate_11_layer render_out
 param_connect plate_12_layer texture_in plate_12_texture texture
 param_connect plate_12_alpha_audio param1 band_highmid result_float
 param_connect plate_12_alpha_sum param1 plate_12_alpha_cycle float
@@ -743,10 +977,13 @@ param_connect plate_12_layer color_multiplier plate_12_color result_float4
 param_connect plate_12_scale_audio param1 band_highmid result_float
 param_connect plate_12_scale_sum param1 plate_12_scale_cycle float
 param_connect plate_12_scale_sum param2 plate_12_scale_audio product
-param_connect plate_12_scale_vector param1 plate_12_scale_sum sum
-param_connect plate_12_scale scale plate_12_scale_vector result_float3
-param_connect plate_12_scale render_in plate_12_layer render_out
-param_connect cathedral_composite render_in plate_12_scale render_out
+param_connect plate_12_layer size plate_12_scale_sum sum
+param_connect plate_12_move_audio param1 band_highmid result_float
+param_connect plate_12_move_sum param1 plate_12_move_cycle float
+param_connect plate_12_move_sum param2 plate_12_move_audio product
+param_connect plate_12_position floata plate_12_move_sum sum
+param_connect plate_12_layer position plate_12_position result_float3
+param_connect cathedral_composite render_in plate_12_layer render_out
 param_connect plate_13_layer texture_in plate_13_texture texture
 param_connect plate_13_alpha_audio param1 band_treble result_float
 param_connect plate_13_alpha_sum param1 plate_13_alpha_cycle float
@@ -756,10 +993,13 @@ param_connect plate_13_layer color_multiplier plate_13_color result_float4
 param_connect plate_13_scale_audio param1 band_treble result_float
 param_connect plate_13_scale_sum param1 plate_13_scale_cycle float
 param_connect plate_13_scale_sum param2 plate_13_scale_audio product
-param_connect plate_13_scale_vector param1 plate_13_scale_sum sum
-param_connect plate_13_scale scale plate_13_scale_vector result_float3
-param_connect plate_13_scale render_in plate_13_layer render_out
-param_connect cathedral_composite render_in plate_13_scale render_out
+param_connect plate_13_layer size plate_13_scale_sum sum
+param_connect plate_13_move_audio param1 band_treble result_float
+param_connect plate_13_move_sum param1 plate_13_move_cycle float
+param_connect plate_13_move_sum param2 plate_13_move_audio product
+param_connect plate_13_position floata plate_13_move_sum sum
+param_connect plate_13_layer position plate_13_position result_float3
+param_connect cathedral_composite render_in plate_13_layer render_out
 param_connect plate_14_layer texture_in plate_14_texture texture
 param_connect plate_14_alpha_audio param1 band_treble result_float
 param_connect plate_14_alpha_sum param1 plate_14_alpha_cycle float
@@ -769,10 +1009,13 @@ param_connect plate_14_layer color_multiplier plate_14_color result_float4
 param_connect plate_14_scale_audio param1 band_treble result_float
 param_connect plate_14_scale_sum param1 plate_14_scale_cycle float
 param_connect plate_14_scale_sum param2 plate_14_scale_audio product
-param_connect plate_14_scale_vector param1 plate_14_scale_sum sum
-param_connect plate_14_scale scale plate_14_scale_vector result_float3
-param_connect plate_14_scale render_in plate_14_layer render_out
-param_connect cathedral_composite render_in plate_14_scale render_out
+param_connect plate_14_layer size plate_14_scale_sum sum
+param_connect plate_14_move_audio param1 band_treble result_float
+param_connect plate_14_move_sum param1 plate_14_move_cycle float
+param_connect plate_14_move_sum param2 plate_14_move_audio product
+param_connect plate_14_position floata plate_14_move_sum sum
+param_connect plate_14_layer position plate_14_position result_float3
+param_connect cathedral_composite render_in plate_14_layer render_out
 param_connect plate_15_layer texture_in plate_15_texture texture
 param_connect plate_15_alpha_audio param1 band_bass result_float
 param_connect plate_15_alpha_sum param1 plate_15_alpha_cycle float
@@ -782,10 +1025,13 @@ param_connect plate_15_layer color_multiplier plate_15_color result_float4
 param_connect plate_15_scale_audio param1 band_bass result_float
 param_connect plate_15_scale_sum param1 plate_15_scale_cycle float
 param_connect plate_15_scale_sum param2 plate_15_scale_audio product
-param_connect plate_15_scale_vector param1 plate_15_scale_sum sum
-param_connect plate_15_scale scale plate_15_scale_vector result_float3
-param_connect plate_15_scale render_in plate_15_layer render_out
-param_connect cathedral_composite render_in plate_15_scale render_out
+param_connect plate_15_layer size plate_15_scale_sum sum
+param_connect plate_15_move_audio param1 band_bass result_float
+param_connect plate_15_move_sum param1 plate_15_move_cycle float
+param_connect plate_15_move_sum param2 plate_15_move_audio product
+param_connect plate_15_position floata plate_15_move_sum sum
+param_connect plate_15_layer position plate_15_position result_float3
+param_connect cathedral_composite render_in plate_15_layer render_out
 param_connect plate_16_layer texture_in plate_16_texture texture
 param_connect plate_16_alpha_audio param1 band_bass result_float
 param_connect plate_16_alpha_sum param1 plate_16_alpha_cycle float
@@ -795,10 +1041,13 @@ param_connect plate_16_layer color_multiplier plate_16_color result_float4
 param_connect plate_16_scale_audio param1 band_bass result_float
 param_connect plate_16_scale_sum param1 plate_16_scale_cycle float
 param_connect plate_16_scale_sum param2 plate_16_scale_audio product
-param_connect plate_16_scale_vector param1 plate_16_scale_sum sum
-param_connect plate_16_scale scale plate_16_scale_vector result_float3
-param_connect plate_16_scale render_in plate_16_layer render_out
-param_connect cathedral_composite render_in plate_16_scale render_out
+param_connect plate_16_layer size plate_16_scale_sum sum
+param_connect plate_16_move_audio param1 band_bass result_float
+param_connect plate_16_move_sum param1 plate_16_move_cycle float
+param_connect plate_16_move_sum param2 plate_16_move_audio product
+param_connect plate_16_position floata plate_16_move_sum sum
+param_connect plate_16_layer position plate_16_position result_float3
+param_connect cathedral_composite render_in plate_16_layer render_out
 param_connect plate_17_layer texture_in plate_17_texture texture
 param_connect plate_17_alpha_audio param1 band_lowmid result_float
 param_connect plate_17_alpha_sum param1 plate_17_alpha_cycle float
@@ -808,10 +1057,13 @@ param_connect plate_17_layer color_multiplier plate_17_color result_float4
 param_connect plate_17_scale_audio param1 band_lowmid result_float
 param_connect plate_17_scale_sum param1 plate_17_scale_cycle float
 param_connect plate_17_scale_sum param2 plate_17_scale_audio product
-param_connect plate_17_scale_vector param1 plate_17_scale_sum sum
-param_connect plate_17_scale scale plate_17_scale_vector result_float3
-param_connect plate_17_scale render_in plate_17_layer render_out
-param_connect cathedral_composite render_in plate_17_scale render_out
+param_connect plate_17_layer size plate_17_scale_sum sum
+param_connect plate_17_move_audio param1 band_lowmid result_float
+param_connect plate_17_move_sum param1 plate_17_move_cycle float
+param_connect plate_17_move_sum param2 plate_17_move_audio product
+param_connect plate_17_position floata plate_17_move_sum sum
+param_connect plate_17_layer position plate_17_position result_float3
+param_connect cathedral_composite render_in plate_17_layer render_out
 param_connect plate_18_layer texture_in plate_18_texture texture
 param_connect plate_18_alpha_audio param1 band_sub result_float
 param_connect plate_18_alpha_sum param1 plate_18_alpha_cycle float
@@ -821,10 +1073,13 @@ param_connect plate_18_layer color_multiplier plate_18_color result_float4
 param_connect plate_18_scale_audio param1 band_sub result_float
 param_connect plate_18_scale_sum param1 plate_18_scale_cycle float
 param_connect plate_18_scale_sum param2 plate_18_scale_audio product
-param_connect plate_18_scale_vector param1 plate_18_scale_sum sum
-param_connect plate_18_scale scale plate_18_scale_vector result_float3
-param_connect plate_18_scale render_in plate_18_layer render_out
-param_connect cathedral_composite render_in plate_18_scale render_out
+param_connect plate_18_layer size plate_18_scale_sum sum
+param_connect plate_18_move_audio param1 band_sub result_float
+param_connect plate_18_move_sum param1 plate_18_move_cycle float
+param_connect plate_18_move_sum param2 plate_18_move_audio product
+param_connect plate_18_position floata plate_18_move_sum sum
+param_connect plate_18_layer position plate_18_position result_float3
+param_connect cathedral_composite render_in plate_18_layer render_out
 param_connect plate_19_layer texture_in plate_19_texture texture
 param_connect plate_19_alpha_audio param1 band_treble result_float
 param_connect plate_19_alpha_sum param1 plate_19_alpha_cycle float
@@ -834,10 +1089,13 @@ param_connect plate_19_layer color_multiplier plate_19_color result_float4
 param_connect plate_19_scale_audio param1 band_treble result_float
 param_connect plate_19_scale_sum param1 plate_19_scale_cycle float
 param_connect plate_19_scale_sum param2 plate_19_scale_audio product
-param_connect plate_19_scale_vector param1 plate_19_scale_sum sum
-param_connect plate_19_scale scale plate_19_scale_vector result_float3
-param_connect plate_19_scale render_in plate_19_layer render_out
-param_connect cathedral_composite render_in plate_19_scale render_out
+param_connect plate_19_layer size plate_19_scale_sum sum
+param_connect plate_19_move_audio param1 band_treble result_float
+param_connect plate_19_move_sum param1 plate_19_move_cycle float
+param_connect plate_19_move_sum param2 plate_19_move_audio product
+param_connect plate_19_position floata plate_19_move_sum sum
+param_connect plate_19_layer position plate_19_position result_float3
+param_connect cathedral_composite render_in plate_19_layer render_out
 param_connect plate_20_layer texture_in plate_20_texture texture
 param_connect plate_20_alpha_audio param1 band_treble result_float
 param_connect plate_20_alpha_sum param1 plate_20_alpha_cycle float
@@ -847,8 +1105,11 @@ param_connect plate_20_layer color_multiplier plate_20_color result_float4
 param_connect plate_20_scale_audio param1 band_treble result_float
 param_connect plate_20_scale_sum param1 plate_20_scale_cycle float
 param_connect plate_20_scale_sum param2 plate_20_scale_audio product
-param_connect plate_20_scale_vector param1 plate_20_scale_sum sum
-param_connect plate_20_scale scale plate_20_scale_vector result_float3
-param_connect plate_20_scale render_in plate_20_layer render_out
-param_connect cathedral_composite render_in plate_20_scale render_out
+param_connect plate_20_layer size plate_20_scale_sum sum
+param_connect plate_20_move_audio param1 band_treble result_float
+param_connect plate_20_move_sum param1 plate_20_move_cycle float
+param_connect plate_20_move_sum param2 plate_20_move_audio product
+param_connect plate_20_position floata plate_20_move_sum sum
+param_connect plate_20_layer position plate_20_position result_float3
+param_connect cathedral_composite render_in plate_20_layer render_out
 param_connect screen0 screen cathedral_composite render_out

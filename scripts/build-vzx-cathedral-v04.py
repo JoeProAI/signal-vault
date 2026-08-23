@@ -46,6 +46,29 @@ BANDS = {
     "treble": (7, 11.0),
 }
 
+MOTION = {
+    "crown_apex": ("y", .060),
+    "crown_left": ("x", -.040),
+    "crown_right": ("x", .040),
+    "main_column_left": ("x", -.065),
+    "main_column_right": ("x", .065),
+    "outer_arch_left": ("x", -.080),
+    "outer_arch_right": ("x", .080),
+    "inner_rib_left": ("x", -.050),
+    "inner_rib_right": ("x", .050),
+    "portal_core": ("y", .025),
+    "upper_ribs_left": ("y", .055),
+    "upper_ribs_right": ("y", .055),
+    "aisle_glow_left": ("x", -.085),
+    "aisle_glow_right": ("x", .085),
+    "root_left": ("x", -.060),
+    "root_right": ("x", .060),
+    "stairs": ("y", -.050),
+    "floor_center": ("y", -.070),
+    "floor_left": ("x", -.075),
+    "floor_right": ("x", .075),
+}
+
 
 def b64(value: str) -> str:
     return base64.b64encode(value.encode("utf-8")).decode("ascii")
@@ -60,8 +83,8 @@ def build_images() -> None:
     master = Image.open(SOURCE).convert("RGB").resize(SIZE, Image.Resampling.LANCZOS)
     master.save(SOURCE, optimize=True)
 
-    base = ImageEnhance.Brightness(master).enhance(.38)
-    base = ImageEnhance.Color(base).enhance(.72)
+    base = ImageEnhance.Brightness(master).enhance(.74)
+    base = ImageEnhance.Color(base).enhance(.95)
     base.save(OUT_DIR / "00-cathedral-shadow-base.png", optimize=True)
 
     luminous = ImageEnhance.Brightness(master).enhance(1.12)
@@ -77,7 +100,21 @@ def build_images() -> None:
         coverage = alpha.point(lambda value: 255 if value else 0)
         output = Image.composite(luminous, Image.new("RGB", SIZE, (0, 0, 0)), coverage)
         output.putalpha(alpha)
-        output.save(OUT_DIR / f"{index:02d}-{layer['name'].replace('_', '-')}-alpha.png", optimize=True)
+        bbox = alpha.getbbox()
+        if bbox is None:
+            raise RuntimeError(f"Layer {layer['name']} produced an empty alpha mask")
+        padding = 16
+        crop = (
+            max(0, bbox[0] - padding),
+            max(0, bbox[1] - padding),
+            min(SIZE[0], bbox[2] + padding),
+            min(SIZE[1], bbox[3] + padding),
+        )
+        layer["crop"] = crop
+        output.crop(crop).save(
+            OUT_DIR / f"{index:02d}-{layer['name'].replace('_', '-')}-alpha.png",
+            optimize=True,
+        )
 
     manifest = {
         "master": SOURCE.name,
@@ -105,7 +142,8 @@ def build_state() -> None:
         "param_set base_texture flip_vertical 1",
         "component_create renderers;basic;textured_rectangle base_layer -0.980000 0.820000",
         "param_set base_layer facing_camera 0",
-        "param_set base_layer size 1.00000000000000000000,0.56189903846153840000,0.00000000000000000000",
+        "param_set base_layer size 1.00000000000000000000",
+        "param_set base_layer x_aspect_ratio 1.00000000000000000000",
         "component_create renderers;opengl_modifiers;blend_mode cathedral_composite 0.860000 0.100000",
         "cpp screen0 1.040000 0.100000",
         "param_set screen0 clear_color 0.00000000000000000000,0.00000000000000000000,0.00400000000000000000,1.00000000000000000000",
@@ -121,6 +159,19 @@ def build_state() -> None:
         alpha_base, alpha_gain = layer["alpha"]
         scale_base, scale_gain = layer["scale"]
         cycle_amp, cycle_freq, cycle_phase = layer["cycle"]
+        crop_left, crop_top, crop_right, crop_bottom = layer["crop"]
+        crop_width = crop_right - crop_left
+        crop_height = crop_bottom - crop_top
+        piece_size = crop_height / SIZE[1]
+        piece_aspect = (crop_width / SIZE[0]) / piece_size
+        center_x = ((crop_left + crop_right) / 2) / SIZE[0]
+        center_y = ((crop_top + crop_bottom) / 2) / SIZE[1]
+        position_x = center_x * 2 - 1
+        position_y = 1 - center_y * 2
+        move_axis, move_gain = MOTION[layer["name"]]
+        scale_base *= piece_size
+        scale_gain *= piece_size
+        cycle_amp *= piece_size
         filename = f"{index:02d}-{layer['name'].replace('_', '-')}-alpha.png"
         lines.extend([
             f"component_create texture;loaders;png_tex_load {key}_texture {x:.6f} {y:.6f}",
@@ -128,7 +179,7 @@ def build_state() -> None:
             f"param_set {key}_texture flip_vertical 1",
             f"component_create renderers;basic;textured_rectangle {key}_layer {x + .08:.6f} {y:.6f}",
             f"param_set {key}_layer facing_camera 0",
-            f"param_set {key}_layer size 1.00000000000000000000,0.56189903846153840000,0.00000000000000000000",
+            f"param_set {key}_layer x_aspect_ratio {piece_aspect:.20f}",
             f"component_create maths;arithmetics;binary;mult {key}_alpha_audio {x:.6f} {y - .08:.6f}",
             f"param_set {key}_alpha_audio param2 {alpha_gain:.20f}",
             f"component_create maths;oscillators;oscillator {key}_alpha_cycle {x + .08:.6f} {y - .08:.6f}",
@@ -149,8 +200,18 @@ def build_state() -> None:
             f"param_set {key}_scale_cycle freq {cycle_freq:.20f}",
             f"param_set {key}_scale_cycle phase {cycle_phase:.20f}",
             f"component_create maths;arithmetics;binary;add {key}_scale_sum {x + .16:.6f} {y - .16:.6f}",
-            f"component_create maths;converters;float_to_float3 {key}_scale_vector {x + .24:.6f} {y - .16:.6f}",
-            f"component_create renderers;opengl_modifiers;gl_scale {key}_scale {x + .32:.6f} {y:.6f}",
+            f"component_create maths;arithmetics;binary;mult {key}_move_audio {x:.6f} {y - .24:.6f}",
+            f"param_set {key}_move_audio param2 {move_gain:.20f}",
+            f"component_create maths;oscillators;oscillator {key}_move_cycle {x + .08:.6f} {y - .24:.6f}",
+            f"param_set {key}_move_cycle amp {abs(move_gain) * .10:.20f}",
+            f"param_set {key}_move_cycle ofs {(position_x if move_axis == 'x' else position_y):.20f}",
+            f"param_set {key}_move_cycle freq {cycle_freq * .73:.20f}",
+            f"param_set {key}_move_cycle phase {cycle_phase:.20f}",
+            f"component_create maths;arithmetics;binary;add {key}_move_sum {x + .16:.6f} {y - .24:.6f}",
+            f"component_create maths;converters;3float_to_float3 {key}_position {x + .24:.6f} {y - .24:.6f}",
+            f"param_set {key}_position floata {(position_x if move_axis == 'y' else 0):.20f}",
+            f"param_set {key}_position floatb {(position_y if move_axis == 'x' else 0):.20f}",
+            f"param_set {key}_position floatc 0.00000000000000000000",
         ])
 
     lines.append("")
@@ -172,10 +233,13 @@ def build_state() -> None:
             f"param_connect {key}_scale_audio param1 band_{band} result_float",
             f"param_connect {key}_scale_sum param1 {key}_scale_cycle float",
             f"param_connect {key}_scale_sum param2 {key}_scale_audio product",
-            f"param_connect {key}_scale_vector param1 {key}_scale_sum sum",
-            f"param_connect {key}_scale scale {key}_scale_vector result_float3",
-            f"param_connect {key}_scale render_in {key}_layer render_out",
-            f"param_connect cathedral_composite render_in {key}_scale render_out",
+            f"param_connect {key}_layer size {key}_scale_sum sum",
+            f"param_connect {key}_move_audio param1 band_{band} result_float",
+            f"param_connect {key}_move_sum param1 {key}_move_cycle float",
+            f"param_connect {key}_move_sum param2 {key}_move_audio product",
+            f"param_connect {key}_position {'floata' if move_axis == 'x' else 'floatb'} {key}_move_sum sum",
+            f"param_connect {key}_layer position {key}_position result_float3",
+            f"param_connect cathedral_composite render_in {key}_layer render_out",
         ])
 
     lines.append("param_connect screen0 screen cathedral_composite render_out")
