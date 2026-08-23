@@ -52,7 +52,7 @@ Keyboard controls:
 
 ## Signal Theater and VZX
 
-Signal Theater is the portable visual layer built directly into the web app. It includes nine original scenes, intensity control, automatic scene changes, fullscreen mode, and local audio analysis through the Web Audio API. Astral Cathedral combines original generated artwork with frequency-sliced parallax, bass-driven depth, spectral bloom, and live waveform geometry.
+Signal Theater is the portable visual layer built directly into the web app. It includes nine original scenes, intensity control, automatic scene changes, fullscreen mode, and local audio analysis through the Web Audio API. Astral Cathedral blends three composition-matched artwork states: bass pressure reshapes its portal and ribs, midrange bends its architecture, and treble reveals crystalline highlights, prism separation, and sparks.
 
 The **Launch VZX Player** control opens the separately installed VZX Player through Steam. VZX listens to the computer's active audio output, so Signal Vault can keep playing the selected local track while VZX renders it in its native OpenGL engine. VZX is a third-party product by Vovoid Media Technologies and is not bundled with Signal Vault.
 

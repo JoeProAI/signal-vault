@@ -45,11 +45,18 @@ export class SignalVisualizer {
     this.lastShuffleAt = performance.now();
     this.particles = [];
     this.ghosts = [];
+    this.astralBands = { bass: 0, lowMid: 0, highMid: 0, treble: 0, energy: 0 };
     this.artTextures = new Map();
     const astralCathedral = new Image();
     astralCathedral.decoding = 'async';
     astralCathedral.src = '/visuals/astral-cathedral.webp';
     this.artTextures.set('astral-cathedral', astralCathedral);
+    for (const variant of ['bass', 'treble']) {
+      const texture = new Image();
+      texture.decoding = 'async';
+      texture.src = `/visuals/astral-cathedral-${variant}.webp`;
+      this.artTextures.set(`astral-cathedral-${variant}`, texture);
+    }
     this.frequencyData = new Uint8Array(128);
     this.waveData = new Uint8Array(256);
     this.resize = this.resize.bind(this);
@@ -130,7 +137,11 @@ export class SignalVisualizer {
       const time = now * 0.001;
       for (let index = 0; index < this.frequencyData.length; index += 1) {
         const decay = 1 - index / this.frequencyData.length;
-        this.frequencyData[index] = 28 + Math.max(0, Math.sin(time * 1.7 + index * 0.31)) * 45 * decay;
+        const position = index / this.frequencyData.length;
+        const bassBeat = Math.pow(Math.max(0, Math.sin(time * 2.15)), 7) * Math.max(0, 1 - position * 8);
+        const midSweep = Math.pow(Math.max(0, Math.sin(time * 0.73 + position * 11)), 3) * Math.max(0, 1 - Math.abs(position - 0.34) * 4);
+        const trebleFlicker = Math.pow(Math.max(0, Math.sin(time * 4.6 + index * 0.91)), 10) * position;
+        this.frequencyData[index] = 18 + Math.min(190, bassBeat * 155 + midSweep * 92 + trebleFlicker * 125 + Math.max(0, Math.sin(time * 1.1 + index * 0.27)) * 24 * decay);
       }
       for (let index = 0; index < this.waveData.length; index += 1) this.waveData[index] = 128 + Math.sin(time * 1.2 + index * 0.09) * 13;
     }
@@ -397,13 +408,18 @@ export class SignalVisualizer {
     }
 
     const { context: ctx, width, height } = this;
+    for (const band of ['bass', 'lowMid', 'highMid', 'treble', 'energy']) {
+      const response = signal[band] > this.astralBands[band] ? 0.24 : 0.065;
+      this.astralBands[band] += (signal[band] - this.astralBands[band]) * response;
+    }
+    const bands = this.astralBands;
     const imageRatio = image.naturalWidth / image.naturalHeight;
     const viewportRatio = width / height;
     const sourceWidth = viewportRatio > imageRatio ? image.naturalWidth : image.naturalHeight * viewportRatio;
     const sourceHeight = viewportRatio > imageRatio ? image.naturalWidth / viewportRatio : image.naturalHeight;
     const sourceX = (image.naturalWidth - sourceWidth) / 2;
     const sourceY = (image.naturalHeight - sourceHeight) / 2;
-    const bassPulse = signal.bass * this.intensity;
+    const bassPulse = bands.bass * this.intensity;
     const breath = 1.025 + Math.sin(time * 0.24) * 0.012 + bassPulse * 0.045;
     const drawWidth = width * breath;
     const drawHeight = height * breath;
@@ -416,9 +432,35 @@ export class SignalVisualizer {
     ctx.globalAlpha = 1;
     ctx.fillStyle = '#010203';
     ctx.fillRect(0, 0, width, height);
-    ctx.filter = `saturate(${1.08 + signal.highMid * 1.1}) contrast(${1.1 + signal.bass * 0.42}) brightness(${0.58 + signal.energy * 0.5}) hue-rotate(${Math.sin(time * 0.11) * 7}deg)`;
+    ctx.filter = `saturate(${1.08 + bands.highMid * 1.1}) contrast(${1.1 + bands.bass * 0.42}) brightness(${0.58 + bands.energy * 0.5}) hue-rotate(${Math.sin(time * 0.11) * 7 + bands.lowMid * 13}deg)`;
     ctx.drawImage(image, sourceX, sourceY, sourceWidth, sourceHeight, drawX, drawY, drawWidth, drawHeight);
     ctx.filter = 'none';
+
+    // Blend into composition-matched AI artwork states so bass and treble alter
+    // the material world itself, rather than only changing an overlay.
+    const bassImage = this.artTextures.get('astral-cathedral-bass');
+    const trebleImage = this.artTextures.get('astral-cathedral-treble');
+    const drawArtworkState = (texture, amount, filter) => {
+      if (!texture?.complete || !texture.naturalWidth || amount <= 0.01) return;
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.globalAlpha = clamp(amount);
+      ctx.filter = filter;
+      ctx.drawImage(texture, sourceX, sourceY, sourceWidth, sourceHeight, drawX, drawY, drawWidth, drawHeight);
+      ctx.filter = 'none';
+      ctx.globalAlpha = 1;
+    };
+    const bassState = clamp((bands.bass - 0.035) * 1.5 * this.intensity, 0, 0.82);
+    const trebleState = clamp((bands.treble - 0.025) * 2.1 * this.intensity, 0, 0.76);
+    drawArtworkState(bassImage, bassState, `brightness(${0.72 + bands.energy * 0.35}) saturate(${1.05 + bands.bass * 0.45})`);
+    drawArtworkState(trebleImage, trebleState, `brightness(${0.68 + bands.energy * 0.45}) saturate(${1.12 + bands.treble * 0.7})`);
+
+    // Midrange energy bends the cathedral's two halves in opposite directions,
+    // making the architectural ribs flex without destabilizing the composition.
+    const ribBend = bands.lowMid * width * 0.028 * this.intensity;
+    ctx.globalCompositeOperation = 'screen';
+    ctx.globalAlpha = 0.06 + bands.lowMid * 0.2;
+    ctx.drawImage(image, sourceX, sourceY, sourceWidth / 2, sourceHeight, -ribBend, 0, width / 2 + ribBend, height);
+    ctx.drawImage(image, sourceX + sourceWidth / 2, sourceY, sourceWidth / 2, sourceHeight, width / 2, 0, width / 2 + ribBend, height);
 
     // Each horizontal band is driven by a different FFT bin, turning the artwork
     // into shifting architecture instead of a static image backdrop.
@@ -433,40 +475,76 @@ export class SignalVisualizer {
       const targetY = progress * height;
       const targetHeight = height / slices + 1;
       const direction = slice % 2 === 0 ? 1 : -1;
-      const offset = direction * value * width * 0.022 * this.intensity * Math.sin(time * 1.2 + slice * 0.7);
-      ctx.globalAlpha = 0.04 + value * 0.18;
+      const offset = direction * value * width * (0.009 + bands.highMid * 0.035) * this.intensity * Math.sin(time * 1.2 + slice * 0.7);
+      ctx.globalAlpha = 0.025 + value * (0.08 + bands.highMid * 0.2);
       ctx.drawImage(image, sourceX, sourceSliceY, sourceWidth, sourceSliceHeight, offset, targetY, width, targetHeight);
     }
 
+    // High mids produce a restrained cyan/magenta prism split at architectural edges.
+    const prismOffset = 2 + bands.highMid * width * 0.012 * this.intensity;
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.globalAlpha = bands.highMid * 0.14;
+    ctx.filter = 'hue-rotate(115deg) saturate(1.8)';
+    ctx.drawImage(image, sourceX, sourceY, sourceWidth, sourceHeight, -prismOffset, 0, width, height);
+    ctx.filter = 'hue-rotate(-95deg) saturate(1.8)';
+    ctx.drawImage(image, sourceX, sourceY, sourceWidth, sourceHeight, prismOffset, 0, width, height);
+    ctx.filter = 'none';
+
     const centerX = width / 2;
     const centerY = height * 0.51;
-    const veilRadius = Math.min(width, height) * (0.105 + signal.bass * 0.025);
-    const bars = Math.min(96, signal.frequency.length);
+    const veilRadius = Math.min(width, height) * (0.1 + bands.bass * 0.055);
+    const radialBars = Math.min(96, signal.frequency.length);
     ctx.translate(centerX, centerY);
     ctx.globalCompositeOperation = 'lighter';
-    for (let index = 0; index < bars; index += 1) {
+    for (let index = 0; index < radialBars; index += 1) {
       const value = signal.frequency[index] / 255;
-      const angle = index / bars * TAU + time * 0.025;
+      const angle = index / radialBars * TAU + time * (0.018 + bands.treble * 0.08);
       const inner = veilRadius * (0.88 + Math.sin(index * 0.8 + time) * 0.025);
       const outer = inner + 4 + value * Math.min(width, height) * 0.14 * this.intensity;
       ctx.beginPath();
       ctx.moveTo(Math.cos(angle) * inner, Math.sin(angle) * inner);
       ctx.lineTo(Math.cos(angle) * outer, Math.sin(angle) * outer);
-      ctx.strokeStyle = `hsla(${150 + index * 1.9 + signal.treble * 95},100%,${58 + value * 24}%,${0.08 + value * 0.48})`;
+      ctx.strokeStyle = `hsla(${150 + index * 1.9 + bands.treble * 95},100%,${58 + value * 24}%,${0.08 + value * 0.48})`;
       ctx.lineWidth = 0.6 + value * 2.2;
       ctx.stroke();
     }
 
     const portal = ctx.createRadialGradient(0, 0, 0, 0, 0, veilRadius * 1.4);
-    portal.addColorStop(0, `rgba(0,0,0,${0.82 - signal.bass * 0.18})`);
+    portal.addColorStop(0, `rgba(0,0,0,${0.84 - bands.bass * 0.28})`);
     portal.addColorStop(0.62, 'rgba(0,7,8,.45)');
-    portal.addColorStop(0.84, `rgba(94,255,196,${0.08 + signal.energy * 0.18})`);
+    portal.addColorStop(0.84, `rgba(94,255,196,${0.08 + bands.energy * 0.18})`);
     portal.addColorStop(1, 'rgba(0,217,255,0)');
     ctx.globalAlpha = 1;
     ctx.fillStyle = portal;
     ctx.beginPath();
     ctx.arc(0, 0, veilRadius * 1.4, 0, TAU);
     ctx.fill();
+
+    // Bass creates pressure waves that travel out from the central aperture.
+    for (let ring = 0; ring < 3; ring += 1) {
+      const phase = (time * (0.22 + bands.bass * 0.38) + ring / 3) % 1;
+      ctx.beginPath();
+      ctx.arc(0, 0, veilRadius * (1.1 + phase * 3.8), 0, TAU);
+      ctx.strokeStyle = `rgba(130,255,190,${bands.bass * (1 - phase) * 0.32})`;
+      ctx.lineWidth = 1 + bands.bass * 5 * (1 - phase);
+      ctx.stroke();
+    }
+    ctx.restore();
+
+    // Treble releases fine crystalline sparks into the upper architecture.
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    const sparkCount = 84;
+    for (let spark = 0; spark < sparkCount; spark += 1) {
+      const seed = (spark * 73.137) % 1;
+      const x = ((seed + Math.sin(spark * 91.7) * 0.5 + time * (0.003 + (spark % 5) * 0.0007)) % 1 + 1) % 1 * width;
+      const y = height * (0.05 + ((spark * 0.618 + time * 0.016 * (1 + spark % 3)) % 1) * 0.7);
+      const flicker = Math.max(0, Math.sin(time * (4 + spark % 7) + spark * 1.7));
+      const alpha = bands.treble * flicker * (0.16 + (spark % 4) * 0.07);
+      const size = 0.6 + bands.treble * (1 + spark % 3) * this.intensity;
+      ctx.fillStyle = spark % 3 === 0 ? `rgba(255,77,218,${alpha})` : `rgba(126,244,255,${alpha})`;
+      ctx.fillRect(x, y, size, size * (1.4 + bands.treble * 2.5));
+    }
     ctx.restore();
 
     const vignette = ctx.createRadialGradient(width / 2, height / 2, Math.min(width, height) * 0.18, width / 2, height / 2, Math.max(width, height) * 0.68);
