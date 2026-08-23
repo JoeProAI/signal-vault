@@ -1,5 +1,11 @@
 meta_set U2lnbmFsIENhdGhlZHJhbCBWMDJ8Sm9zZXBoIHwgU2lnbmFsIFZhdWx0fHx8Q2F0aGVkcmFsIEVuZ2luZTogbGF5ZXJlZCBpbWFnZSBzeW50aGVzaXMgd2l0aCBzbW9vdGhlZCBiYXNzLCBtaWQgYW5kIHRyZWJsZSBzY2FsZSBwbHVzIG9wYWNpdHkgYmxvb20u
 component_create sound;input_visualization_listener audio -0.920000 0.000000
+component_create maths;interpolation;float_smoother bass_smooth -0.780000 0.120000
+param_set bass_smooth speed 3.20000000000000000000
+component_create maths;interpolation;float_smoother mid_smooth -0.780000 0.040000
+param_set mid_smooth speed 2.50000000000000000000
+component_create maths;interpolation;float_smoother treble_smooth -0.780000 -0.040000
+param_set treble_smooth speed 4.50000000000000000000
 
 component_create texture;loaders;png_tex_load morph_sub_texture -1.080000 0.880000
 ps64 morph_sub_texture filename cmVzb3VyY2VzL3NpZ25hbC12YXVsdC9sYXllcnMtdjAzL2NhdGhlZHJhbC1iYWNrZ3JvdW5kLXBsYXRlLnBuZw==
@@ -63,7 +69,7 @@ param_set morph_treble_color floatb 1.00000000000000000000
 param_set morph_treble_color floatc 1.00000000000000000000
 
 component_create maths;arithmetics;binary;mult arch_bass_scale -0.080000 0.900000
-param_set arch_bass_scale param2 0.00000000000000000000
+param_set arch_bass_scale param2 0.05500000000000000000
 component_create maths;arithmetics;binary;add arch_scale_offset 0.070000 0.900000
 param_set arch_scale_offset param2 0.98500000000000000000
 component_create maths;converters;float_to_float3 arch_scale_vector 0.220000 0.900000
@@ -79,19 +85,19 @@ component_create renderers;opengl_modifiers;gl_rotate arch_rotate 0.520000 0.880
 param_set arch_rotate axis 0.00000000000000000000,0.00000000000000000000,1.00000000000000000000
 
 component_create maths;arithmetics;binary;mult inner_bass_scale -0.080000 0.740000
-param_set inner_bass_scale param2 0.00000000000000000000
+param_set inner_bass_scale param2 0.11000000000000000000
 component_create maths;oscillators;oscillator inner_depth_cycle 0.070000 0.740000
 param_set inner_depth_cycle amp 0.01200000000000000000
 param_set inner_depth_cycle ofs 0.00000000000000000000
 param_set inner_depth_cycle freq 0.11800000000000000000
 component_create maths;arithmetics;binary;add inner_motion_sum 0.220000 0.740000
 component_create maths;arithmetics;binary;add inner_scale_offset 0.370000 0.740000
-param_set inner_scale_offset param2 0.92500000000000000000
+param_set inner_scale_offset param2 0.94000000000000000000
 component_create maths;converters;float_to_float3 inner_scale_vector 0.520000 0.740000
 component_create renderers;opengl_modifiers;gl_scale inner_scale 0.670000 0.720000
 
 component_create maths;arithmetics;binary;mult floor_treble_scale -0.080000 0.580000
-param_set floor_treble_scale param2 0.00000000000000000000
+param_set floor_treble_scale param2 0.05000000000000000000
 component_create maths;oscillators;oscillator floor_ripple_cycle 0.070000 0.580000
 param_set floor_ripple_cycle amp 0.00800000000000000000
 param_set floor_ripple_cycle ofs 0.00000000000000000000
@@ -142,37 +148,40 @@ param_set screen0 clear_color 0.00000000000000000000,0.00000000000000000000,0.00
 param_set screen0 gamma_correction 1.00000000000000000000
 
 param_connect base_layer texture_in morph_sub_texture texture
+param_connect bass_smooth value_in audio octaves_l_0
+param_connect mid_smooth value_in audio octaves_l_3
+param_connect treble_smooth value_in audio octaves_l_7
 param_connect morph_bass_layer texture_in morph_bass_texture texture
-param_connect morph_bass_audio param1 audio octaves_l_0
+param_connect morph_bass_audio param1 bass_smooth result_float
 param_connect morph_bass_alpha param1 morph_bass_cycle float
 param_connect morph_bass_alpha param2 morph_bass_audio product
 param_connect morph_bass_color floatd morph_bass_alpha sum
 param_connect morph_bass_layer color_multiplier morph_bass_color result_float4
 param_connect morph_mid_layer texture_in morph_mid_texture texture
-param_connect morph_mid_audio param1 audio octaves_l_3
+param_connect morph_mid_audio param1 mid_smooth result_float
 param_connect morph_mid_alpha param1 morph_mid_cycle float
 param_connect morph_mid_alpha param2 morph_mid_audio product
 param_connect morph_mid_color floatd morph_mid_alpha sum
 param_connect morph_mid_layer color_multiplier morph_mid_color result_float4
 param_connect morph_treble_layer texture_in morph_treble_texture texture
-param_connect morph_treble_audio param1 audio octaves_l_7
+param_connect morph_treble_audio param1 treble_smooth result_float
 param_connect morph_treble_alpha param1 morph_treble_cycle float
 param_connect morph_treble_alpha param2 morph_treble_audio product
 param_connect morph_treble_color floatd morph_treble_alpha sum
 param_connect morph_treble_layer color_multiplier morph_treble_color result_float4
 
-param_connect arch_bass_scale param1 audio octaves_l_0
+param_connect arch_bass_scale param1 bass_smooth result_float
 param_connect arch_scale_offset param1 arch_bass_scale product
 param_connect arch_scale_vector param1 arch_scale_offset sum
 param_connect arch_scale scale arch_scale_vector result_float3
 param_connect arch_scale render_in morph_bass_layer render_out
-param_connect arch_mid_angle param1 audio octaves_l_3
+param_connect arch_mid_angle param1 mid_smooth result_float
 param_connect arch_angle_sum param1 arch_mid_angle product
 param_connect arch_angle_sum param2 arch_sway float
 param_connect arch_rotate angle arch_angle_sum sum
 param_connect arch_rotate render_in arch_scale render_out
 
-param_connect inner_bass_scale param1 audio octaves_l_0
+param_connect inner_bass_scale param1 mid_smooth result_float
 param_connect inner_motion_sum param1 inner_bass_scale product
 param_connect inner_motion_sum param2 inner_depth_cycle float
 param_connect inner_scale_offset param1 inner_motion_sum sum
@@ -180,7 +189,7 @@ param_connect inner_scale_vector param1 inner_scale_offset sum
 param_connect inner_scale scale inner_scale_vector result_float3
 param_connect inner_scale render_in morph_mid_layer render_out
 
-param_connect floor_treble_scale param1 audio octaves_l_7
+param_connect floor_treble_scale param1 treble_smooth result_float
 param_connect floor_motion_sum param1 floor_treble_scale product
 param_connect floor_motion_sum param2 floor_ripple_cycle float
 param_connect floor_scale_offset param1 floor_motion_sum sum
