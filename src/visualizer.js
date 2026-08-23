@@ -16,7 +16,8 @@ export const VISUAL_SCENES = [
   { id: 'chromatic-wormhole', code: 'V06', name: 'CHROMATIC WORMHOLE', mood: 'Infinite geometry / tempo descent' },
   { id: 'particle-cathedral', code: 'V07', name: 'PARTICLE CATHEDRAL', mood: 'Luminous dust / towering harmonics' },
   { id: 'signal-ghost', code: 'V08', name: 'SIGNAL GHOST', mood: 'Feedback trails / haunted transmission' },
-  { id: 'astral-cathedral', code: 'V09', name: 'ASTRAL CATHEDRAL', mood: 'Ten-state image spectrum / filament oscilloscope' }
+  { id: 'astral-cathedral', code: 'V09', name: 'ASTRAL CATHEDRAL', mood: 'Ten-state image spectrum / filament oscilloscope' },
+  { id: 'motion-rig', code: 'V10', name: 'CUTLIGHT', mood: 'Music-directed moving artwork / any image' }
 ];
 
 function polygon(context, x, y, radius, sides, rotation = 0) {
@@ -50,6 +51,16 @@ export class SignalVisualizer {
     this.astralTransient = 0;
     this.astralAfterglow = 0;
     this.astralCentroid = 0;
+    this.rigImage = new Image();
+    this.rigImage.decoding = 'async';
+    this.rigImage.src = '/visuals/astral-cathedral.webp';
+    this.rigImageName = 'Astral Cathedral / built-in demo';
+    this.rigPieces = this.buildRigPieces();
+    this.rigDirectives = { motion: 1, bass: 1, palette: 'cycle', beatColor: true, cutSensitivity: 0.055 };
+    this.rigPreviousSignal = { energy: 0, bass: 0, highMid: 0 };
+    this.rigCutPulse = 0;
+    this.rigHue = 0;
+    this.rigLastCutAt = 0;
     this.artTextures = new Map();
     for (const variant of ['base', 'sub', 'bass', 'lowmid', 'mid', 'highmid', 'treble', 'air', 'transient', 'decay']) {
       const texture = new Image();
@@ -105,6 +116,91 @@ export class SignalVisualizer {
     this.particles = [];
     this.ghosts = [];
     this.onSceneChange?.(this.scene, this);
+  }
+
+  setSceneById(id) {
+    const index = VISUAL_SCENES.findIndex((scene) => scene.id === id);
+    if (index >= 0) this.setScene(index);
+  }
+
+  buildRigPieces() {
+    const pieces = [];
+    const columns = 5;
+    const rows = 4;
+    for (let row = 0; row < rows; row += 1) {
+      for (let column = 0; column < columns; column += 1) {
+        const index = row * columns + column;
+        const centerX = (column + 0.5) / columns;
+        const centerY = (row + 0.5) / rows;
+        const radialX = centerX - 0.5;
+        const radialY = centerY - 0.5;
+        const length = Math.hypot(radialX, radialY) || 1;
+        const band = row === rows - 1
+          ? (column > 0 && column < columns - 1 ? 'bass' : 'treble')
+          : row === 2
+            ? (column > 0 && column < columns - 1 ? 'lowMid' : 'highMid')
+            : row === 1
+              ? (column === 2 ? 'bass' : 'lowMid')
+              : (column === 2 ? 'highMid' : 'treble');
+        pieces.push({
+          index,
+          row,
+          column,
+          x: column / columns,
+          y: row / rows,
+          width: 1 / columns,
+          height: 1 / rows,
+          directionX: radialX / length,
+          directionY: radialY / length,
+          band,
+          phase: index * 0.73 + row * 0.41,
+          level: 0
+        });
+      }
+    }
+    return pieces;
+  }
+
+  async setRigImage(file) {
+    if (!file?.type?.startsWith('image/')) throw new Error('Choose an image file');
+    const url = URL.createObjectURL(file);
+    const image = new Image();
+    image.decoding = 'async';
+    await new Promise((resolve, reject) => {
+      image.onload = resolve;
+      image.onerror = () => reject(new Error('This image could not be decoded'));
+      image.src = url;
+    });
+    URL.revokeObjectURL(url);
+    this.rigImage = image;
+    this.rigImageName = file.name;
+    this.rigPieces = this.buildRigPieces();
+    this.setSceneById('motion-rig');
+    return { name: file.name, pieces: this.rigPieces.length, width: image.naturalWidth, height: image.naturalHeight };
+  }
+
+  applyRigPrompt(prompt) {
+    const text = String(prompt || '').trim().toLowerCase();
+    if (!text) return 'Describe color, movement, bass, smoothness, or musical cuts.';
+    const directives = { ...this.rigDirectives };
+    if (/wild|intense|hard|huge|epic|more movement|explode/.test(text)) directives.motion = 1.65;
+    if (/smooth|cinematic|slow|gentle/.test(text)) directives.motion = 0.78;
+    if (/subtle|minimal|calm/.test(text)) directives.motion = 0.52;
+    if (/bass|low end|kick/.test(text)) directives.bass = /hard|huge|more|heavy/.test(text) ? 1.8 : 1.4;
+    if (/monochrome|black and white|grayscale/.test(text)) directives.palette = 'mono';
+    else if (/warm|orange|red|gold|fire/.test(text)) directives.palette = 'warm';
+    else if (/cold|cool|blue|cyan|ice/.test(text)) directives.palette = 'cool';
+    else if (/green|acid|lime/.test(text)) directives.palette = 'acid';
+    else if (/color|colour|rainbow|spectrum|hue/.test(text)) directives.palette = 'cycle';
+    if (/cut|change|transition|drop|beat|section/.test(text)) {
+      directives.beatColor = !/do not|don't|without/.test(text);
+      directives.cutSensitivity = /every|each|sensitive/.test(text) ? 0.032 : 0.048;
+    }
+    if (/no color change|keep the color|fixed color/.test(text)) directives.beatColor = false;
+    this.rigDirectives = directives;
+    const color = directives.palette === 'mono' ? 'monochrome' : `${directives.palette} color`;
+    const cuts = directives.beatColor ? 'colors react to musical changes' : 'color stays continuous';
+    return `${Math.round(directives.motion * 100)}% motion · ${Math.round(directives.bass * 100)}% bass · ${color} · ${cuts}`;
   }
 
   next() { this.setScene(this.sceneIndex + 1); }
@@ -183,7 +279,8 @@ export class SignalVisualizer {
       'chromatic-wormhole': this.drawChromaticWormhole,
       'particle-cathedral': this.drawParticleCathedral,
       'signal-ghost': this.drawSignalGhost,
-      'astral-cathedral': this.drawAstralCathedral
+      'astral-cathedral': this.drawAstralCathedral,
+      'motion-rig': this.drawMotionRig
     }[this.scene.id];
     drawScene.call(this, time, signal);
     this.frameHandle = requestAnimationFrame(this.draw);
@@ -400,6 +497,98 @@ export class SignalVisualizer {
       ctx.lineWidth = 1 + (1 - ghostIndex / this.ghosts.length) * 3;
       ctx.stroke();
     });
+    ctx.restore();
+  }
+
+  drawMotionRig(time, signal) {
+    const image = this.rigImage;
+    if (!image?.complete || !image.naturalWidth) {
+      this.drawChromaticWormhole(time, signal);
+      return;
+    }
+
+    const { context: ctx, width, height } = this;
+    const imageRatio = image.naturalWidth / image.naturalHeight;
+    const viewportRatio = width / height;
+    const sourceWidth = viewportRatio > imageRatio ? image.naturalWidth : image.naturalHeight * viewportRatio;
+    const sourceHeight = viewportRatio > imageRatio ? image.naturalWidth / viewportRatio : image.naturalHeight;
+    const sourceX = (image.naturalWidth - sourceWidth) / 2;
+    const sourceY = (image.naturalHeight - sourceHeight) / 2;
+    const directives = this.rigDirectives;
+    const signalChange = Math.abs(signal.energy - this.rigPreviousSignal.energy) * 1.25
+      + Math.abs(signal.bass - this.rigPreviousSignal.bass)
+      + Math.abs(signal.highMid - this.rigPreviousSignal.highMid) * 0.8;
+    if (signal.live && signalChange > directives.cutSensitivity && time - this.rigLastCutAt > 0.22) {
+      this.rigCutPulse = 1;
+      this.rigLastCutAt = time;
+      if (directives.beatColor) this.rigHue = (this.rigHue + 47 + Math.round(signal.treble * 90)) % 360;
+    }
+    this.rigCutPulse *= 0.88;
+    this.rigPreviousSignal = { energy: signal.energy, bass: signal.bass, highMid: signal.highMid };
+    const paletteHue = directives.palette === 'warm' ? -28
+      : directives.palette === 'cool' ? 145
+        : directives.palette === 'acid' ? 78
+          : directives.palette === 'cycle' ? this.rigHue + time * 4 : 0;
+    const paletteFilter = directives.palette === 'mono'
+      ? 'grayscale(1) contrast(1.2) brightness(.88)'
+      : `hue-rotate(${paletteHue}deg) brightness(.84) saturate(1.12) contrast(1.08)`;
+
+    ctx.save();
+    ctx.setTransform(this.ratio, 0, 0, this.ratio, 0, 0);
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = '#020304';
+    ctx.fillRect(0, 0, width, height);
+    ctx.filter = paletteFilter;
+    ctx.drawImage(image, sourceX, sourceY, sourceWidth, sourceHeight, 0, 0, width, height);
+    ctx.filter = 'none';
+
+    for (const piece of this.rigPieces) {
+      const bandSignal = signal[piece.band] ?? signal.energy;
+      const target = clamp(bandSignal * (piece.band === 'bass' ? directives.bass : 1));
+      const easing = target > piece.level ? 0.11 : 0.038;
+      piece.level += (target - piece.level) * easing;
+      const idle = Math.sin(time * (0.22 + piece.row * 0.025) + piece.phase);
+      const response = piece.level * this.intensity * directives.motion;
+      const centerX = (piece.x + piece.width / 2) * width;
+      const centerY = (piece.y + piece.height / 2) * height;
+      const floorPush = piece.row === 3 ? 1.45 : 1;
+      const travel = Math.min(width, height) * (0.012 + response * 0.034) * floorPush;
+      const cutDirection = piece.index % 2 ? -1 : 1;
+      const translateX = piece.directionX * travel + Math.cos(piece.phase) * idle * 2.5 + cutDirection * this.rigCutPulse * width * 0.006;
+      const translateY = piece.directionY * travel + (piece.row === 0 ? -1 : piece.row === 3 ? 1 : 0) * response * height * 0.018 + Math.sin(piece.phase) * idle * 2.5;
+      const scale = 1.006 + response * (piece.column === 2 ? 0.105 : 0.072) + idle * 0.006 + this.rigCutPulse * 0.018;
+      const targetX = piece.x * width - 2;
+      const targetY = piece.y * height - 2;
+      const targetWidth = piece.width * width + 4;
+      const targetHeight = piece.height * height + 4;
+      const cropX = sourceX + piece.x * sourceWidth;
+      const cropY = sourceY + piece.y * sourceHeight;
+      const cropWidth = piece.width * sourceWidth;
+      const cropHeight = piece.height * sourceHeight;
+
+      ctx.save();
+      ctx.translate(centerX + translateX, centerY + translateY);
+      ctx.scale(scale, scale);
+      ctx.translate(-centerX, -centerY);
+      ctx.beginPath();
+      ctx.rect(targetX, targetY, targetWidth, targetHeight);
+      ctx.clip();
+      ctx.globalAlpha = clamp(0.54 + response * 0.54, 0, 1);
+      const pieceColor = directives.palette === 'mono' ? 'grayscale(1)' : `hue-rotate(${paletteHue + piece.index * 1.7}deg)`;
+      ctx.filter = `${pieceColor} brightness(${1.08 + response * 0.34}) saturate(${1.18 + response * 0.74}) contrast(${1.04 + response * 0.18})`;
+      ctx.drawImage(image, cropX, cropY, cropWidth, cropHeight, targetX, targetY, targetWidth, targetHeight);
+      ctx.restore();
+    }
+
+    ctx.globalCompositeOperation = 'screen';
+    ctx.globalAlpha = 0.11 + signal.energy * 0.2;
+    const glow = ctx.createRadialGradient(width / 2, height * 0.52, 0, width / 2, height * 0.52, Math.max(width, height) * 0.58);
+    glow.addColorStop(0, 'rgba(167,255,63,.26)');
+    glow.addColorStop(.48, 'rgba(0,217,255,.08)');
+    glow.addColorStop(1, 'rgba(255,79,216,0)');
+    ctx.fillStyle = glow;
+    ctx.fillRect(0, 0, width, height);
     ctx.restore();
   }
 

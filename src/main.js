@@ -10,7 +10,8 @@ const PAGE_SIZE = 60;
 const state = {
   catalog: createEmptyCatalog(), tracksById: new Map(), localFiles: new Map(), ratings: {},
   activeCrate: 'priority', query: '', sort: 'signal', visible: PAGE_SIZE, selectedId: null,
-  currentObjectUrl: null, audioContext: null, analyser: null, sourceNode: null, importController: null
+  currentObjectUrl: null, audioContext: null, analyser: null, sourceNode: null, recordDestination: null,
+  recorder: null, recordingChunks: [], standaloneTitle: '', importController: null
 };
 
 const audio = $('#audio');
@@ -197,12 +198,14 @@ async function ensureAnalyser() {
   state.sourceNode = state.audioContext.createMediaElementSource(audio);
   state.sourceNode.connect(state.analyser);
   state.analyser.connect(state.audioContext.destination);
+  state.recordDestination = state.audioContext.createMediaStreamDestination();
+  state.analyser.connect(state.recordDestination);
 }
 
 function updateVisualizerTrack() {
   const track = state.tracksById.get(state.selectedId);
-  $('#visualizer-track-title').textContent = track?.title || 'NO SIGNAL LOADED';
-  $('#visualizer-track-artist').textContent = track ? `${track.artist} / ${track.source}` : 'Choose a track or let the idle signal breathe.';
+  $('#visualizer-track-title').textContent = track?.title || state.standaloneTitle || 'NO SIGNAL LOADED';
+  $('#visualizer-track-artist').textContent = track ? `${track.artist} / ${track.source}` : state.standaloneTitle ? 'LOCAL AUTO RIG AUDIO' : 'Choose a track or let the idle signal breathe.';
 }
 
 function updateVisualizerScene(scene, engine = visualizer) {
@@ -212,6 +215,7 @@ function updateVisualizerScene(scene, engine = visualizer) {
   $('#visualizer-mood').textContent = scene.mood;
   $('#visualizer-shuffle').textContent = engine?.shuffle ? 'AUTO / ON' : 'AUTO / OFF';
   $('#visualizer-shuffle').setAttribute('aria-pressed', String(Boolean(engine?.shuffle)));
+  $('#motion-rig-panel').hidden = scene.id !== 'motion-rig';
   $$('#visualizer-index button').forEach((button) => button.classList.toggle('active', button.dataset.scene === scene.id));
 }
 
@@ -238,11 +242,115 @@ async function openTheater() {
   updateVisualizerTrack();
 }
 
+async function openRigCreator() {
+  await openTheater();
+  visualizer?.setSceneById('motion-rig');
+}
+
+async function loadRigImage(file) {
+  if (!visualizer) initializeVisualizer();
+  try {
+    const rig = await visualizer.setRigImage(file);
+    $('#rig-image-name').textContent = rig.name.toUpperCase();
+    $('#rig-status').textContent = `${rig.pieces} MOTION PLANES · ${rig.width} × ${rig.height}`;
+    toast(`CUTLIGHT RIG BUILT / ${rig.pieces} LOCAL PLANES`);
+  } catch (error) {
+    console.error(error);
+    toast('THIS IMAGE COULD NOT BE RIGGED');
+  }
+}
+
+async function loadRigAudio(file) {
+  if (!file?.type?.startsWith('audio/')) { toast('CHOOSE AN AUDIO FILE'); return; }
+  audio.pause();
+  if (state.currentObjectUrl) URL.revokeObjectURL(state.currentObjectUrl);
+  state.currentObjectUrl = URL.createObjectURL(file);
+  state.standaloneTitle = file.name.replace(/\.[^.]+$/, '');
+  state.selectedId = null;
+  audio.src = state.currentObjectUrl;
+  $('#transport-title').textContent = state.standaloneTitle;
+  $('#transport-status').textContent = 'LOCAL CUTLIGHT AUDIO';
+  $('#visualizer-track-title').textContent = state.standaloneTitle;
+  $('#visualizer-track-artist').textContent = `${file.type || 'AUDIO'} / CUTLIGHT LOCAL FILE`;
+  await ensureAnalyser();
+  try { await audio.play(); } catch { toast('PRESS PLAY TO START THE LOCAL SONG'); }
+  toast('SONG CONNECTED / READY TO RECORD');
+}
+
+function recordingMimeType() {
+  const candidates = ['video/webm;codecs=vp9,opus', 'video/webm;codecs=vp8,opus', 'video/webm'];
+  return candidates.find((type) => window.MediaRecorder?.isTypeSupported(type)) || '';
+}
+
+function recordingName() {
+  const source = state.standaloneTitle || state.tracksById.get(state.selectedId)?.title || 'cutlight-session';
+  const safe = source.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 70) || 'cutlight-session';
+  return `${safe}-visualizer.webm`;
+}
+
+async function stopRigRecording({ download = true } = {}) {
+  const recorder = state.recorder;
+  if (!recorder || recorder.state === 'inactive') return;
+  await new Promise((resolve) => {
+    recorder.addEventListener('stop', resolve, { once: true });
+    recorder.stop();
+  });
+  state.recorder = null;
+  const button = $('#rig-record');
+  button.classList.remove('recording');
+  button.setAttribute('aria-pressed', 'false');
+  button.innerHTML = '<span>●</span> RECORD VIDEO';
+  if (!download || !state.recordingChunks.length) { state.recordingChunks = []; return; }
+  const blob = new Blob(state.recordingChunks, { type: recorder.mimeType || 'video/webm' });
+  state.recordingChunks = [];
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = recordingName();
+  link.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1500);
+  toast(`VIDEO SAVED / ${(blob.size / 1024 / 1024).toFixed(1)} MB`);
+}
+
+async function toggleRigRecording() {
+  if (state.recorder?.state === 'recording') { await stopRigRecording(); return; }
+  if (!window.MediaRecorder || !$('#visualizer-canvas').captureStream) { toast('VIDEO RECORDING IS NOT SUPPORTED HERE'); return; }
+  if (!audio.src) { $('#rig-audio-input').click(); toast('LOAD A SONG BEFORE RECORDING'); return; }
+  await ensureAnalyser();
+  const canvasStream = $('#visualizer-canvas').captureStream(60);
+  const stream = new MediaStream(canvasStream.getVideoTracks());
+  state.recordDestination?.stream.getAudioTracks().forEach((track) => stream.addTrack(track));
+  const mimeType = recordingMimeType();
+  state.recordingChunks = [];
+  state.recorder = new MediaRecorder(stream, { ...(mimeType ? { mimeType } : {}), videoBitsPerSecond: 12_000_000 });
+  state.recorder.addEventListener('dataavailable', (event) => { if (event.data.size) state.recordingChunks.push(event.data); });
+  state.recorder.start(1000);
+  const button = $('#rig-record');
+  button.classList.add('recording');
+  button.setAttribute('aria-pressed', 'true');
+  button.innerHTML = '<span>■</span> STOP / SAVE';
+  if (audio.paused) {
+    if (audio.ended || audio.currentTime >= audio.duration - 0.1) audio.currentTime = 0;
+    await audio.play();
+  }
+  toast('RECORDING CLEAN CANVAS + SONG AUDIO');
+}
+
+function applyRigDirection(event) {
+  event.preventDefault();
+  if (!visualizer) initializeVisualizer();
+  const summary = visualizer.applyRigPrompt($('#rig-prompt').value);
+  $('#rig-status').textContent = summary.toUpperCase();
+  visualizer.setSceneById('motion-rig');
+  toast(`DIRECTOR / ${summary.toUpperCase()}`);
+}
+
 function closeTheater() {
   if ($('#visualizer-screen').hidden) return;
   $('#visualizer-screen').hidden = true;
   document.body.classList.remove('theater-open');
   visualizer?.stop();
+  if (state.recorder?.state === 'recording') stopRigRecording();
   if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
 }
 
@@ -254,6 +362,7 @@ async function toggleTheaterFullscreen() {
 }
 
 function togglePlayback() {
+  if (audio.src && !state.selectedId) { if (audio.paused) audio.play(); else audio.pause(); return; }
   if (!state.selectedId) { const first = filteredTracks()[0]; if (first) selectTrack(first.id, true); else folderInput.click(); return; }
   if (!audio.src) playTrack(state.tracksById.get(state.selectedId)); else if (audio.paused) audio.play(); else audio.pause();
 }
@@ -432,6 +541,7 @@ const openFolder = () => folderInput.click();
 $('#connect-button').addEventListener('click', openFolder);
 $('#welcome-connect').addEventListener('click', openFolder);
 $('#welcome-theater').addEventListener('click', openTheater);
+$('#welcome-rig').addEventListener('click', openRigCreator);
 $('#theater-launch').addEventListener('click', openTheater);
 $('#theater-launch-deck').addEventListener('click', openTheater);
 $('#visualizer-close').addEventListener('click', closeTheater);
@@ -443,6 +553,12 @@ $('#visualizer-intensity').addEventListener('input', (event) => visualizer?.setI
 $('#visualizer-shuffle').addEventListener('click', () => visualizer?.setShuffle(!visualizer.shuffle));
 $('#visualizer-fullscreen').addEventListener('click', toggleTheaterFullscreen);
 $('#vzx-launch').addEventListener('click', () => toast('OPENING VZX PLAYER / IT WILL LISTEN TO YOUR SYSTEM AUDIO'));
+$('#rig-load-image').addEventListener('click', () => $('#rig-image-input').click());
+$('#rig-load-audio').addEventListener('click', () => $('#rig-audio-input').click());
+$('#rig-record').addEventListener('click', toggleRigRecording);
+$('#rig-director').addEventListener('submit', applyRigDirection);
+$('#rig-image-input').addEventListener('change', async (event) => { const [file] = event.target.files; event.target.value = ''; if (file) await loadRigImage(file); });
+$('#rig-audio-input').addEventListener('change', async (event) => { const [file] = event.target.files; event.target.value = ''; if (file) await loadRigAudio(file); });
 folderInput.addEventListener('change', async () => { const files = [...folderInput.files]; folderInput.value = ''; await connectFolder(files); });
 $('#cancel-import').addEventListener('click', () => state.importController?.abort());
 $('#dismiss-privacy').addEventListener('click', () => $('#privacy-strip').remove());
@@ -460,7 +576,10 @@ $('#volume').addEventListener('input', (event) => { audio.volume = Number(event.
 audio.addEventListener('play', () => { updateTransport(); renderTracks(); });
 audio.addEventListener('pause', () => { updateTransport(); renderTracks(); });
 audio.addEventListener('timeupdate', updateTransport);
-audio.addEventListener('ended', () => adjacentTrack(1));
+audio.addEventListener('ended', async () => {
+  if (state.recorder?.state === 'recording') await stopRigRecording();
+  if (state.selectedId) adjacentTrack(1);
+});
 document.addEventListener('keydown', (event) => {
   if (event.target.matches('input, select, textarea')) return;
   const theaterOpen = !$('#visualizer-screen').hidden;

@@ -4,7 +4,7 @@ Signal Vault is a local-first music curation console for large folders of AI gen
 
 ## Try it
 
-[Open Signal Vault](https://signal-vault-coral.vercel.app/), choose a music folder, and start reviewing. Analysis, playback, and ratings stay in your browser.
+[Open CUTLIGHT](https://cutlight.predictyou.ai/), load an image and song, or connect a music folder to enter the full Signal Vault review deck. Analysis, playback, rigging, and recording stay in your browser.
 
 ## What it does
 
@@ -13,7 +13,10 @@ Signal Vault is a local-first music curation console for large folders of AI gen
 - Groups tracks with matching artist and title as alternate cuts
 - Builds eight themed crates plus a 250-track priority audition deck
 - Supports private local playback, search, energy sorting, and keyboard review
-- Includes Signal Theater with nine original browser-native audio-reactive scenes, including the AI-forged Astral Cathedral
+- Includes Signal Theater with ten original browser-native audio-reactive scenes
+- Includes CUTLIGHT, which turns any image and song into a twenty-plane moving artwork rig
+- Accepts local director prompts for color, movement, bass response, and musical transitions
+- Records the clean visual canvas plus song audio as a downloadable WebM video
 - Can launch the installed VZX Player for a native OpenGL visualizer experience
 - Saves `VAULT`, `HOLD`, and `CUT` decisions in the browser
 - Provides an explicit **Forget Library** action that removes the cached catalog and ratings without touching audio files
@@ -50,9 +53,15 @@ Keyboard controls:
 - `R`: randomize the Signal Theater scene
 - `Escape`: close Signal Theater
 
+## CUTLIGHT
+
+CUTLIGHT is a local-first moving-artwork instrument inside Signal Theater. Load any image and song, then describe the direction in plain language. The current local director understands color families, monochrome treatment, movement intensity, bass emphasis, and color changes on detected beats, cuts, drops, or section transitions.
+
+The browser divides the visible image into twenty independently eased motion planes. Each plane has its own pivot, frequency assignment, direction, scale, opacity, and transition response. The original image remains underneath the moving planes so the composition can separate without opening holes. Recording uses the canvas capture and Web Audio streams already on the device; nothing is uploaded for a normal session.
+
 ## Signal Theater and VZX
 
-Signal Theater is the portable visual layer built directly into the web app. It includes nine original scenes, intensity control, automatic scene changes, fullscreen mode, and local audio analysis through the Web Audio API. Astral Cathedral is built from ten composition-matched artwork states. Mirrored image strips map individual FFT bins from sub-bass through air frequencies into changing filament colors and lengths, while dedicated transient and spectral-decay states record musical impacts.
+Signal Theater is the portable visual layer built directly into the web app. It includes ten original scenes, intensity control, automatic scene changes, fullscreen mode, and local audio analysis through the Web Audio API. Astral Cathedral is built from ten composition-matched artwork states. CUTLIGHT is the reusable any-image scene and recording workflow.
 
 The **Launch VZX Player** control opens the separately installed VZX Player through Steam. VZX listens to the computer's active audio output, so Signal Vault can keep playing the selected local track while VZX renders it in its native OpenGL engine. VZX is a third-party product by Vovoid Media Technologies and is not bundled with Signal Vault.
 

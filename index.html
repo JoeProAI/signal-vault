@@ -142,6 +142,8 @@
     </div>
 
     <audio id="audio" preload="metadata"></audio>
+    <input id="rig-image-input" type="file" accept="image/*" hidden />
+    <input id="rig-audio-input" type="file" accept="audio/*" hidden />
     <section class="visualizer-screen" id="visualizer-screen" hidden aria-label="Signal Theater audio visualizer">
       <canvas id="visualizer-canvas" aria-hidden="true"></canvas>
       <div class="visualizer-vignette" aria-hidden="true"></div>
@@ -159,6 +161,24 @@
         <strong id="visualizer-track-title">NO SIGNAL LOADED</strong>
         <small id="visualizer-track-artist">Choose a track or let the idle signal breathe.</small>
       </div>
+      <aside class="motion-rig-panel" id="motion-rig-panel" aria-label="Cutlight creator" hidden>
+        <div class="motion-rig-heading">
+          <span>CUTLIGHT / LOCAL CREATOR</span>
+          <strong id="rig-image-name">ASTRAL CATHEDRAL</strong>
+          <small id="rig-status">20 MOTION PLANES · READY FOR ANY IMAGE</small>
+        </div>
+        <div class="motion-rig-actions">
+          <button id="rig-load-image" type="button"><span>01</span> LOAD IMAGE</button>
+          <button id="rig-load-audio" type="button"><span>02</span> LOAD SONG</button>
+          <button id="rig-record" type="button" aria-pressed="false"><span>●</span> RECORD VIDEO</button>
+        </div>
+        <form class="motion-rig-director" id="rig-director">
+          <label for="rig-prompt">DIRECTOR PROMPT</label>
+          <input id="rig-prompt" type="text" autocomplete="off" placeholder="Change colors on every musical cut…" />
+          <button type="submit">APPLY ↗</button>
+        </form>
+        <p>Files remain on this device. Recording exports the clean canvas plus song audio as WebM.</p>
+      </aside>
       <div class="visualizer-controls" aria-label="Visualizer controls">
         <button class="visualizer-play" id="visualizer-play" type="button">PLAY / PAUSE</button>
         <button id="visualizer-previous" type="button" aria-label="Previous visualizer">←</button>
@@ -198,6 +218,9 @@
           </button>
           <button class="welcome-theater" id="welcome-theater" type="button">
             <span>PREVIEW SIGNAL THEATER</span><span>◉</span>
+          </button>
+          <button class="welcome-rig" id="welcome-rig" type="button">
+            <span>OPEN CUTLIGHT</span><span>●</span>
           </button>
         </div>
         <div class="welcome-steps">

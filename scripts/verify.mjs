@@ -15,11 +15,15 @@ const files = await filesUnder(distRoot);
 const textFiles = files.filter((file) => /\.(html|js|css|json|txt|md)$/i.test(file));
 const publicText = (await Promise.all(textFiles.map((file) => readFile(file, 'utf8')))).join('\n');
 const packageJson = JSON.parse(await readFile(path.join(projectRoot, 'package.json'), 'utf8'));
+const vercelIgnore = await readFile(path.join(projectRoot, '.vercelignore'), 'utf8');
 
 if (!files.some((file) => file.endsWith('index.html'))) failures.push('Production index.html is missing.');
 if (!publicText.includes('CHOOSE A MUSIC FOLDER')) failures.push('Universal folder onboarding is missing from the production build.');
 if (!publicText.includes('SIGNAL THEATER') || !publicText.includes('LAUNCH VZX PLAYER')) failures.push('Signal Theater or its VZX launch path is missing from the production build.');
-if (!publicText.includes('ASTRAL CATHEDRAL')) failures.push('AI-forged Astral Cathedral scene is missing from the production build.');
+if (!publicText.includes('ASTRAL CATHEDRAL')) failures.push('Astral Cathedral scene is missing from the production build.');
+if (!publicText.includes('CUTLIGHT') || !publicText.includes('DIRECTOR PROMPT')) failures.push('CUTLIGHT creator or its director prompt is missing from the production build.');
+if (!publicText.includes('RECORD VIDEO') || !publicText.includes('MediaRecorder')) failures.push('CUTLIGHT recording workflow is missing from the production build.');
+if (!publicText.includes('20 MOTION PLANES') || !publicText.includes('rig-image-input') || !publicText.includes('rig-audio-input')) failures.push('CUTLIGHT any-image and any-song onboarding is incomplete.');
 if (!files.some((file) => /visuals[\\/]astral-cathedral\.webp$/i.test(file))) failures.push('Astral Cathedral visual texture is missing from the production build.');
 for (const variant of ['sub', 'bass', 'lowmid', 'mid', 'highmid', 'treble', 'air', 'transient', 'decay']) {
   if (!files.some((file) => new RegExp(`visuals[\\\\/]astral-cathedral-${variant}\\.webp$`, 'i').test(file))) failures.push(`Astral Cathedral ${variant} texture is missing from the production build.`);
@@ -28,10 +32,11 @@ if (/C:\\Users\\|JOEPROAI|8\.15\.26/i.test(publicText)) failures.push('Productio
 if (files.some((file) => /catalog\.json$/i.test(file))) failures.push('Production build contains a prebuilt personal catalog.');
 if (files.some((file) => /\.(mp3|m4a|flac|wav|ogg|opus|aac|aiff?)$/i.test(file))) failures.push('Production build contains audio.');
 if (!packageJson.dependencies?.['music-metadata']) failures.push('Browser metadata parser dependency is missing.');
+if (!/^\.env\s*$/m.test(vercelIgnore) || !/^\.env\.\*\s*$/m.test(vercelIgnore)) failures.push('.vercelignore does not protect environment files.');
 
 if (failures.length) {
   console.error(failures.join('\n'));
   process.exit(1);
 }
 
-console.log(`Verified universal build: ${files.length} files, local folder onboarding and Signal Theater present, and no personal catalog, path, or audio leakage.`);
+console.log(`Verified universal build: ${files.length} files, CUTLIGHT creator and recording workflow present, and no personal catalog, path, audio, or environment leakage.`);
