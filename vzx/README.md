@@ -4,18 +4,19 @@ This folder contains the native VZX Creative side of Signal Vault. It is deliber
 
 ## Cathedral Engine V02
 
-`states/signal-cathedral-v02` is the current VZX Artiste scene. Unlike V01's flat image plus analyzer traces, V02 composites four synchronized image passes and a native procedural effects layer:
+`states/signal-cathedral-v02` is the current VZX Artiste scene. Unlike V01's flat image plus analyzer traces, V02 continuously crossfades six aligned cathedral states and composites native procedural effects over them:
 
-- bass drives the central portal shockwave and a smaller camera push through octave 0;
-- mids rotate the architectural filament pass through octave 3;
-- high frequencies expose and expand the filament and atmosphere passes through octaves 6 and 7;
+- sub, bass, mid, treble, transient, and decay images change the cathedral's color, filament length, portal energy, and architectural detail;
+- bass, mids, and highs independently expose their matching image states through octaves 0, 3, 6, and 7;
+- slow phase-shifted cycles keep the architecture evolving between beats instead of behaving like one uniformly pulsing image;
+- bass still drives the central portal shockwave, while mids rotate the separate architectural filament pass;
 - waveform and spectrum data form a radial structure inside the portal instead of straight analyzer overlays;
 - 650 native VZX particles respond to the high-frequency band; and
 - a render surface, blur pass, and low-alpha feedback loop create glow and trails.
 
-V02 also has zero-centered idle motion for the base architecture, portal, filaments, and atmosphere. The cathedral therefore keeps moving when Artiste's separate Visualization Audio service is stopped. When audio is active, the octave bands add stronger frequency-specific motion on top of that baseline.
+V02 also has zero-centered idle motion for the base architecture, portal, filaments, and atmosphere. The old full-frame scale pulse has been reduced to a very small accent, so the visible movement now comes primarily from image-state morphing, portal motion, filament sway, atmosphere, radial waveforms, and particles. The cathedral therefore keeps changing when Artiste's separate Visualization Audio service is stopped. When audio is active, the octave bands add stronger frequency-specific morphing on top of that baseline.
 
-The three V02 effect images are AI-generated, composition-matched passes derived from the original Astral Cathedral artwork. All state files use VZX resource-relative paths. Launching Artiste with this folder as its `data_path` keeps the scene portable and leaves the Steam installation untouched. V01 remains available as the simpler diagnostic scene.
+The V02 effect images and six-state morph bank are AI-generated, composition-matched passes derived from the original Astral Cathedral artwork. All state files use VZX resource-relative paths. Launching Artiste with this folder as its `data_path` keeps the scene portable and leaves the Steam installation untouched. V01 remains available as the simpler diagnostic scene.
 
 ## Controls
 

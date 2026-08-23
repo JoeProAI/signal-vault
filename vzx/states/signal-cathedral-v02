@@ -1,9 +1,6 @@
 meta_set U2lnbmFsIENhdGhlZHJhbCBWMDJ8Sm9zZXBoIHwgU2lnbmFsIFZhdWx0fHx8Q2F0aGVkcmFsIEVuZ2luZTogbGF5ZXJlZCBpbWFnZSBzeW50aGVzaXMsIGJhc3Mgc2hvY2t3YXZlcywgbWlkIGFyY2hpdGVjdHVyZSBkcmlmdCwgdHJlYmxlIGZpbGFtZW50cywgcmFkaWFsIHdhdmVmb3JtLCBwYXJ0aWNsZXMsIGdsb3cgYW5kIGZlZWRiYWNrLg==
 component_create sound;input_visualization_listener audio -0.920000 0.000000
 
-component_create texture;loaders;png_tex_load base_texture -0.900000 0.260000
-ps64 base_texture filename cmVzb3VyY2VzL3NpZ25hbC12YXVsdC9hc3RyYWwtY2F0aGVkcmFsLnBuZw==
-param_set base_texture flip_vertical 1
 component_create texture;loaders;png_tex_load filament_texture -0.900000 0.180000
 ps64 filament_texture filename cmVzb3VyY2VzL3NpZ25hbC12YXVsdC9jYXRoZWRyYWwtZmlsYW1lbnRzLXYwMi5wbmc=
 param_set filament_texture flip_vertical 1
@@ -14,33 +11,132 @@ component_create texture;loaders;png_tex_load atmosphere_texture -0.900000 0.020
 ps64 atmosphere_texture filename cmVzb3VyY2VzL3NpZ25hbC12YXVsdC9jYXRoZWRyYWwtYXRtb3NwaGVyZS12MDIucG5n
 param_set atmosphere_texture flip_vertical 1
 
+component_create texture;loaders;png_tex_load morph_sub_texture -1.080000 0.880000
+ps64 morph_sub_texture filename cmVzb3VyY2VzL3NpZ25hbC12YXVsdC9tb3JwaC9jYXRoZWRyYWwtc3ViLnBuZw==
+param_set morph_sub_texture flip_vertical 1
+component_create texture;loaders;png_tex_load morph_bass_texture -1.080000 0.800000
+ps64 morph_bass_texture filename cmVzb3VyY2VzL3NpZ25hbC12YXVsdC9tb3JwaC9jYXRoZWRyYWwtYmFzcy5wbmc=
+param_set morph_bass_texture flip_vertical 1
+component_create texture;loaders;png_tex_load morph_mid_texture -1.080000 0.720000
+ps64 morph_mid_texture filename cmVzb3VyY2VzL3NpZ25hbC12YXVsdC9tb3JwaC9jYXRoZWRyYWwtbWlkLnBuZw==
+param_set morph_mid_texture flip_vertical 1
+component_create texture;loaders;png_tex_load morph_treble_texture -1.080000 0.640000
+ps64 morph_treble_texture filename cmVzb3VyY2VzL3NpZ25hbC12YXVsdC9tb3JwaC9jYXRoZWRyYWwtdHJlYmxlLnBuZw==
+param_set morph_treble_texture flip_vertical 1
+component_create texture;loaders;png_tex_load morph_transient_texture -1.080000 0.560000
+ps64 morph_transient_texture filename cmVzb3VyY2VzL3NpZ25hbC12YXVsdC9tb3JwaC9jYXRoZWRyYWwtdHJhbnNpZW50LnBuZw==
+param_set morph_transient_texture flip_vertical 1
+component_create texture;loaders;png_tex_load morph_decay_texture -1.080000 0.480000
+ps64 morph_decay_texture filename cmVzb3VyY2VzL3NpZ25hbC12YXVsdC9tb3JwaC9jYXRoZWRyYWwtZGVjYXkucG5n
+param_set morph_decay_texture flip_vertical 1
+component_create renderers;opengl_modifiers;blend_mode morph_blend -0.620000 0.760000
+
+component_create renderers;basic;textured_rectangle morph_bass_layer -0.460000 0.880000
+param_set morph_bass_layer facing_camera 0
+param_set morph_bass_layer size 1.00000000000000000000,0.56250000000000000000,0.00000000000000000000
+component_create maths;oscillators;oscillator morph_bass_cycle -0.820000 0.940000
+param_set morph_bass_cycle amp 0.19000000000000000000
+param_set morph_bass_cycle ofs 0.23000000000000000000
+param_set morph_bass_cycle freq 0.07100000000000000000
+component_create maths;arithmetics;binary;mult morph_bass_audio -0.650000 0.940000
+param_set morph_bass_audio param2 0.65000000000000000000
+component_create maths;arithmetics;binary;add morph_bass_alpha -0.480000 0.940000
+component_create maths;converters;4float_to_float4 morph_bass_color -0.300000 0.940000
+param_set morph_bass_color floata 1.00000000000000000000
+param_set morph_bass_color floatb 1.00000000000000000000
+param_set morph_bass_color floatc 1.00000000000000000000
+
+component_create renderers;basic;textured_rectangle morph_mid_layer -0.460000 0.800000
+param_set morph_mid_layer facing_camera 0
+param_set morph_mid_layer size 1.00000000000000000000,0.56250000000000000000,0.00000000000000000000
+component_create maths;oscillators;oscillator morph_mid_cycle -0.820000 0.860000
+param_set morph_mid_cycle amp 0.17000000000000000000
+param_set morph_mid_cycle ofs 0.21000000000000000000
+param_set morph_mid_cycle freq 0.09700000000000000000
+param_set morph_mid_cycle phase 0.41000000000000000000
+component_create maths;arithmetics;binary;mult morph_mid_audio -0.650000 0.860000
+param_set morph_mid_audio param2 0.70000000000000000000
+component_create maths;arithmetics;binary;add morph_mid_alpha -0.480000 0.860000
+component_create maths;converters;4float_to_float4 morph_mid_color -0.300000 0.860000
+param_set morph_mid_color floata 1.00000000000000000000
+param_set morph_mid_color floatb 1.00000000000000000000
+param_set morph_mid_color floatc 1.00000000000000000000
+
+component_create renderers;basic;textured_rectangle morph_treble_layer -0.460000 0.720000
+param_set morph_treble_layer facing_camera 0
+param_set morph_treble_layer size 1.00000000000000000000,0.56250000000000000000,0.00000000000000000000
+component_create maths;oscillators;oscillator morph_treble_cycle -0.820000 0.780000
+param_set morph_treble_cycle amp 0.16000000000000000000
+param_set morph_treble_cycle ofs 0.19000000000000000000
+param_set morph_treble_cycle freq 0.13700000000000000000
+param_set morph_treble_cycle phase 0.83000000000000000000
+component_create maths;arithmetics;binary;mult morph_treble_audio -0.650000 0.780000
+param_set morph_treble_audio param2 0.95000000000000000000
+component_create maths;arithmetics;binary;add morph_treble_alpha -0.480000 0.780000
+component_create maths;converters;4float_to_float4 morph_treble_color -0.300000 0.780000
+param_set morph_treble_color floata 1.00000000000000000000
+param_set morph_treble_color floatb 1.00000000000000000000
+param_set morph_treble_color floatc 1.00000000000000000000
+
+component_create renderers;basic;textured_rectangle morph_transient_layer -0.460000 0.640000
+param_set morph_transient_layer facing_camera 0
+param_set morph_transient_layer size 1.00000000000000000000,0.56250000000000000000,0.00000000000000000000
+component_create maths;oscillators;oscillator morph_transient_cycle -0.820000 0.700000
+param_set morph_transient_cycle amp 0.12000000000000000000
+param_set morph_transient_cycle ofs 0.13000000000000000000
+param_set morph_transient_cycle freq 0.18100000000000000000
+param_set morph_transient_cycle phase 1.22000000000000000000
+component_create maths;arithmetics;binary;mult morph_transient_audio -0.650000 0.700000
+param_set morph_transient_audio param2 1.15000000000000000000
+component_create maths;arithmetics;binary;add morph_transient_alpha -0.480000 0.700000
+component_create maths;converters;4float_to_float4 morph_transient_color -0.300000 0.700000
+param_set morph_transient_color floata 1.00000000000000000000
+param_set morph_transient_color floatb 1.00000000000000000000
+param_set morph_transient_color floatc 1.00000000000000000000
+
+component_create renderers;basic;textured_rectangle morph_decay_layer -0.460000 0.560000
+param_set morph_decay_layer facing_camera 0
+param_set morph_decay_layer size 1.00000000000000000000,0.56250000000000000000,0.00000000000000000000
+component_create maths;oscillators;oscillator morph_decay_cycle -0.820000 0.620000
+param_set morph_decay_cycle amp 0.15000000000000000000
+param_set morph_decay_cycle ofs 0.18000000000000000000
+param_set morph_decay_cycle freq 0.05300000000000000000
+param_set morph_decay_cycle phase 1.67000000000000000000
+component_create maths;arithmetics;binary;mult morph_decay_audio -0.650000 0.620000
+param_set morph_decay_audio param2 0.45000000000000000000
+component_create maths;arithmetics;binary;add morph_decay_alpha -0.480000 0.620000
+component_create maths;converters;4float_to_float4 morph_decay_color -0.300000 0.620000
+param_set morph_decay_color floata 1.00000000000000000000
+param_set morph_decay_color floatb 1.00000000000000000000
+param_set morph_decay_color floatc 1.00000000000000000000
+
 component_create renderers;basic;textured_rectangle base_layer -0.520000 0.260000
 param_set base_layer facing_camera 0
 param_set base_layer size 1.00000000000000000000,0.56250000000000000000,0.00000000000000000000
 param_set base_layer color_multiplier 0.70000000000000000000,0.78000000000000000000,0.90000000000000000000,1.00000000000000000000
 component_create maths;arithmetics;binary;mult base_bass_gain -0.720000 0.330000
-param_set base_bass_gain param2 0.02800000000000000000
+param_set base_bass_gain param2 0.00700000000000000000
 component_create maths;arithmetics;binary;add base_bass_offset -0.570000 0.330000
 param_set base_bass_offset param2 1.00000000000000000000
 component_create maths;converters;float_to_float3 base_scale_vector -0.410000 0.330000
 component_create renderers;opengl_modifiers;gl_scale base_scale -0.250000 0.260000
 component_create maths;oscillators;oscillator base_breathe -0.720000 0.580000
-param_set base_breathe amp 0.02500000000000000000
+param_set base_breathe amp 0.00800000000000000000
 param_set base_breathe freq 0.12000000000000000000
 param_set base_breathe ofs 0.00000000000000000000
 component_create maths;arithmetics;binary;add base_motion_sum -0.410000 0.580000
 component_create maths;oscillators;oscillator base_sway -0.720000 0.650000
-param_set base_sway amp 0.00800000000000000000
+param_set base_sway amp 0.00400000000000000000
 param_set base_sway freq 0.05500000000000000000
 param_set base_sway ofs 0.00000000000000000000
 component_create renderers;opengl_modifiers;gl_rotate base_rotate -0.100000 0.260000
 param_set base_rotate axis 0.00000000000000000000,0.00000000000000000000,1.00000000000000000000
 component_create maths;oscillators;oscillator base_drift_x -0.720000 0.720000
-param_set base_drift_x amp 0.01000000000000000000
+param_set base_drift_x amp 0.00500000000000000000
 param_set base_drift_x freq 0.03700000000000000000
 param_set base_drift_x ofs 0.00000000000000000000
 component_create maths;oscillators;oscillator base_drift_y -0.570000 0.720000
-param_set base_drift_y amp 0.00600000000000000000
+param_set base_drift_y amp 0.00300000000000000000
 param_set base_drift_y freq 0.08300000000000000000
 param_set base_drift_y ofs 0.00000000000000000000
 component_create maths;converters;3float_to_float3 base_drift_vector -0.410000 0.720000
@@ -189,14 +285,50 @@ cpp screen0 0.960000 0.080000
 param_set screen0 clear_color 0.00000000000000000000,0.00000000000000000000,0.00600000000000000000,1.00000000000000000000
 param_set screen0 gamma_correction 1.00000000000000000000
 
-param_connect base_layer texture_in base_texture texture
+param_connect base_layer texture_in morph_sub_texture texture
+param_connect morph_bass_layer texture_in morph_bass_texture texture
+param_connect morph_bass_audio param1 audio octaves_l_0
+param_connect morph_bass_alpha param1 morph_bass_cycle float
+param_connect morph_bass_alpha param2 morph_bass_audio product
+param_connect morph_bass_color floatd morph_bass_alpha sum
+param_connect morph_bass_layer color_multiplier morph_bass_color result_float4
+param_connect morph_mid_layer texture_in morph_mid_texture texture
+param_connect morph_mid_audio param1 audio octaves_l_3
+param_connect morph_mid_alpha param1 morph_mid_cycle float
+param_connect morph_mid_alpha param2 morph_mid_audio product
+param_connect morph_mid_color floatd morph_mid_alpha sum
+param_connect morph_mid_layer color_multiplier morph_mid_color result_float4
+param_connect morph_treble_layer texture_in morph_treble_texture texture
+param_connect morph_treble_audio param1 audio octaves_l_7
+param_connect morph_treble_alpha param1 morph_treble_cycle float
+param_connect morph_treble_alpha param2 morph_treble_audio product
+param_connect morph_treble_color floatd morph_treble_alpha sum
+param_connect morph_treble_layer color_multiplier morph_treble_color result_float4
+param_connect morph_transient_layer texture_in morph_transient_texture texture
+param_connect morph_transient_audio param1 audio octaves_l_6
+param_connect morph_transient_alpha param1 morph_transient_cycle float
+param_connect morph_transient_alpha param2 morph_transient_audio product
+param_connect morph_transient_color floatd morph_transient_alpha sum
+param_connect morph_transient_layer color_multiplier morph_transient_color result_float4
+param_connect morph_decay_layer texture_in morph_decay_texture texture
+param_connect morph_decay_audio param1 audio octaves_l_1
+param_connect morph_decay_alpha param1 morph_decay_cycle float
+param_connect morph_decay_alpha param2 morph_decay_audio product
+param_connect morph_decay_color floatd morph_decay_alpha sum
+param_connect morph_decay_layer color_multiplier morph_decay_color result_float4
+param_connect morph_blend render_in base_layer render_out
+param_connect morph_blend render_in morph_bass_layer render_out
+param_connect morph_blend render_in morph_mid_layer render_out
+param_connect morph_blend render_in morph_treble_layer render_out
+param_connect morph_blend render_in morph_transient_layer render_out
+param_connect morph_blend render_in morph_decay_layer render_out
 param_connect base_bass_gain param1 audio octaves_l_0
 param_connect base_bass_offset param1 base_bass_gain product
 param_connect base_motion_sum param1 base_bass_offset sum
 param_connect base_motion_sum param2 base_breathe float
 param_connect base_scale_vector param1 base_motion_sum sum
 param_connect base_scale scale base_scale_vector result_float3
-param_connect base_scale render_in base_layer render_out
+param_connect base_scale render_in morph_blend render_out
 param_connect base_rotate angle base_sway float
 param_connect base_rotate render_in base_scale render_out
 param_connect base_drift_vector floata base_drift_x float
