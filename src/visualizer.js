@@ -148,7 +148,53 @@ export class SignalVisualizer {
     if (index >= 0) this.setScene(index);
   }
 
-  buildRigPieces() {
+  buildRigPieces(semantic = true) {
+    if (semantic) {
+      const regions = [
+        { band: 'treble', center: [.10, .35], points: [[0,0],[.13,0],[.23,.19],[.20,.42],[.18,.67],[.10,.80],[0,.75]] },
+        { band: 'treble', center: [.90, .35], points: [[1,0],[.87,0],[.77,.19],[.80,.42],[.82,.67],[.90,.80],[1,.75]] },
+        { band: 'highMid', center: [.32, .15], points: [[.11,0],[.46,0],[.43,.17],[.36,.31],[.24,.29],[.18,.14]] },
+        { band: 'highMid', center: [.68, .15], points: [[.89,0],[.54,0],[.57,.17],[.64,.31],[.76,.29],[.82,.14]] },
+        { band: 'highMid', center: [.50, .18], points: [[.28,.05],[.42,.02],[.50,.05],[.58,.02],[.72,.05],[.67,.22],[.59,.36],[.50,.31],[.41,.36],[.33,.22]] },
+        { band: 'lowMid', center: [.30, .48], points: [[.22,.20],[.31,.17],[.38,.31],[.37,.57],[.35,.79],[.27,.84],[.22,.67]] },
+        { band: 'lowMid', center: [.70, .48], points: [[.78,.20],[.69,.17],[.62,.31],[.63,.57],[.65,.79],[.73,.84],[.78,.67]] },
+        { band: 'highMid', center: [.39, .49], points: [[.29,.28],[.43,.31],[.49,.43],[.48,.65],[.40,.70],[.32,.60]] },
+        { band: 'highMid', center: [.61, .49], points: [[.71,.28],[.57,.31],[.51,.43],[.52,.65],[.60,.70],[.68,.60]] },
+        { band: 'treble', center: [.50, .48], points: [[.43,.29],[.50,.25],[.57,.29],[.58,.55],[.54,.69],[.46,.69],[.42,.55]] },
+        { band: 'treble', center: [.17, .57], points: [[0,.36],[.18,.31],[.31,.46],[.28,.67],[.20,.78],[0,.72]] },
+        { band: 'treble', center: [.83, .57], points: [[1,.36],[.82,.31],[.69,.46],[.72,.67],[.80,.78],[1,.72]] },
+        { band: 'lowMid', center: [.34, .69], points: [[.10,.61],[.34,.59],[.50,.66],[.47,.77],[.24,.79],[.09,.73]] },
+        { band: 'lowMid', center: [.66, .69], points: [[.90,.61],[.66,.59],[.50,.66],[.53,.77],[.76,.79],[.91,.73]] },
+        { band: 'bass', center: [.50, .72], points: [[.34,.64],[.66,.64],[.64,.79],[.58,.83],[.42,.83],[.36,.79]] },
+        { band: 'bass', center: [.50, .84], points: [[.34,.75],[.66,.75],[.65,.91],[.58,.95],[.42,.95],[.35,.91]] },
+        { band: 'bass', center: [.19, .88], points: [[0,.72],[.34,.77],[.39,.90],[.31,1],[0,1]] },
+        { band: 'bass', center: [.81, .88], points: [[1,.72],[.66,.77],[.61,.90],[.69,1],[1,1]] },
+        { band: 'highMid', center: [.15, .72], points: [[0,.54],[.27,.55],[.35,.70],[.28,.84],[.08,.82],[0,.75]] },
+        { band: 'highMid', center: [.85, .72], points: [[1,.54],[.73,.55],[.65,.70],[.72,.84],[.92,.82],[1,.75]] }
+      ];
+
+      return regions.map((region, index) => {
+        const [centerX, centerY] = region.center;
+        const radialX = centerX - 0.5;
+        const radialY = centerY - 0.5;
+        const length = Math.hypot(radialX, radialY) || 1;
+        return {
+          index,
+          row: Math.min(3, Math.floor(centerY * 4)),
+          column: Math.min(4, Math.floor(centerX * 5)),
+          centerX,
+          centerY,
+          polygon: region.points.map(([x, y]) => ({ x, y })),
+          directionX: radialX / length,
+          directionY: radialY / length,
+          band: region.band,
+          phase: index * 0.73,
+          level: 0,
+          semantic: true
+        };
+      });
+    }
+
     const columns = 5;
     const rows = 4;
     const seeds = [];
@@ -217,7 +263,7 @@ export class SignalVisualizer {
     URL.revokeObjectURL(url);
     this.rigImage = image;
     this.rigImageName = file.name;
-    this.rigPieces = this.buildRigPieces();
+    this.rigPieces = this.buildRigPieces(false);
     this.setSceneById('motion-rig');
     return { name: file.name, pieces: this.rigPieces.length, width: image.naturalWidth, height: image.naturalHeight };
   }
@@ -586,14 +632,17 @@ export class SignalVisualizer {
     ctx.globalAlpha = 1;
     ctx.fillStyle = '#020304';
     ctx.fillRect(0, 0, width, height);
-    ctx.filter = 'blur(28px) brightness(.24) saturate(.8)';
-    ctx.drawImage(image, backgroundX - 30, backgroundY - 30, backgroundWidth + 60, backgroundHeight + 60);
-    ctx.filter = 'none';
-    ctx.fillStyle = 'rgba(2,3,4,.28)';
-    ctx.fillRect(0, 0, width, height);
-    ctx.filter = paletteFilter;
-    ctx.drawImage(image, drawX, drawY, drawWidth, drawHeight);
-    ctx.filter = 'none';
+    const semanticMode = this.rigPieces[0]?.semantic === true;
+    if (!semanticMode) {
+      ctx.filter = 'blur(28px) brightness(.24) saturate(.8)';
+      ctx.drawImage(image, backgroundX - 30, backgroundY - 30, backgroundWidth + 60, backgroundHeight + 60);
+      ctx.filter = 'none';
+      ctx.fillStyle = 'rgba(2,3,4,.28)';
+      ctx.fillRect(0, 0, width, height);
+      ctx.filter = paletteFilter;
+      ctx.drawImage(image, drawX, drawY, drawWidth, drawHeight);
+      ctx.filter = 'none';
+    }
 
     for (const piece of this.rigPieces) {
       const bandSignal = signal[piece.band] ?? signal.energy;
@@ -605,13 +654,14 @@ export class SignalVisualizer {
       const centerX = drawX + piece.centerX * drawWidth;
       const centerY = drawY + piece.centerY * drawHeight;
       const floorPush = piece.row === 3 ? 1.45 : 1;
-      const travel = Math.min(drawWidth, drawHeight) * (0.005 + response * 0.026) * floorPush;
+      const travel = Math.min(drawWidth, drawHeight) * (semanticMode ? 0.002 + response * 0.021 : 0.005 + response * 0.026) * floorPush;
       const cutDirection = piece.index % 2 ? -1 : 1;
-      const translateX = piece.directionX * travel + Math.cos(piece.phase) * idle * 2.2 + cutDirection * this.rigCutPulse * drawWidth * 0.004;
-      const translateY = piece.directionY * travel + (piece.row === 0 ? -1 : piece.row === 3 ? 1 : 0) * response * drawHeight * 0.012 + Math.sin(piece.phase) * idle * 2.2;
-      const scale = 1.002 + response * (piece.column === 2 ? 0.065 : 0.04) + idle * 0.003 + this.rigCutPulse * 0.01;
+      const translateX = piece.directionX * travel + Math.cos(piece.phase) * idle * 1.8 + cutDirection * this.rigCutPulse * drawWidth * 0.003;
+      const translateY = piece.directionY * travel + (piece.row === 0 ? -1 : piece.row === 3 ? 1 : 0) * response * drawHeight * 0.01 + Math.sin(piece.phase) * idle * 1.8;
+      const scale = 1.001 + response * (piece.column === 2 ? 0.05 : 0.033) + idle * 0.002 + this.rigCutPulse * 0.008;
 
       ctx.save();
+      if (semanticMode) ctx.globalCompositeOperation = 'screen';
       ctx.translate(centerX + translateX, centerY + translateY);
       ctx.scale(scale, scale);
       ctx.translate(-centerX, -centerY);
@@ -623,23 +673,29 @@ export class SignalVisualizer {
       });
       ctx.closePath();
       ctx.clip();
-      ctx.globalAlpha = clamp(0.42 + response * 0.5, 0, 0.92);
+      ctx.globalAlpha = semanticMode
+        ? clamp(0.82 + response * 0.2, 0, 1)
+        : clamp(0.42 + response * 0.5, 0, 0.92);
       const pieceColor = directives.palette === 'mono' ? 'grayscale(1)' : `hue-rotate(${paletteHue + piece.index * 1.7}deg)`;
-      ctx.filter = `${pieceColor} brightness(${1.02 + response * 0.22}) saturate(${1.08 + response * 0.5}) contrast(${1.02 + response * 0.12})`;
+      ctx.filter = semanticMode
+        ? `${pieceColor} brightness(${0.92 + response * 0.24}) saturate(${1.05 + response * 0.42}) contrast(${1.04 + response * 0.14})`
+        : `${pieceColor} brightness(${1.02 + response * 0.22}) saturate(${1.08 + response * 0.5}) contrast(${1.02 + response * 0.12})`;
       ctx.drawImage(image, drawX, drawY, drawWidth, drawHeight);
       ctx.restore();
     }
 
-    ctx.globalCompositeOperation = 'screen';
-    ctx.globalAlpha = 0.11 + signal.energy * 0.2;
-    const glowX = drawX + drawWidth / 2;
-    const glowY = drawY + drawHeight * 0.52;
-    const glow = ctx.createRadialGradient(glowX, glowY, 0, glowX, glowY, Math.max(drawWidth, drawHeight) * 0.58);
-    glow.addColorStop(0, 'rgba(167,255,63,.26)');
-    glow.addColorStop(.48, 'rgba(0,217,255,.08)');
-    glow.addColorStop(1, 'rgba(255,79,216,0)');
-    ctx.fillStyle = glow;
-    ctx.fillRect(0, 0, width, height);
+    if (!semanticMode) {
+      ctx.globalCompositeOperation = 'screen';
+      ctx.globalAlpha = 0.11 + signal.energy * 0.2;
+      const glowX = drawX + drawWidth / 2;
+      const glowY = drawY + drawHeight * 0.52;
+      const glow = ctx.createRadialGradient(glowX, glowY, 0, glowX, glowY, Math.max(drawWidth, drawHeight) * 0.58);
+      glow.addColorStop(0, 'rgba(167,255,63,.26)');
+      glow.addColorStop(.48, 'rgba(0,217,255,.08)');
+      glow.addColorStop(1, 'rgba(255,79,216,0)');
+      ctx.fillStyle = glow;
+      ctx.fillRect(0, 0, width, height);
+    }
     ctx.restore();
   }
 
