@@ -16,11 +16,13 @@ const textFiles = files.filter((file) => /\.(html|js|css|json|txt|md)$/i.test(fi
 const publicText = (await Promise.all(textFiles.map((file) => readFile(file, 'utf8')))).join('\n');
 const packageJson = JSON.parse(await readFile(path.join(projectRoot, 'package.json'), 'utf8'));
 const vercelIgnore = await readFile(path.join(projectRoot, '.vercelignore'), 'utf8');
+const visualizerSource = await readFile(path.join(projectRoot, 'src', 'visualizer.js'), 'utf8');
 
 if (!files.some((file) => file.endsWith('index.html'))) failures.push('Production index.html is missing.');
 if (!publicText.includes('CHOOSE A MUSIC FOLDER')) failures.push('Universal folder onboarding is missing from the production build.');
 if (!publicText.includes('SIGNAL THEATER') || !publicText.includes('LAUNCH VZX PLAYER')) failures.push('Signal Theater or its VZX launch path is missing from the production build.');
 if (!publicText.includes('ASTRAL CATHEDRAL')) failures.push('Astral Cathedral scene is missing from the production build.');
+if (!visualizerSource.includes("'astral-cathedral': this.drawSemanticCathedral")) failures.push('Astral Cathedral is not routed through the background-free semantic renderer.');
 if (!publicText.includes('CUTLIGHT') || !publicText.includes('DIRECTOR PROMPT')) failures.push('CUTLIGHT creator or its director prompt is missing from the production build.');
 if (!publicText.includes('RECORD VIDEO') || !publicText.includes('MediaRecorder')) failures.push('CUTLIGHT recording workflow is missing from the production build.');
 if (!publicText.includes('20 MOTION PLANES') || !publicText.includes('rig-image-input') || !publicText.includes('rig-audio-input')) failures.push('CUTLIGHT any-image and any-song onboarding is incomplete.');

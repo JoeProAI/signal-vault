@@ -80,7 +80,8 @@ export class SignalVisualizer {
     this.rigImage.decoding = 'async';
     this.rigImage.src = '/visuals/astral-cathedral.webp';
     this.rigImageName = 'Astral Cathedral / built-in demo';
-    this.rigPieces = this.buildRigPieces();
+    this.cathedralPieces = this.buildRigPieces();
+    this.rigPieces = this.cathedralPieces;
     this.rigDirectives = { motion: 1.25, bass: 1.15, palette: 'cycle', beatColor: true, cutSensitivity: 0.052 };
     this.rigPreviousSignal = { energy: 0, bass: 0, highMid: 0 };
     this.rigCutPulse = 0;
@@ -368,7 +369,7 @@ export class SignalVisualizer {
       'chromatic-wormhole': this.drawChromaticWormhole,
       'particle-cathedral': this.drawParticleCathedral,
       'signal-ghost': this.drawSignalGhost,
-      'astral-cathedral': this.drawAstralCathedral,
+      'astral-cathedral': this.drawSemanticCathedral,
       'motion-rig': this.drawMotionRig
     }[this.scene.id];
     drawScene.call(this, time, signal);
@@ -589,8 +590,16 @@ export class SignalVisualizer {
     ctx.restore();
   }
 
-  drawMotionRig(time, signal) {
-    const image = this.rigImage;
+  drawSemanticCathedral(time, signal) {
+    this.drawMotionRig(time, signal, {
+      image: this.artTextures.get('astral-cathedral-base'),
+      pieces: this.cathedralPieces
+    });
+  }
+
+  drawMotionRig(time, signal, options = {}) {
+    const image = options.image || this.rigImage;
+    const rigPieces = options.pieces || this.rigPieces;
     if (!image?.complete || !image.naturalWidth) {
       this.drawChromaticWormhole(time, signal);
       return;
@@ -632,7 +641,7 @@ export class SignalVisualizer {
     ctx.globalAlpha = 1;
     ctx.fillStyle = '#020304';
     ctx.fillRect(0, 0, width, height);
-    const semanticMode = this.rigPieces[0]?.semantic === true;
+    const semanticMode = rigPieces[0]?.semantic === true;
     if (!semanticMode) {
       ctx.filter = 'blur(28px) brightness(.24) saturate(.8)';
       ctx.drawImage(image, backgroundX - 30, backgroundY - 30, backgroundWidth + 60, backgroundHeight + 60);
@@ -644,7 +653,7 @@ export class SignalVisualizer {
       ctx.filter = 'none';
     }
 
-    for (const piece of this.rigPieces) {
+    for (const piece of rigPieces) {
       const bandSignal = signal[piece.band] ?? signal.energy;
       const target = clamp(bandSignal * (piece.band === 'bass' ? directives.bass : 1));
       const easing = target > piece.level ? 0.11 : 0.038;
